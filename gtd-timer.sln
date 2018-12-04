@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.136
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gtd-timer", "gtd-timer\gtd-timer.csproj", "{19E15B65-C9BF-4807-A144-A0C673EDF4AD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{19E15B65-C9BF-4807-A144-A0C673EDF4AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19E15B65-C9BF-4807-A144-A0C673EDF4AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19E15B65-C9BF-4807-A144-A0C673EDF4AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19E15B65-C9BF-4807-A144-A0C673EDF4AD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C319C047-BFA7-4360-AF09-95ADD2BCCE59}
+	EndGlobalSection
+EndGlobal
