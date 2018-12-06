@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Timer.DTO\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
