@@ -15,6 +15,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using gtdtimer.Timer.DAL.Entities;
 using gtdtimer.Timer.DAL.UnitOfWork;
+using gtdtimer.Timer.DAL;
 //using gtdtimer.Timer.DAL.UnitOfWork;
 
 
@@ -49,7 +50,6 @@ namespace gtd_timer
             {
                 app.UseHsts();
             }
-
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseMvc();

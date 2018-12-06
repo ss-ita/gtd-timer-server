@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using gtdtimer.Timer.DAL.Entities;
 
 namespace gtdtimer.Migrations
 {
     [DbContext(typeof(TimerContext))]
-    partial class TimerContextModelSnapshot : ModelSnapshot
+    [Migration("20181206113009_presetsnull")]
+    partial class presetsnull
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -165,12 +167,6 @@ namespace gtdtimer.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
-
-                    b.HasData(
-                        new { Id = 77, AccessFailedCount = 0, ConcurrencyStamp = "6607f09c-2b94-43ea-a791-447c14f03945", Email = "example1@gmail.com", EmailConfirmed = false, FirstName = "Alice", LastName = "Smith", LockoutEnabled = false, PasswordHash = "1234567", PhoneNumberConfirmed = false, TwoFactorEnabled = false },
-                        new { Id = 41, AccessFailedCount = 0, ConcurrencyStamp = "6b585269-e807-4566-af30-7408870b99df", Email = "example2@gmail.com", EmailConfirmed = false, FirstName = "Bob", LastName = "Johns", LockoutEnabled = false, PasswordHash = "54237829", PhoneNumberConfirmed = false, TwoFactorEnabled = false },
-                        new { Id = 31, AccessFailedCount = 0, ConcurrencyStamp = "ed5809a5-ebfa-425d-9268-985086848f36", Email = "example3@gmail.com", EmailConfirmed = false, FirstName = "Sam", LastName = "Paul", LockoutEnabled = false, PasswordHash = "0978687687", PhoneNumberConfirmed = false, TwoFactorEnabled = false }
-                    );
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
