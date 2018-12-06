@@ -2,22 +2,30 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using gtdtimer.Timer.DAL.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using gtdtimer.Timer.DAL.Entities;
+using gtdtimer.Timer.DAL.UnitOfWork;
+using gtdtimer.Timer.DAL;
+//using gtdtimer.Timer.DAL.UnitOfWork;
+
 
 namespace gtd_timer
 {
     public class Startup
-    {
+    { 
         public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
+        {        
+            Configuration = configuration;         
         }
 
         public IConfiguration Configuration { get; }
@@ -25,6 +33,9 @@ namespace gtd_timer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<TimerContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddIdentity<User, Role>().AddEntityFrameworkStores<TimerContext>().AddDefaultTokenProviders();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
@@ -39,7 +50,7 @@ namespace gtd_timer
             {
                 app.UseHsts();
             }
-
+            app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseMvc();
         }
