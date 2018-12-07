@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Linq;
-using System.Threading.Tasks;
+
 using gtdtimer.Timer.DAL.Entities;
 using gtdtimer.Timer.DAL.UnitOfWork;
 using gtdtimer.Timer.DTO;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace gtdtimer.Controllers
 {
@@ -15,13 +11,18 @@ namespace gtdtimer.Controllers
     [ApiController]
     public class SignUpController : ControllerBase
     {
-        private IUnitOfWork unitOfWork;/* = new UnitOfWork(new TimerContext(new DbContextOptions<TimerContext>()));*/
+        private IUnitOfWork unitOfWork;
 
         public SignUpController(IUnitOfWork uow)
         {
             this.unitOfWork = uow;
         }
 
+        /// <summary>
+        /// Retrieve user by his/her Id.
+        /// </summary>
+        /// <param name="id">The Id of the desired User</param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         public IActionResult GetByID(int id)
         {
@@ -34,6 +35,11 @@ namespace gtdtimer.Controllers
             return Ok(user);
         }
 
+        /// <summary>
+        /// Create user.
+        /// </summary>
+        /// <param name="model">The DTO model of User entity</param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Post(UserDTO model)
         {

@@ -12,6 +12,5 @@ namespace gtdtimer.Timer.DAL.Repositories
         void Update(TEntity entityToUpdate);
 
         void Save();
-
     }
 }
