@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using gtdtimer.Timer.DAL.Entities;
 
 namespace gtdtimer.Migrations
 {
     [DbContext(typeof(TimerContext))]
-    partial class TimerContextModelSnapshot : ModelSnapshot
+    [Migration("20181207200139_nameconventionsmigration")]
+    partial class nameconventionsmigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

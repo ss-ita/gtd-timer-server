@@ -9,40 +9,40 @@ namespace gtdtimer.Timer.DAL.Entities
         {
             //Database.EnsureCreated();
         }
-
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Preset> Presets { get; set; }
         public virtual DbSet<Message> Messages { get; set; }
         public virtual DbSet<Task> Tasks { get; set; }
+        public virtual DbSet<Timer> Timers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
             builder.Entity<User>().HasData(
                 new User
-                {   
-                    Id = 77,
+                {
+                    Id = 300,
                     FirstName = "Alice",
                     LastName = "Smith",
                     PasswordHash = "1234567",
-                    Email = "example1@gmail.com"
+                    Email = "example33@gmail.com"
                 },
                 new User
                 {
-                    Id = 41,
+                    Id = 301,
                     FirstName = "Bob",
                     LastName = "Johns",
                     PasswordHash = "54237829",
-                    Email = "example2@gmail.com"
+                    Email = "example34@gmail.com"
                 },
                 new User
                 {
-                    Id = 31,
+                    Id = 302,
                     FirstName = "Sam",
                     LastName = "Paul",
                     PasswordHash = "0978687687",
-                    Email = "example3@gmail.com"
+                    Email = "example35@gmail.com"
                 }
             );
         }

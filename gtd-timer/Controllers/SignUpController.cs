@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 
 using gtdtimer.Timer.DAL.Entities;
@@ -47,14 +48,14 @@ namespace gtdtimer.Controllers
             if (userExist)
             {
                 return BadRequest("User with such email address already exist");
-            } 
+            }
 
             User user = new User
             {
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 Email = model.Email,
-                PasswordHash=model.Password
+                PasswordHash = model.Password
             }; 
             unitOfWork.Users.Create(user);
             unitOfWork.Save();
@@ -64,3 +65,4 @@ namespace gtdtimer.Controllers
 
     }
 }
+

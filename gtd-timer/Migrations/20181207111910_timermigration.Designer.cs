@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using gtdtimer.Timer.DAL.Entities;
 
 namespace gtdtimer.Migrations
 {
     [DbContext(typeof(TimerContext))]
-    partial class TimerContextModelSnapshot : ModelSnapshot
+    [Migration("20181207111910_timermigration")]
+    partial class timermigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,7 +27,7 @@ namespace gtdtimer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Text");
+                    b.Property<string>("MessageText");
 
                     b.Property<int>("UserId");
 
@@ -42,7 +44,7 @@ namespace gtdtimer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Name");
+                    b.Property<string>("PresetName");
 
                     b.Property<int?>("UserId");
 
@@ -84,17 +86,17 @@ namespace gtdtimer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Description");
-
                     b.Property<DateTime>("FinishTime");
 
                     b.Property<string>("GroupName");
 
                     b.Property<bool>("IsActive");
 
-                    b.Property<string>("Name");
-
                     b.Property<DateTime>("StartTime");
+
+                    b.Property<string>("TaskDescription");
+
+                    b.Property<string>("TaskName");
 
                     b.Property<int>("UserId");
 
@@ -111,11 +113,11 @@ namespace gtdtimer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<TimeSpan>("Interval");
-
-                    b.Property<string>("Name");
-
                     b.Property<int>("PresetId");
+
+                    b.Property<string>("TimerName");
+
+                    b.Property<TimeSpan>("TimerTime");
 
                     b.HasKey("Id");
 
@@ -178,12 +180,6 @@ namespace gtdtimer.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
-
-                    b.HasData(
-                        new { Id = 300, AccessFailedCount = 0, ConcurrencyStamp = "0d13f334-13e6-4f85-992e-64ec253ff59c", Email = "example33@gmail.com", EmailConfirmed = false, FirstName = "Alice", LastName = "Smith", LockoutEnabled = false, PasswordHash = "1234567", PhoneNumberConfirmed = false, TwoFactorEnabled = false },
-                        new { Id = 301, AccessFailedCount = 0, ConcurrencyStamp = "f12d3c7c-5960-442c-bb9c-7717253fda15", Email = "example34@gmail.com", EmailConfirmed = false, FirstName = "Bob", LastName = "Johns", LockoutEnabled = false, PasswordHash = "54237829", PhoneNumberConfirmed = false, TwoFactorEnabled = false },
-                        new { Id = 302, AccessFailedCount = 0, ConcurrencyStamp = "0dadb0f8-312a-492e-8aeb-faff137cd4da", Email = "example35@gmail.com", EmailConfirmed = false, FirstName = "Sam", LastName = "Paul", LockoutEnabled = false, PasswordHash = "0978687687", PhoneNumberConfirmed = false, TwoFactorEnabled = false }
-                    );
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
