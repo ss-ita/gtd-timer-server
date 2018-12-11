@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Acheve.TestHost" Version="1.4.0" />
+    <PackageReference Include="IdentityModel" Version="3.10.4" />
+    <PackageReference Include="NUnit" Version="3.11.0" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\gtd-timer\gtdtimer.csproj" />
+  </ItemGroup>
+
+</Project>
