@@ -9,9 +9,11 @@ using System;
 using System.IO;
 using System.Reflection;
 
+using gtdtimer.Extentions;
 using gtdtimer.Timer.DAL.Entities;
 using gtdtimer.Timer.DAL.UnitOfWork;
 using Swashbuckle.AspNetCore.Swagger;
+
 
 namespace gtd_timer
 {
@@ -60,6 +62,7 @@ namespace gtd_timer
             });
             app.UseAuthentication();
             app.UseHttpsRedirection();
+            app.UseMiddleware(typeof(ErrorHandlingMiddleware));
             app.UseMvc();
         }
     }

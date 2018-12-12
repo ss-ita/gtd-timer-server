@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 
+using gtdtimer.Extentions.Exceptions;
 using gtdtimer.Timer.DAL.Entities;
 using gtdtimer.Timer.DAL.UnitOfWork;
 using gtdtimer.Timer.DTO;
+
 
 namespace gtdtimer.Controllers
 {
@@ -30,7 +32,7 @@ namespace gtdtimer.Controllers
             var user = unitOfWork.Users.GetByID(id);
             if (user == null)
             {
-                return NotFound("The Employee record couldn't be found.");
+                throw new UserNotFoundException();
             }
 
             return Ok(user);
