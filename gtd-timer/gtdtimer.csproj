@@ -10,15 +10,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20181207105533_timermigration.cs" />
-    <Compile Remove="Migrations\20181207105533_timermigration.Designer.cs" />
-    <Compile Remove="Migrations\20181207105941_timermigration.cs" />
-    <Compile Remove="Migrations\20181207105941_timermigration.Designer.cs" />
-    <Compile Remove="Migrations\20181207195834_nameconventionsmigration.cs" />
-    <Compile Remove="Migrations\20181207195834_nameconventionsmigration.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
@@ -30,6 +21,12 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\ServiceTier\ServiceTier.csproj" />
+    <ProjectReference Include="..\Timer.DAL\Timer.DAL.csproj" />
   </ItemGroup>
 
 </Project>

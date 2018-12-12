@@ -1,8 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Common.Constant;
 
-using gtdtimer.Constant;
-
-namespace gtdtimer.Model
+namespace Common.Model
 {
     public class LoginModel
     {

@@ -3,12 +3,11 @@ using Moq;
 using NUnit.Framework;
 using Task = System.Threading.Tasks.Task;
 
-using gtdtimer.Constant;
+using Common.Constant;
 using gtdtimer.Controllers;
-using gtdtimer.Model;
+using Common.Model;
 using gtdtimer.Timer.DAL.Entities;
-
-
+using System.Net;
 
 namespace LoginControllerTests
 {
@@ -25,23 +24,23 @@ namespace LoginControllerTests
         }
 
         [Test]
-        public async Task LoginTest_ReturnsBadRequest_WhenModlNotCorect()
+        public async Task LoginTest_ReturnsBadRequest_WhenModelNotCorect()
         {
             var loginModel = new LoginModel { Email = "sfd", Password = "sdf" };
 
             var result = await controller.LoginAsync(loginModel);
-            StatusCodeResult status = new StatusCodeResult(Constants.Status401Unauthorized);
+            StatusCodeResult status = new StatusCodeResult((int)HttpStatusCode.Unauthorized);
 
             Assert.AreEqual(status, result);
         }
 
         [Test]
-        public async Task LoginTest_ReturnsBadRequest_WhenModlCorect()
+        public async Task LoginTest_ReturnsBadRequest_WhenModelCorect()
         {
             var loginModel = new LoginModel { Email = Constants.CorectEmail, Password = Constants.CorectPassword };
 
             var result = await controller.LoginAsync(loginModel);
-            StatusCodeResult status = new StatusCodeResult(Constants.Status200OK);
+            StatusCodeResult status = new StatusCodeResult((int)HttpStatusCode.OK);
 
             Assert.AreEqual(status, result);
         }
