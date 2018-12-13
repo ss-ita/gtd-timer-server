@@ -3,10 +3,8 @@
 using ServiceTier.Services;
 using Common.Attributes;
 using Common.Extentions.Exceptions;
-using gtdtimer.Timer.DAL.Entities;
-using gtdtimer.Timer.DAL.UnitOfWork;
 using gtdtimer.Timer.DTO;
-
+using Common.Attributes;
 
 namespace gtdtimer.Controllers
 {
