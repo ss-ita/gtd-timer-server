@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 
 using System;
 using System.Net;
@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using Common.Extentions.Exceptions;
 
 namespace Common.Extentions
+
 {
     public class ErrorHandlingMiddleware
     {
