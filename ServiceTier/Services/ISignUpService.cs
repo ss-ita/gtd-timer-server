@@ -1,5 +1,5 @@
-﻿using gtdtimer.Timer.DAL.Entities;
-using gtdtimer.Timer.DTO;
+﻿using gtdtimer.ModelsDTO;
+using gtdtimer.Timer.DAL.Entities;
 
 namespace ServiceTier.Services
 {

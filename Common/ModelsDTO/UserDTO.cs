@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace gtdtimer.Timer.DTO
+namespace gtdtimer.ModelsDTO
 {
     public class UserDTO
     {
@@ -12,7 +12,7 @@ namespace gtdtimer.Timer.DTO
         [EmailAddress(ErrorMessage = "Invalid Email Address")]
         public string Email { get; set; }
         [Required]
-        [MinLength(4)]
+        [MinLength(6), MaxLength(16)]
         public string Password { get; set; }
         [Required]
         [Compare("Password")]

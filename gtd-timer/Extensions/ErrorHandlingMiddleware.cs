@@ -5,7 +5,7 @@ using System.Net;
 using System.Threading.Tasks;
 
 using Newtonsoft.Json;
-using Common.Extentions.Exceptions;
+using Common.Exceptions;
 
 namespace Common.Extentions
 
@@ -50,6 +50,9 @@ namespace Common.Extentions
             {
                 case UserNotFoundException _:
                     exceptionCode = HttpStatusCode.NoContent;
+                    break;
+                case UserAlreadyExistsException _:
+                    exceptionCode = HttpStatusCode.BadRequest;
                     break;
                 default:
                     exceptionCode = HttpStatusCode.InternalServerError;

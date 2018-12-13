@@ -1,10 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 
+using gtdtimer.Attributes;
 using ServiceTier.Services;
-using Common.Attributes;
-using Common.Extentions.Exceptions;
-using gtdtimer.Timer.DTO;
-
+using Common.Exceptions;
+using gtdtimer.ModelsDTO;
 
 namespace gtdtimer.Controllers
 {
@@ -41,7 +40,6 @@ namespace gtdtimer.Controllers
         /// <param name="model">The DTO model of User entity</param>
         /// <returns></returns>
         [ValidateModel]
-        [UserAlreadyExistsExceptionFilter]
         [HttpPost]
         public ActionResult Post([FromBody]UserDTO model)
         {

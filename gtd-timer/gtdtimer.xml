@@ -11,7 +11,7 @@
             <param name="id">The Id of the desired User</param>
             <returns></returns>
         </member>
-        <member name="M:gtdtimer.Controllers.SignUpController.Post(gtdtimer.Timer.DTO.UserDTO)">
+        <member name="M:gtdtimer.Controllers.SignUpController.Post(gtdtimer.ModelsDTO.UserDTO)">
             <summary>
             Create user.
             </summary>

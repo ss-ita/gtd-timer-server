@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Common.Extentions.Exceptions
+namespace Common.Exceptions
 {
     public class UserNotFoundException : Exception
     {

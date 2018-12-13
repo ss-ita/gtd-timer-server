@@ -2,9 +2,9 @@
 
 using Common.Exceptions;
 using Common.Extensions;
+using gtdtimer.ModelsDTO;
 using gtdtimer.Timer.DAL.Entities;
 using gtdtimer.Timer.DAL.UnitOfWork;
-using gtdtimer.Timer.DTO;
 
 namespace ServiceTier.Services
 {
