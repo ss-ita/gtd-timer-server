@@ -4,7 +4,6 @@ using ServiceTier.Services;
 using Common.Attributes;
 using Common.Extentions.Exceptions;
 using gtdtimer.Timer.DTO;
-using Common.Attributes;
 
 namespace gtdtimer.Controllers
 {
