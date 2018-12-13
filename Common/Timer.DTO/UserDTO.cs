@@ -10,7 +10,7 @@ namespace gtdtimer.Timer.DTO
         public string LastName { get; set; }
         [Required]
         [EmailAddress(ErrorMessage = "Invalid Email Address")]
-        public string Email { get; set;}
+        public string Email { get; set; }
         [Required]
         [MinLength(4)]
         public string Password { get; set; }

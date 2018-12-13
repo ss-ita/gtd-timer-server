@@ -1,24 +1,21 @@
-﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 
-using gtdtimer.Extentions.Exceptions;
-using gtdtimer.Timer.DAL.Entities;
-using gtdtimer.Timer.DAL.UnitOfWork;
+using ServiceTier.Services;
+using Common.Attributes;
+using Common.Extentions.Exceptions;
 using gtdtimer.Timer.DTO;
 
 
 namespace gtdtimer.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
     public class SignUpController : ControllerBase
     {
-        private IUnitOfWork unitOfWork;
+        private readonly ISignUpService signUpService;
 
-        public SignUpController(IUnitOfWork uow)
+        public SignUpController(ISignUpService signUpService)
         {
-            this.unitOfWork = uow;
+            this.signUpService = signUpService;
         }
 
         /// <summary>
@@ -29,7 +26,7 @@ namespace gtdtimer.Controllers
         [HttpGet("{id}")]
         public IActionResult GetByID(int id)
         {
-            var user = unitOfWork.Users.GetByID(id);
+            var user = signUpService.GetUserById(id);
             if (user == null)
             {
                 throw new UserNotFoundException();
@@ -43,28 +40,15 @@ namespace gtdtimer.Controllers
         /// </summary>
         /// <param name="model">The DTO model of User entity</param>
         /// <returns></returns>
+        [ValidateModel]
+        [UserAlreadyExistsExceptionFilter]
         [HttpPost]
-        public ActionResult Post(UserDTO model)
+        public ActionResult Post([FromBody]UserDTO model)
         {
-            var userExist = unitOfWork.Users.GetAll().Any(u => u.Email == model.Email);
-            if (userExist)
-            {
-                return BadRequest("User with such email address already exist");
-            }
-
-            User user = new User
-            {
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                Email = model.Email,
-                PasswordHash = model.Password
-            }; 
-            unitOfWork.Users.Create(user);
-            unitOfWork.Save();
+            signUpService.AddUser(model);
 
             return Ok();
         }
-
     }
 }
 
