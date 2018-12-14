@@ -3,8 +3,8 @@
 using Common.Exceptions;
 using Common.Extensions;
 using gtdtimer.ModelsDTO;
-using gtdtimer.Timer.DAL.Entities;
-using gtdtimer.Timer.DAL.UnitOfWork;
+using Timer.DAL.Timer.DAL.Entities;
+using Timer.DAL.Timer.DAL.UnitOfWork;
 
 namespace ServiceTier.Services
 {
@@ -23,22 +23,22 @@ namespace ServiceTier.Services
 
             User user = model.ToUser();
 
-            unitOfWork.Users.Create(user);
+            unitOfWork.UserManager.CreateAsync(user);
             unitOfWork.Save();
         }
 
         public User GetUserById(int id)
         {
-            var user = unitOfWork.Users.GetByID(id);
+            var user = unitOfWork.UserManager.FindByIdAsync(id).Result;
 
             return user;
         }
 
         private bool UserExists(UserDTO model)
         {
-            var userExist = unitOfWork.Users.GetAll().Any(u => u.Email == model.Email);
+            var userToFind = unitOfWork.UserManager.FindByEmailAsync(model.Email).Result;
 
-            return userExist;
+            return userToFind != null;
         }
     }
 }

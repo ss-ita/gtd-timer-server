@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace gtdtimer.Timer.DAL.Entities
+namespace Timer.DAL.Timer.DAL.Entities
 {
     public class Preset
     {

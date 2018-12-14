@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace gtdtimer.Timer.DAL.Entities
+namespace Timer.DAL.Timer.DAL.Entities
 {
-    public class Task
+    public class Tasks
     {
         public int Id { get; set; }
         public string Name { get; set; }

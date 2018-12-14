@@ -2,8 +2,8 @@
 using System.Security.Claims;
 using System.Text;
 
-using gtdtimer.Timer.DAL.Entities;
-using gtdtimer.Timer.DAL.UnitOfWork;
+using Timer.DAL.Timer.DAL.Entities;
+using Timer.DAL.Timer.DAL.UnitOfWork;
 using Common.Model;
 using Common.Constant;
 using ServiceTier.Services;
@@ -24,7 +24,7 @@ namespace gtdtimer.Services
 
         public string CreateToken(LoginModel model)
         {
-            var user = userManager.Users.FindByElementAsync(model.Email);
+            var user = userManager.UserManager.FindByEmailAsync(model.Email).Result;
 
             if (user == null || !(user.PasswordHash == model.Password))
             {

@@ -14,8 +14,9 @@ using System.Text;
 
 using Common.Constant;
 using Common.Extentions;
-using gtdtimer.Timer.DAL.Entities;
-using gtdtimer.Timer.DAL.UnitOfWork;
+using Timer.DAL.Timer.DAL.Repositories;
+using Timer.DAL.Timer.DAL.Entities;
+using Timer.DAL.Timer.DAL.UnitOfWork;
 using ServiceTier.Services;
 using Swashbuckle.AspNetCore.Swagger;
 using gtdtimer.Services;
@@ -39,7 +40,6 @@ namespace gtd_timer
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ISignUpService, SignUpService>();
             services.AddScoped<ILogInService, LogInService>();
-
             services.AddAuthentication(opts =>
             {
                 opts.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

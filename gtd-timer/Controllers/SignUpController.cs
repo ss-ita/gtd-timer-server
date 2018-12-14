@@ -1,9 +1,14 @@
+﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
+
 
 using gtdtimer.Attributes;
 using ServiceTier.Services;
 using Common.Exceptions;
 using gtdtimer.ModelsDTO;
+using Timer.DAL.Timer.DAL.UnitOfWork;
+using Timer.DAL.Timer.DAL.Entities;
 
 namespace gtdtimer.Controllers
 {

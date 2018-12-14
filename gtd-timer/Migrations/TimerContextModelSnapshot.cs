@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using gtdtimer.Timer.DAL.Entities;
+using Timer.DAL.Timer.DAL.Entities;
 
 namespace gtdtimer.Migrations
 {

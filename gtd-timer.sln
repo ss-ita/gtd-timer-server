@@ -5,15 +5,15 @@ VisualStudioVersion = 15.0.28307.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "gtdtimer", "gtd-timer\gtdtimer.csproj", "{19E15B65-C9BF-4807-A144-A0C673EDF4AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceTier", "ServiceTier\ServiceTier.csproj", "{A4A1215D-C073-40A7-B1E8-3C20E1363F4D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceTier", "ServiceTier\ServiceTier.csproj", "{A4A1215D-C073-40A7-B1E8-3C20E1363F4D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A6E288FC-39D1-48D2-BD1E-DB14C6AC4A88}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{541D97B0-71C0-46AB-A10B-89841BA5D980}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csproj", "{541D97B0-71C0-46AB-A10B-89841BA5D980}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timer.DAL", "Timer.DAL\Timer.DAL.csproj", "{F929608B-BF64-4EE7-B451-A2E25B890A04}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Timer.DAL", "Timer.DAL\Timer.DAL.csproj", "{F929608B-BF64-4EE7-B451-A2E25B890A04}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gtdtimerTests", "gtdtimerTests\gtdtimerTests.csproj", "{7EECB0A7-428E-4195-AD5C-4A934113ECC6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "gtdtimerTests", "gtdtimerTests\gtdtimerTests.csproj", "{7EECB0A7-428E-4195-AD5C-4A934113ECC6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,4 +1,4 @@
-﻿using gtdtimer.Timer.DAL.UnitOfWork;
+﻿using Timer.DAL.Timer.DAL.UnitOfWork;
 
 namespace ServiceTier.Services
 {

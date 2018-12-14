@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
-using gtdtimer.Timer.DAL.Entities;
+using Timer.DAL.Timer.DAL.Entities;
 
-namespace gtdtimer.Timer.DAL.Repositories
+namespace Timer.DAL.Timer.DAL.Repositories
 {
     public class Repository<TEntity> : IRepository<TEntity> where TEntity:class
     {

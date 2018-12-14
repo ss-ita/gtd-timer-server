@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace gtdtimer.Timer.DAL.Repositories
+namespace Timer.DAL.Timer.DAL.Repositories
 {
     public interface IRepository<TEntity>
     {

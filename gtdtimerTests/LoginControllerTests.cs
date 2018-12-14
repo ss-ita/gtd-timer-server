@@ -6,7 +6,8 @@ using Task = System.Threading.Tasks.Task;
 using Common.Constant;
 using gtdtimer.Controllers;
 using Common.Model;
-using gtdtimer.Timer.DAL.Entities;
+using Timer.DAL.Timer.DAL.Entities;
+using Timer.DAL.Timer.DAL.Repositories;
 using System.Net;
 
 namespace LoginControllerTests
@@ -14,13 +15,13 @@ namespace LoginControllerTests
     [TestFixture]
     public class LoginControllerTest
     {
-        private Mock<ApplicationUserManager<User>> userManegerMock;
-        private LoginController controller;
+        private Mock<ApplicationUserManager> userManegerMock;
+        private LogInController controller;
 
         public LoginControllerTest()
         {
-            userManegerMock = new Mock<ApplicationUserManager<User>>();
-            controller = new LoginController(userManegerMock.Object);
+            userManegerMock = new Mock<ApplicationUserManager>();
+            controller = new LogInController(userManegerMock.Object);
         }
 
         [Test]

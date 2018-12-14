@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace gtdtimer.Timer.DAL.Entities
+namespace Timer.DAL.Timer.DAL.Entities
 {
     public class TimerContext:IdentityDbContext<User,Role,int>
     {
@@ -13,7 +13,7 @@ namespace gtdtimer.Timer.DAL.Entities
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Preset> Presets { get; set; }
         public virtual DbSet<Message> Messages { get; set; }
-        public virtual DbSet<Task> Tasks { get; set; }
+        public virtual DbSet<Tasks> Tasks { get; set; }
         public virtual DbSet<Timer> Timers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)

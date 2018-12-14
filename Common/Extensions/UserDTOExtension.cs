@@ -1,5 +1,5 @@
 ﻿using gtdtimer.ModelsDTO;
-using gtdtimer.Timer.DAL.Entities;
+using Timer.DAL.Timer.DAL.Entities;
 
 namespace Common.Extensions
 {

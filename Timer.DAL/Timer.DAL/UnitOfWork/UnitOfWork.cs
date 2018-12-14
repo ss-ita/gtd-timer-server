@@ -1,23 +1,51 @@
-﻿using gtdtimer.Timer.DAL.Entities;
-using gtdtimer.Timer.DAL.Repositories;
+﻿using Timer.DAL.Timer.DAL.Entities;
+using Timer.DAL.Timer.DAL.Repositories;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNet.Identity;
 
-namespace gtdtimer.Timer.DAL.UnitOfWork
+namespace Timer.DAL.Timer.DAL.UnitOfWork
 {
     public class UnitOfWork:IUnitOfWork
     {
-        public IRepository<User> Users { get; set; }
-        public IRepository<Role> Roles { get; set; }
+        private UserManager<User,int> userManager;
+        public UserManager<User,int> UserManager
+        {
+            get
+            {
+                if (userManager == null)
+                {
+                    userManager = new ApplicationUserManager(new UserRepository(context));
+                }
+                return userManager;
+            }
+            set
+            {
+                userManager = value;
+            }
+        }
+
+        public IRepository<Role> Roles
+        {
+            get
+            {
+                if(Roles == null)
+                {
+                    Roles = new Repository<Role>(context);
+                }
+                return Roles;
+            }
+            set
+            {
+                Roles = value;
+            }
+        }
 
         private TimerContext context;
 
         public UnitOfWork(TimerContext context)
         {
             this.context = context;
-
-            this.Users = new Repository<User>(context);
-            this.Roles = new Repository<Role>(context);
         }
-
         public void Save()
         {
             this.context.SaveChanges();
