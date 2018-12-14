@@ -18,6 +18,7 @@ using gtdtimer.Timer.DAL.Entities;
 using gtdtimer.Timer.DAL.UnitOfWork;
 using ServiceTier.Services;
 using Swashbuckle.AspNetCore.Swagger;
+using gtdtimer.Services;
 
 namespace gtd_timer
 {
@@ -37,6 +38,8 @@ namespace gtd_timer
             services.AddIdentity<User, Role>().AddEntityFrameworkStores<TimerContext>().AddDefaultTokenProviders();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ISignUpService, SignUpService>();
+            services.AddScoped<ILogInService, LogInService>();
+
             services.AddAuthentication(opts =>
             {
                 opts.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -46,12 +49,15 @@ namespace gtd_timer
             {
                 opts.SaveToken = true;
                 opts.RequireHttpsMetadata = false;
-                opts.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+                opts.TokenValidationParameters = new TokenValidationParameters()
                 {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Constants.SecretKey))
                 };
             }
             );
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
