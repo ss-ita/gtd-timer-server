@@ -15,36 +15,36 @@ namespace LoginControllerTests
     [TestFixture]
     public class LoginControllerTest
     {
-        private Mock<ApplicationUserManager> userManegerMock;
-        private LogInController controller;
+        //private Mock<ApplicationUserManager> userManegerMock;
+        //private LogInController controller;
 
-        public LoginControllerTest()
-        {
-            userManegerMock = new Mock<ApplicationUserManager>();
-            controller = new LogInController(userManegerMock.Object);
-        }
+        //public LoginControllerTest()
+        //{
+        //    userManegerMock = new Mock<ApplicationUserManager>();
+        //    controller = new LogInController(userManegerMock.Object);
+        //}
 
-        [Test]
-        public async Task LoginTest_ReturnsBadRequest_WhenModelNotCorect()
-        {
-            var loginModel = new LoginModel { Email = "sfd", Password = "sdf" };
+        //[Test]
+        //public async Task LoginTest_ReturnsBadRequest_WhenModelNotCorect()
+        //{
+        //    var loginModel = new LoginModel { Email = "sfd", Password = "sdf" };
 
-            var result = await controller.LoginAsync(loginModel);
-            StatusCodeResult status = new StatusCodeResult((int)HttpStatusCode.Unauthorized);
+        //    var result = await controller.LoginAsync(loginModel);
+        //    StatusCodeResult status = new StatusCodeResult((int)HttpStatusCode.Unauthorized);
 
-            Assert.AreEqual(status, result);
-        }
+        //    Assert.AreEqual(status, result);
+        //}
 
-        [Test]
-        public async Task LoginTest_ReturnsBadRequest_WhenModelCorect()
-        {
-            var loginModel = new LoginModel { Email = Constants.CorectEmail, Password = Constants.CorectPassword };
+        //[Test]
+        //public async Task LoginTest_ReturnsBadRequest_WhenModelCorect()
+        //{
+        //    var loginModel = new LoginModel { Email = Constants.CorectEmail, Password = Constants.CorectPassword };
 
-            var result = await controller.LoginAsync(loginModel);
-            StatusCodeResult status = new StatusCodeResult((int)HttpStatusCode.OK);
+        //    var result = await controller.LoginAsync(loginModel);
+        //    StatusCodeResult status = new StatusCodeResult((int)HttpStatusCode.OK);
 
-            Assert.AreEqual(status, result);
-        }
+        //    Assert.AreEqual(status, result);
+        //}
     }
 }
 
