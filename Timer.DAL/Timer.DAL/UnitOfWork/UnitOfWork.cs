@@ -1,14 +1,15 @@
-﻿using Timer.DAL.Timer.DAL.Entities;
+﻿using Microsoft.AspNet.Identity;
+using System;
+
+using Timer.DAL.Timer.DAL.Entities;
 using Timer.DAL.Timer.DAL.Repositories;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNet.Identity;
 
 namespace Timer.DAL.Timer.DAL.UnitOfWork
 {
-    public class UnitOfWork:IUnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
-        private UserManager<User,int> userManager;
-        public UserManager<User,int> UserManager
+        private UserManager<User, int> userManager;
+        public UserManager<User, int> UserManager
         {
             get
             {
@@ -28,7 +29,7 @@ namespace Timer.DAL.Timer.DAL.UnitOfWork
         {
             get
             {
-                if(Roles == null)
+                if (Roles == null)
                 {
                     Roles = new Repository<Role>(context);
                 }
@@ -41,14 +42,35 @@ namespace Timer.DAL.Timer.DAL.UnitOfWork
         }
 
         private TimerContext context;
+        private bool disposed;
 
         public UnitOfWork(TimerContext context)
         {
             this.context = context;
+            this.disposed = false;
         }
+
         public void Save()
         {
             this.context.SaveChanges();
+        }
+
+        public virtual void Dispose(bool disposing)
+        {
+            if (!disposed)
+            {
+                if (disposing)
+                {
+                    context.Dispose();
+                }
+                disposed = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

@@ -1,6 +1,8 @@
-﻿namespace ServiceTier.Services
+﻿using System;
+
+namespace ServiceTier.Services
 {
-    public interface IBaseService
+    public interface IBaseService : IDisposable
     {
     }
 }

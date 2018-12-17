@@ -10,5 +10,10 @@ namespace ServiceTier.Services
         {
             this.unitOfWork = unitOfWork;
         }
+
+        public void Dispose()
+        {
+            unitOfWork.Dispose();
+        }
     }
 }

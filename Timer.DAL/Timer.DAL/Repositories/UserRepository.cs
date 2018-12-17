@@ -118,7 +118,7 @@ namespace Timer.DAL.Timer.DAL.Repositories
             List<User> list = timerContext.Users.Where(userToFind => userToFind.Email == email).ToList<User>();
             if (list.Count == 0)
             {
-                throw new ArgumentException("user");
+                return null;
             }
             return list[0];
         }

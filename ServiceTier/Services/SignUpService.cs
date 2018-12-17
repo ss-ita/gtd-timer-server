@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-using Common.Exceptions;
+﻿using Common.Exceptions;
 using Common.Extensions;
 using gtdtimer.ModelsDTO;
 using Timer.DAL.Timer.DAL.Entities;
