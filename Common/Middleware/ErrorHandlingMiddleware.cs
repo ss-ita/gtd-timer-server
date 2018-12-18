@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Common.Exceptions;
 
-namespace Common.Extentions
+namespace Common.Middleware
 
 {
     public class ErrorHandlingMiddleware
