@@ -18,11 +18,9 @@ namespace ServiceTier.Services
             {
                 throw new UserAlreadyExistsException();
             }
-
-            User user = model.ToUser();
-
-            unitOfWork.UserManager.CreateAsync(user);
-            unitOfWork.Save();
+             
+           User user = model.ToUser();
+           unitOfWork.UserManager.CreateAsync(user).GetAwaiter().GetResult();
         }
 
         public User GetUserById(int id)

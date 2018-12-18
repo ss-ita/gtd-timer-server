@@ -14,5 +14,14 @@ namespace Timer.DAL.Timer.DAL.Entities
         public IEnumerable<Preset> Presets { get; set; }
         public IEnumerable<Message> Messages { get; set; }
         public IEnumerable<Tasks> Tasks { get; set; }
+
+        public User()
+        {
+            this.PhoneNumberConfirmed = false;
+            this.TwoFactorEnabled = false;
+            this.LockoutEnabled = false;
+            this.AccessFailedCount = 0;
+            this.EmailConfirmed = false;
+        }
     }
 }

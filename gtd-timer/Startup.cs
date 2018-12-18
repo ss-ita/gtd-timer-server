@@ -40,6 +40,7 @@ namespace gtd_timer
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ISignUpService, SignUpService>();
             services.AddScoped<ILogInService, LogInService>();
+            services.AddScoped<IRepository<Role>, Repository<Role>>();
             services.AddAuthentication(opts =>
             {
                 opts.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

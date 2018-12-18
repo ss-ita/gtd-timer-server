@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Identity;
 using System;
 
 using Timer.DAL.Timer.DAL.Entities;
@@ -8,8 +9,8 @@ namespace Timer.DAL.Timer.DAL.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private UserManager<User, int> userManager;
-        public UserManager<User, int> UserManager
+        private ApplicationUserManager userManager;
+        public ApplicationUserManager UserManager
         {
             get
             {
@@ -25,21 +26,8 @@ namespace Timer.DAL.Timer.DAL.UnitOfWork
             }
         }
 
-        public IRepository<Role> Roles
-        {
-            get
-            {
-                if (Roles == null)
-                {
-                    Roles = new Repository<Role>(context);
-                }
-                return Roles;
-            }
-            set
-            {
-                Roles = value;
-            }
-        }
+        private IRepository<Role> roles;
+        public IRepository<Role> Roles { get; set; }
 
         private TimerContext context;
         private bool disposed;
@@ -49,7 +37,6 @@ namespace Timer.DAL.Timer.DAL.UnitOfWork
             this.context = context;
             this.disposed = false;
         }
-
         public void Save()
         {
             this.context.SaveChanges();

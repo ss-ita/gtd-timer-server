@@ -12,7 +12,8 @@ namespace Common.Extensions
                 FirstName = userDTO.FirstName,
                 LastName = userDTO.LastName,
                 Email = userDTO.Email,
-                PasswordHash = userDTO.Password
+                PasswordHash = userDTO.Password,
+                UserName = userDTO.Email
             };
 
             return user;

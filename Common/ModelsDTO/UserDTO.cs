@@ -10,6 +10,7 @@ namespace gtdtimer.ModelsDTO
         public string LastName { get; set; }
         [Required]
         [EmailAddress(ErrorMessage = "Invalid Email Address")]
+        
         public string Email { get; set; }
         [Required]
         [MinLength(6), MaxLength(16)]

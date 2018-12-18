@@ -13,9 +13,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Timer.DAL", "Timer.DAL\Timer.DAL.csproj", "{F929608B-BF64-4EE7-B451-A2E25B890A04}"
 EndProject
+<<<<<<< HEAD
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "gtdtimerTests", "gtdtimerTests\gtdtimerTests.csproj", "{7EECB0A7-428E-4195-AD5C-4A934113ECC6}"
+=======
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceTierTests", "Tests\ServiceTierTests\ServiceTierTests.csproj", "{FB641CFD-46D7-4FB5-ADA2-297C275B8944}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "gtdtimerTests", "Tests\gtdtimerTests\gtdtimerTests.csproj", "{858639FC-AA8A-464C-84E7-1C68A5845E7C}"
+>>>>>>> 95868b56a08c38ce67b92d2922b645bf840263d3
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonTests", "Tests\CommonTests\CommonTests.csproj", "{EF9A0DB9-0122-4C26-AAC4-CF2ABD6A6FF0}"
 EndProject
