@@ -1,4 +1,4 @@
-﻿using Common.Exceptions;
+using Common.Exceptions;
 using gtdtimer.ModelsDTO;
 using Microsoft.AspNet.Identity;
 using Moq;
@@ -50,7 +50,7 @@ namespace ServiceTierTests
 
             subject.AddUser(model);
 
-            unitOfWork.Verify(_ => _.Save(), Times.Once);
+            unitOfWork.Verify(_ => _.Save(), Times.Never);
         }
 
         [Test]
