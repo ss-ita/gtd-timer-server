@@ -26,17 +26,22 @@ namespace gtdtimer.Services
         {
             var user = userManager.UserManager.FindByEmailAsync(model.Email).Result;
 
-            if (user == null || !(user.PasswordHash == model.Password))
+            if (user == null)
             {
                 throw new UserNotFoundException();
             }
 
-            var token = GeneretaToken(user);
+            if(user.PasswordHash != model.Password)
+            {
+                throw new IncorrectPasswordException();
+            }
+
+            var token = GenerateToken(user);
 
             return token;
         }
 
-        private static string GeneretaToken(User user)
+        private static string GenerateToken(User user)
         {
             var claims = new[]
             {
@@ -47,7 +52,7 @@ namespace gtdtimer.Services
             var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Constants.SecretKey));
 
             var token = new JwtSecurityToken(
-                expires: DateTime.UtcNow.AddHours(1),
+                expires: DateTime.UtcNow.AddHours(Constants.Validity),
                 claims: claims,
                 signingCredentials: new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256),
                 issuer: "Tokens:Issuer",
