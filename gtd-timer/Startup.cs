@@ -20,22 +20,34 @@ using Timer.DAL.Timer.DAL.UnitOfWork;
 using ServiceTier.Services;
 using Swashbuckle.AspNetCore.Swagger;
 using gtdtimer.Services;
+using gtdtimer.IoC;
 
 namespace gtd_timer
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IHostingEnvironment env)
         {
-            Configuration = configuration;
-        }
+            var builder = new ConfigurationBuilder()
+                 .SetBasePath(env.ContentRootPath)
+                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                 .AddJsonFile("azurekeyvault.json", optional: false, reloadOnChange: true)
+                 .AddEnvironmentVariables();
 
-        public IConfiguration Configuration { get; }
+            var config = builder.Build();
+            builder.AddAzureKeyVault(
+                $"https://{config["AzureKeyVault:vault"]}.vault.azure.net/",
+                config["AzureKeyVault:clientId"],
+                config["AzureKeyVault:clientSecret"]
+            );
+            IoCContainer.Configuration = builder.Build();
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<TimerContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<TimerContext>(opts => opts.UseSqlServer(IoCContainer.Configuration["AzureConnection"]));
             services.AddIdentity<User, Role>().AddEntityFrameworkStores<TimerContext>().AddDefaultTokenProviders();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ISignUpService, SignUpService>();
