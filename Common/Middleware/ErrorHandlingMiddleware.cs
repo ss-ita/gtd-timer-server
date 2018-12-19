@@ -43,6 +43,7 @@ namespace Common.Middleware
             context.Response.StatusCode = (int)exceptionCode;
             return context.Response.WriteAsync(result);
         }
+
         private HttpStatusCode GetExceptionCode(Exception exception)
         {
             HttpStatusCode exceptionCode;
@@ -52,6 +53,9 @@ namespace Common.Middleware
                     exceptionCode = HttpStatusCode.NoContent;
                     break;
                 case UserAlreadyExistsException _:
+                    exceptionCode = HttpStatusCode.Conflict;
+                    break;
+                case IncorrectPasswordException _:
                     exceptionCode = HttpStatusCode.BadRequest;
                     break;
                 default:
