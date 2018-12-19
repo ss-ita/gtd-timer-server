@@ -27,7 +27,20 @@ namespace Timer.DAL.Timer.DAL.UnitOfWork
         }
 
         private IRepository<Role> roles;
-        public IRepository<Role> Roles { get; set; }
+        public IRepository<Role> Roles {
+            get
+            {
+                if(roles == null)
+                {
+                    roles = new Repository<Role>(context);
+                }
+                return roles;
+            }
+            set
+            {
+                roles = value;
+            }
+        }
 
         private TimerContext context;
         private bool disposed;
