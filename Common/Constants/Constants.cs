@@ -7,5 +7,7 @@
         public const string CorectEmail = "example33@gmail.com";
         public const string CorectPassword = "1234567";
         public const int Validity = 1;
+        public const string PasswordInvalidMessage = "The Password field is not a valid password";
+        public const string PasswordRegularExpression = @"^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=.,\-_!])([a-zA-Z0-9 @#$%^&+=*.,\-_!]){8,}$";
     }
 }

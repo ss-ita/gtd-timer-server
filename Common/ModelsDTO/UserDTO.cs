@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Common.Constant;
+using System.ComponentModel.DataAnnotations;
 
 namespace gtdtimer.ModelsDTO
 {
@@ -6,15 +7,19 @@ namespace gtdtimer.ModelsDTO
     {
         [Required]
         public string FirstName { get; set; }
+
         [Required]
         public string LastName { get; set; }
+
         [Required]
-        [EmailAddress(ErrorMessage = "Invalid Email Address")]
-        
+        [EmailAddress]
         public string Email { get; set; }
+
         [Required]
-        [MinLength(6), MaxLength(16)]
+        [MinLength(8)]
+        [RegularExpression(Constants.PasswordRegularExpression, ErrorMessage = Constants.PasswordInvalidMessage)]
         public string Password { get; set; }
+
         [Required]
         [Compare("Password")]
         public string PasswordConfirm { get; set; }
