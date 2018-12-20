@@ -10,6 +10,7 @@ using ServiceTier.Services;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using Common.Exceptions;
+using Newtonsoft.Json;
 
 namespace gtdtimer.Services
 {
@@ -61,7 +62,7 @@ namespace gtdtimer.Services
 
             var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
-            return tokenString;
+            return JsonConvert.SerializeObject(new { access_token = tokenString });
         }
 
     }
