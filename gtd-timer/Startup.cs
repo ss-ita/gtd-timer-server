@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNet.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -58,7 +59,11 @@ namespace gtd_timer
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ISignUpService, SignUpService>();
             services.AddScoped<ILogInService, LogInService>();
+
             services.AddScoped<IRepository<Role>, Repository<Role>>();
+            services.AddScoped<IApplicationUserManager<User, int>, ApplicationUserManager>();
+            services.AddScoped<IUserStore<User,int>, UserRepository>(); 
+
             services.AddAuthentication(opts =>
             {
                 opts.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -72,7 +77,7 @@ namespace gtd_timer
                 {
                     ValidateIssuer = true,
                     ValidateAudience = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Constants.SecretKey))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Common.Constant.Constants.SecretKey))
                 };
             }
             );

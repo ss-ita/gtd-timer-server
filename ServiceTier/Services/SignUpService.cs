@@ -21,6 +21,8 @@ namespace ServiceTier.Services
              
            User user = model.ToUser();
            unitOfWork.UserManager.CreateAsync(user).GetAwaiter().GetResult();
+
+            unitOfWork.Save();
         }
 
         public User GetUserById(int id)

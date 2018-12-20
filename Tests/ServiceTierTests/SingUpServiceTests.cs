@@ -50,7 +50,7 @@ namespace ServiceTierTests
 
             subject.AddUser(model);
 
-            unitOfWork.Verify(_ => _.Save(), Times.Never);
+            unitOfWork.Verify(_ => _.Save(), Times.Once);
         }
 
         [Test]

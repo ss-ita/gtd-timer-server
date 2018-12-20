@@ -9,6 +9,10 @@ namespace Timer.DAL.Timer.DAL.Entities
         {
             //Database.EnsureCreated();
         }
+        public TimerContext()
+        {
+
+        }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Preset> Presets { get; set; }

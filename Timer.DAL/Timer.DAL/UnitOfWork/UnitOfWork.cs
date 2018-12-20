@@ -9,47 +9,36 @@ namespace Timer.DAL.Timer.DAL.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private ApplicationUserManager userManager;
-        public ApplicationUserManager UserManager
-        {
-            get
-            {
-                if (userManager == null)
-                {
-                    userManager = new ApplicationUserManager(new UserRepository(context));
-                }
-                return userManager;
-            }
-            set
-            {
-                userManager = value;
-            }
-        }
-
-        private IRepository<Role> roles;
-        public IRepository<Role> Roles {
-            get
-            {
-                if(roles == null)
-                {
-                    roles = new Repository<Role>(context);
-                }
-                return roles;
-            }
-            set
-            {
-                roles = value;
-            }
-        }
-
         private TimerContext context;
+        private Lazy<IApplicationUserManager<User, int>> userManager;
+        private Lazy<IRepository<Role>> roles;
         private bool disposed;
 
-        public UnitOfWork(TimerContext context)
+        public IApplicationUserManager<User, int> UserManager
+        {
+            get => userManager.Value;
+            set
+            {
+                userManager = new Lazy<IApplicationUserManager<User, int>>(() => value);
+            }
+        }
+        public IRepository<Role> Roles
+        {
+            get => roles.Value;
+            set
+            {
+                roles = new Lazy<IRepository<Role>>(() => value);
+            }
+        }
+
+        public UnitOfWork(TimerContext context, IApplicationUserManager<User,int> applicationUserManager,IRepository<Role> role)
         {
             this.context = context;
             this.disposed = false;
+            this.UserManager = applicationUserManager;
+            this.Roles = role;
         }
+
         public void Save()
         {
             this.context.SaveChanges();

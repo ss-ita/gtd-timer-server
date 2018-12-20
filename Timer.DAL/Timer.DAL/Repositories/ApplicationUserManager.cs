@@ -8,7 +8,7 @@ using Timer.DAL.Timer.DAL.Entities;
 
 namespace Timer.DAL.Timer.DAL.Repositories
 {
-    public class ApplicationUserManager : UserManager<User, int>, IUserManager
+    public class ApplicationUserManager : UserManager<User, int>, IApplicationUserManager<User,int>
     {
         public ApplicationUserManager(IUserStore<User, int> store) : base(store)
         {

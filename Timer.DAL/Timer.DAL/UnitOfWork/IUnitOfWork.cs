@@ -9,7 +9,7 @@ namespace Timer.DAL.Timer.DAL.UnitOfWork
 {
     public interface IUnitOfWork : IDisposable
     {
-        ApplicationUserManager UserManager { get; set; }
+        IApplicationUserManager<User,int> UserManager { get; set; }
 
         IRepository<Role> Roles { get; set; }
 

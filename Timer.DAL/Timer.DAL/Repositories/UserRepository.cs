@@ -9,9 +9,11 @@ using Timer.DAL.Timer.DAL.Entities;
 
 namespace Timer.DAL.Timer.DAL.Repositories
 {
-    public class UserRepository : IUserStore<User, int>, IUserEmailStore<User, int>, IRepository<User>
+    public class UserRepository : IUserStore<User, int>, IUserEmailStore<User, int>, IRepository<User>, IQueryableUserStore<User,int>
     {
         public TimerContext timerContext { get; set; }
+
+        public IQueryable<User> Users { get; }
 
         public UserRepository(TimerContext context)
         {
