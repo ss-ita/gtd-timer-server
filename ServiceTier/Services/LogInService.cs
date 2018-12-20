@@ -62,8 +62,7 @@ namespace gtdtimer.Services
 
             var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
-            return JsonConvert.SerializeObject(new
-            { access_token = tokenString });
+            return JsonConvert.SerializeObject(new { access_token = tokenString });
         }
 
     }
