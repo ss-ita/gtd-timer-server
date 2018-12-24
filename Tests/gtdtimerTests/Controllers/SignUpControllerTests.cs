@@ -6,7 +6,6 @@ using Moq;
 using NUnit.Framework;
 using ServiceTier.Services;
 using System.Net;
-using Timer.DAL.Timer.DAL.Entities;
 
 namespace gtdtimerTests.Controllers
 {
@@ -22,32 +21,6 @@ namespace gtdtimerTests.Controllers
         {
             signUpService = new Mock<ISignUpService>();
             subject = new SignUpController(signUpService.Object);
-        }
-
-        [Test]
-        public void GetByID()
-        {
-            int userID = 1;
-            User user = new User();
-
-            signUpService.Setup(_ => _.GetUserById(userID)).Returns(user);
-
-            var actual = (OkObjectResult)subject.GetByID(userID);
-
-            Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
-            Assert.AreSame(actual.Value, user);
-        }
-
-        [Test]
-        public void GetByID_Throws_UserNotFoundException()
-        {
-            int userID = 1;
-
-            signUpService.Setup(_ => _.GetUserById(userID)).Returns((User)null);
-
-            var ex = Assert.Throws<UserNotFoundException>(() => subject.GetByID(userID));
-
-            Assert.That(ex.Message, Is.EqualTo("User does not Exist!"));
         }
 
         [Test]

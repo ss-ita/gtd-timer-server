@@ -23,22 +23,7 @@ namespace ServiceTierTests
             unitOfWork = new Mock<IUnitOfWork>();
             subject = new SignUpService(unitOfWork.Object);
         }
-
-        [Test]
-        public void GetUserById()
-        {
-            int userID = 1;
-            User user = new User();
-            var userRepository = new Mock<IUserStore<User, int>>();
-
-            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object));
-            userRepository.Setup(_ => _.FindByIdAsync(userID)).ReturnsAsync(user);
-
-            var actual = subject.GetUserById(userID);
-
-            Assert.AreSame(actual, user);
-        }
-
+        
         [Test]
         public void AddUser()
         {

@@ -4,13 +4,6 @@
         <name>gtdtimer</name>
     </assembly>
     <members>
-        <member name="M:gtdtimer.Controllers.SignUpController.GetByID(System.Int32)">
-            <summary>
-            Retrieve user by his/her Id.
-            </summary>
-            <param name="id">The Id of the desired User</param>
-            <returns></returns>
-        </member>
         <member name="M:gtdtimer.Controllers.SignUpController.Post(gtdtimer.ModelsDTO.UserDTO)">
             <summary>
             Create user.
