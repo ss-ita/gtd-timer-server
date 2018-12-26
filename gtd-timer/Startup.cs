@@ -13,7 +13,6 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 
-using Common.Constant;
 using Common.Middleware;
 using Timer.DAL.Timer.DAL.Repositories;
 using Timer.DAL.Timer.DAL.Entities;
@@ -37,6 +36,8 @@ namespace gtd_timer
                  .AddEnvironmentVariables();
 
             var config = builder.Build();
+            
+
             builder.AddAzureKeyVault(
                 $"https://{config["AzureKeyVault:vault"]}.vault.azure.net/",
                 config["AzureKeyVault:clientId"],
@@ -51,9 +52,9 @@ namespace gtd_timer
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowSpecificOrigin",
-                    builder => builder.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod());
+                    builder => builder.WithOrigins(IoCContainer.Configuration["Origins"]).AllowAnyHeader().AllowAnyMethod());
             });
-
+          
             services.AddDbContext<TimerContext>(opts => opts.UseSqlServer(IoCContainer.Configuration["AzureConnection"]));
             services.AddIdentity<User, Role>().AddEntityFrameworkStores<TimerContext>().AddDefaultTokenProviders();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -84,7 +85,12 @@ namespace gtd_timer
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
+                c.SwaggerDoc(
+                    IoCContainer.Configuration.GetValue<string>("SwaggerDocument:Name"),
+                    new Info {
+                        Title = IoCContainer.Configuration.GetValue<string>("SwaggerDocument:Title"),
+                        Version =  IoCContainer.Configuration.GetValue<string>("SwaggerDocument:Version")
+                        });
 
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.XML";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
@@ -109,7 +115,10 @@ namespace gtd_timer
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.SwaggerEndpoint(
+                    $"/swagger/{IoCContainer.Configuration.GetValue<string>("SwaggerDocument:Name")}/swagger.json",
+                    IoCContainer.Configuration.GetValue<string>("SwaggerDocument:Name")
+                    );
             });
             app.UseAuthentication();
             app.UseHttpsRedirection();
