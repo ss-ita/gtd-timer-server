@@ -1,7 +1,7 @@
 ﻿using Common.Constant;
 using System.ComponentModel.DataAnnotations;
 
-namespace gtdtimer.ModelsDTO
+namespace Common.ModelsDTO
 {
     public class UserDTO
     {

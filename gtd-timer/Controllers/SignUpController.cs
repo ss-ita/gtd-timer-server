@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
 using gtdtimer.Attributes;
-using gtdtimer.ModelsDTO;
+using Common.ModelsDTO;
 using ServiceTier.Services;
 
 namespace gtdtimer.Controllers

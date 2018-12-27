@@ -1,6 +1,6 @@
 ﻿using Common.Exceptions;
 using gtdtimer.Controllers;
-using gtdtimer.ModelsDTO;
+using Common.ModelsDTO;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;

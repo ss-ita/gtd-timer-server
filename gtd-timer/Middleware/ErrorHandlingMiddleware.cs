@@ -1,13 +1,11 @@
-using Microsoft.AspNetCore.Http;
-
+﻿using Microsoft.AspNetCore.Http;
 using System;
 using System.Net;
 using System.Threading.Tasks;
-
 using Newtonsoft.Json;
 using Common.Exceptions;
 
-namespace Common.Middleware
+namespace gtdtimer.Middleware
 
 {
     public class ErrorHandlingMiddleware

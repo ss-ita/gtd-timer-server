@@ -4,7 +4,7 @@
         <name>gtdtimer</name>
     </assembly>
     <members>
-        <member name="M:gtdtimer.Controllers.SignUpController.Post(gtdtimer.ModelsDTO.UserDTO)">
+        <member name="M:gtdtimer.Controllers.SignUpController.Post(Common.ModelsDTO.UserDTO)">
             <summary>
             Create user.
             </summary>

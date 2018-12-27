@@ -1,5 +1,5 @@
 using Common.Exceptions;
-using gtdtimer.ModelsDTO;
+using Common.ModelsDTO;
 using Microsoft.AspNet.Identity;
 using Moq;
 using NUnit.Framework;

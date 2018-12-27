@@ -4,7 +4,7 @@ using System.Net;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using Common.Exceptions;
-using Common.Middleware;
+using gtdtimer.Middleware;
 
 namespace ErrorHandlingMiddlewareTests
 {

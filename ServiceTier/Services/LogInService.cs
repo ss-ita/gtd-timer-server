@@ -4,7 +4,7 @@ using System.Text;
 
 using Timer.DAL.Timer.DAL.Entities;
 using Timer.DAL.Timer.DAL.UnitOfWork;
-using Common.Model;
+using Common.ModelsDTO;
 using Common.Constant;
 using ServiceTier.Services;
 using System.IdentityModel.Tokens.Jwt;
@@ -23,7 +23,7 @@ namespace gtdtimer.Services
             this.userManager = userManager;
         }
 
-        public string CreateToken(LoginModel model)
+        public string CreateToken(LoginDTO model)
         {
             var user = userManager.UserManager.FindByEmailAsync(model.Email).Result;
 

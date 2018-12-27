@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
 using gtdtimer.Attributes;
-using Common.Model;
+using Common.ModelsDTO;
 using ServiceTier.Services;
 
 namespace gtdtimer.Controllers
@@ -18,7 +18,7 @@ namespace gtdtimer.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login([FromBody] LoginModel model)
+        public IActionResult Login([FromBody] LoginDTO model)
         {
             var token = logInService.CreateToken(model);
 

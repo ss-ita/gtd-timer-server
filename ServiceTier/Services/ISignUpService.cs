@@ -1,4 +1,4 @@
-﻿using gtdtimer.ModelsDTO;
+﻿using Common.ModelsDTO;
 
 namespace ServiceTier.Services
 {

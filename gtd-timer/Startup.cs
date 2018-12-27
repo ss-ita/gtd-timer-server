@@ -13,7 +13,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 
-using Common.Middleware;
+using gtdtimer.Middleware;
 using Timer.DAL.Timer.DAL.Repositories;
 using Timer.DAL.Timer.DAL.Entities;
 using Timer.DAL.Timer.DAL.UnitOfWork;

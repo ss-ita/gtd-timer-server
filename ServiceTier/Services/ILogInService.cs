@@ -1,9 +1,9 @@
-﻿using Common.Model;
+﻿using Common.ModelsDTO;
 
 namespace ServiceTier.Services
 {
     public interface ILogInService
     {
-        string CreateToken(LoginModel model);
+        string CreateToken(LoginDTO model);
     }
 }

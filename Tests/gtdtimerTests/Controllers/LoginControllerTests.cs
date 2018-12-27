@@ -5,7 +5,7 @@ using Task = System.Threading.Tasks.Task;
 
 using Common.Constant;
 using gtdtimer.Controllers;
-using Common.Model;
+using Common.ModelsDTO;
 using Timer.DAL.Timer.DAL.Entities;
 using Timer.DAL.Timer.DAL.Repositories;
 using System.Net;
@@ -34,7 +34,7 @@ namespace LoginControllerTests
             [Test]
             public void LoginTest_ReturnsOkRequest_WhenModelCorect()
             {
-                LoginModel model = new LoginModel() { Email = Constants.CorectEmail, Password = Constants.CorectPassword };
+                LoginDTO model = new LoginDTO() { Email = Constants.CorectEmail, Password = Constants.CorectPassword };
 
                 var actual = (OkObjectResult)subject.Login(model);
 
@@ -44,7 +44,7 @@ namespace LoginControllerTests
             [Test]
             public void LoginTest_Throws_UserNotFoundException()
             {
-                LoginModel model = new LoginModel();
+                LoginDTO model = new LoginDTO();
 
                 logInService.Setup(_ => _.CreateToken(model)).Throws(new UserNotFoundException());
 
