@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\Timer.DAL\Timer.DAL.csproj" />
   </ItemGroup>
 
   <ItemGroup>

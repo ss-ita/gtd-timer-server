@@ -11,6 +11,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using Common.Exceptions;
 using Newtonsoft.Json;
+using Common.IoC;
 
 namespace gtdtimer.Services
 {
@@ -50,7 +51,7 @@ namespace gtdtimer.Services
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
-            var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Constants.SecretKey));
+            var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(IoCContainer.Configuration["JWTSecretKey"]));
 
             var token = new JwtSecurityToken(
                 expires: DateTime.UtcNow.AddHours(Constants.Validity),

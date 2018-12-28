@@ -20,7 +20,7 @@ using Timer.DAL.Timer.DAL.UnitOfWork;
 using ServiceTier.Services;
 using Swashbuckle.AspNetCore.Swagger;
 using gtdtimer.Services;
-using gtdtimer.IoC;
+using Common.IoC;
 
 namespace gtd_timer
 {
@@ -78,7 +78,7 @@ namespace gtd_timer
                 {
                     ValidateIssuer = true,
                     ValidateAudience = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Common.Constant.Constants.SecretKey))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(IoCContainer.Configuration["JWTSecretKey"]))
                 };
             }
             );

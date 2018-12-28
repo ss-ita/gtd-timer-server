@@ -1,7 +1,7 @@
 ﻿using Common.ModelsDTO;
 using Timer.DAL.Timer.DAL.Entities;
 
-namespace Common.Extensions
+namespace Timer.DAL.Extensions
 {
     public static class UserDTOExtension
     {

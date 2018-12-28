@@ -1,5 +1,5 @@
 ﻿using Common.Exceptions;
-using Common.Extensions;
+using Timer.DAL.Extensions;
 using Common.ModelsDTO;
 using Timer.DAL.Timer.DAL.Entities;
 using Timer.DAL.Timer.DAL.UnitOfWork;

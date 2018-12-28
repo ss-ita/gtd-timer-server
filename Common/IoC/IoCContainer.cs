@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
-namespace gtdtimer.IoC
+
+namespace Common.IoC
 {
     public static class IoCContainer
     {
