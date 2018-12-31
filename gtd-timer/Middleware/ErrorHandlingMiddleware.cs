@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Common.Exceptions;
 
+
 namespace gtdtimer.Middleware
 
 {
@@ -32,15 +33,16 @@ namespace gtdtimer.Middleware
         public Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             var exceptionCode = GetExceptionCode(exception);
-            var result = JsonConvert.SerializeObject(new
-            {
-                error = exception.Message,
-                code = exceptionCode
-            });
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)exceptionCode;
-            return context.Response.WriteAsync(result);
+
+            return context.Response.WriteAsync(JsonConvert.SerializeObject(new
+            {
+                Message = exception.Message,
+                StatusCode = exceptionCode
+            }));
         }
+
 
         private HttpStatusCode GetExceptionCode(Exception exception)
         {
