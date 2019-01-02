@@ -4,11 +4,30 @@
         <name>gtdtimer</name>
     </assembly>
     <members>
-        <member name="M:gtdtimer.Controllers.SignUpController.Post(Common.ModelsDTO.UserDTO)">
+        <member name="M:gtdtimer.Controllers.UserController.Get">
+            <summary>
+            Retrieve current user.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:gtdtimer.Controllers.UserController.Post(Common.ModelsDTO.UserDTO)">
             <summary>
             Create user.
             </summary>
             <param name="model">The DTO model of User entity</param>
+            <returns></returns>
+        </member>
+        <member name="M:gtdtimer.Controllers.UserController.Put(Common.ModelsDTO.UpdatePasswordDTO)">
+            <summary>
+            Update current user password.
+            </summary>
+            <param name="model">The DTO model of Password entity</param>
+            <returns></returns>
+        </member>
+        <member name="M:gtdtimer.Controllers.UserController.Delete">
+            <summary>
+            Delete current user.
+            </summary>
             <returns></returns>
         </member>
     </members>

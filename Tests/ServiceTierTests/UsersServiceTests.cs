@@ -11,21 +11,21 @@ using Timer.DAL.Timer.DAL.UnitOfWork;
 namespace ServiceTierTests
 {
     [TestFixture]
-    public class SignUpServiceTests
+    public class UsersServiceTests
     {
         private Mock<IUnitOfWork> unitOfWork;
 
-        private SignUpService subject;
+        private UsersService subject;
 
         [SetUp]
         public void Setup()
         {
             unitOfWork = new Mock<IUnitOfWork>();
-            subject = new SignUpService(unitOfWork.Object);
+            subject = new UsersService(unitOfWork.Object);
         }
         
         [Test]
-        public void AddUser()
+        public void Create()
         {
             UserDTO model = new UserDTO { Email = "" };
             var userRepository = new Mock<IUserEmailStore<User, int>>();
@@ -33,13 +33,13 @@ namespace ServiceTierTests
             unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object));
             userRepository.Setup(_ => _.FindByEmailAsync(model.Email)).ReturnsAsync((User)null);
 
-            subject.AddUser(model);
+            subject.Create(model);
 
             unitOfWork.Verify(_ => _.Save(), Times.Once);
         }
 
         [Test]
-        public void AddUser_Throws_UserAlreadyExistsException()
+        public void Create_Throws_UserAlreadyExistsException()
         {
             UserDTO model = new UserDTO { Email = "" };
             User user = new User();
@@ -48,7 +48,7 @@ namespace ServiceTierTests
             unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object));
             userRepository.Setup(_ => _.FindByEmailAsync(model.Email)).ReturnsAsync(user);
 
-            var ex = Assert.Throws<UserAlreadyExistsException>(() => subject.AddUser(model));
+            var ex = Assert.Throws<UserAlreadyExistsException>(() => subject.Create(model));
 
             Assert.That(ex.Message, Is.EqualTo("User with such email address already exists"));
         }

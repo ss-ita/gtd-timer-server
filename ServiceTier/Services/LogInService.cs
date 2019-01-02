@@ -47,6 +47,7 @@ namespace gtdtimer.Services
         {
             var claims = new[]
             {
+                new Claim(Constants.ClaimUserId, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };

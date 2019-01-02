@@ -58,8 +58,9 @@ namespace gtd_timer
             services.AddDbContext<TimerContext>(opts => opts.UseSqlServer(IoCContainer.Configuration["AzureConnection"]));
             services.AddIdentity<User, Role>().AddEntityFrameworkStores<TimerContext>().AddDefaultTokenProviders();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<ISignUpService, SignUpService>();
             services.AddScoped<ILogInService, LogInService>();
+            services.AddScoped<IUsersService, UsersService>();
+            services.AddScoped<IUserIdentityService, UserIdentityService>();
 
             services.AddScoped<IRepository<Role>, Repository<Role>>();
             services.AddScoped<IApplicationUserManager<User, int>, ApplicationUserManager>();
@@ -78,6 +79,9 @@ namespace gtd_timer
                 {
                     ValidateIssuer = true,
                     ValidateAudience = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = "Tokens:Issuer",
+                    ValidAudience = "Tokens:Audience",
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(IoCContainer.Configuration["JWTSecretKey"]))
                 };
             }
