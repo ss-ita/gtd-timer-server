@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Timer.DAL.Timer.DAL.Entities;
 
-namespace gtdtimer.Migrations
+namespace Timer.DAL.Migrations
 {
     [DbContext(typeof(TimerContext))]
-    [Migration("20181207111910_timermigration")]
-    partial class timermigration
+    [Migration("20181228115426_preset-update-migration")]
+    partial class presetupdatemigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,167 +20,6 @@ namespace gtdtimer.Migrations
                 .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("gtdtimer.Timer.DAL.Entities.Message", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("MessageText");
-
-                    b.Property<int>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Messages");
-                });
-
-            modelBuilder.Entity("gtdtimer.Timer.DAL.Entities.Preset", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("PresetName");
-
-                    b.Property<int?>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Presets");
-                });
-
-            modelBuilder.Entity("gtdtimer.Timer.DAL.Entities.Role", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken();
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
-
-                    b.ToTable("AspNetRoles");
-                });
-
-            modelBuilder.Entity("gtdtimer.Timer.DAL.Entities.Task", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("FinishTime");
-
-                    b.Property<string>("GroupName");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<DateTime>("StartTime");
-
-                    b.Property<string>("TaskDescription");
-
-                    b.Property<string>("TaskName");
-
-                    b.Property<int>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Tasks");
-                });
-
-            modelBuilder.Entity("gtdtimer.Timer.DAL.Entities.Timer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("PresetId");
-
-                    b.Property<string>("TimerName");
-
-                    b.Property<TimeSpan>("TimerTime");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PresetId");
-
-                    b.ToTable("Timers");
-                });
-
-            modelBuilder.Entity("gtdtimer.Timer.DAL.Entities.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("AccessFailedCount");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken();
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256);
-
-                    b.Property<bool>("EmailConfirmed");
-
-                    b.Property<string>("FirstName");
-
-                    b.Property<string>("LastName");
-
-                    b.Property<bool>("LockoutEnabled");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("PasswordHash");
-
-                    b.Property<string>("PhoneNumber");
-
-                    b.Property<bool>("PhoneNumberConfirmed");
-
-                    b.Property<string>("SecurityStamp");
-
-                    b.Property<bool>("TwoFactorEnabled");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.ToTable("AspNetUsers");
-                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
@@ -265,40 +104,176 @@ namespace gtdtimer.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("gtdtimer.Timer.DAL.Entities.Message", b =>
+            modelBuilder.Entity("Timer.DAL.Timer.DAL.Entities.Message", b =>
                 {
-                    b.HasOne("gtdtimer.Timer.DAL.Entities.User", "User")
-                        .WithMany("Messages")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Text");
+
+                    b.Property<int>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Messages");
                 });
 
-            modelBuilder.Entity("gtdtimer.Timer.DAL.Entities.Preset", b =>
+            modelBuilder.Entity("Timer.DAL.Timer.DAL.Entities.Preset", b =>
                 {
-                    b.HasOne("gtdtimer.Timer.DAL.Entities.User", "User")
-                        .WithMany("Presets")
-                        .HasForeignKey("UserId");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name");
+
+                    b.Property<int?>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Presets");
                 });
 
-            modelBuilder.Entity("gtdtimer.Timer.DAL.Entities.Task", b =>
+            modelBuilder.Entity("Timer.DAL.Timer.DAL.Entities.Role", b =>
                 {
-                    b.HasOne("gtdtimer.Timer.DAL.Entities.User", "User")
-                        .WithMany("Tasks")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken();
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles");
                 });
 
-            modelBuilder.Entity("gtdtimer.Timer.DAL.Entities.Timer", b =>
+            modelBuilder.Entity("Timer.DAL.Timer.DAL.Entities.Tasks", b =>
                 {
-                    b.HasOne("gtdtimer.Timer.DAL.Entities.Preset", "Preset")
-                        .WithMany("Timers")
-                        .HasForeignKey("PresetId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description");
+
+                    b.Property<DateTime>("FinishTime");
+
+                    b.Property<string>("GroupName");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<string>("Name");
+
+                    b.Property<DateTime>("StartTime");
+
+                    b.Property<int>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Tasks");
+                });
+
+            modelBuilder.Entity("Timer.DAL.Timer.DAL.Entities.Timer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<TimeSpan>("Interval");
+
+                    b.Property<string>("Name");
+
+                    b.Property<int>("PresetId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PresetId");
+
+                    b.ToTable("Timers");
+                });
+
+            modelBuilder.Entity("Timer.DAL.Timer.DAL.Entities.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AccessFailedCount");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken();
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256);
+
+                    b.Property<bool>("EmailConfirmed");
+
+                    b.Property<string>("FirstName");
+
+                    b.Property<string>("LastName");
+
+                    b.Property<bool>("LockoutEnabled");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("PasswordHash");
+
+                    b.Property<string>("PhoneNumber");
+
+                    b.Property<bool>("PhoneNumberConfirmed");
+
+                    b.Property<string>("SecurityStamp");
+
+                    b.Property<bool>("TwoFactorEnabled");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers");
+
+                    b.HasData(
+                        new { Id = 300, AccessFailedCount = 0, ConcurrencyStamp = "8d771c10-2814-4948-9888-60c3cd1ca129", Email = "example33@gmail.com", EmailConfirmed = false, FirstName = "Alice", LastName = "Smith", LockoutEnabled = false, PasswordHash = "1234567", PhoneNumberConfirmed = false, TwoFactorEnabled = false },
+                        new { Id = 301, AccessFailedCount = 0, ConcurrencyStamp = "ac61ae6c-5487-432a-8bfb-fd5788ae2452", Email = "example34@gmail.com", EmailConfirmed = false, FirstName = "Bob", LastName = "Johns", LockoutEnabled = false, PasswordHash = "54237829", PhoneNumberConfirmed = false, TwoFactorEnabled = false },
+                        new { Id = 302, AccessFailedCount = 0, ConcurrencyStamp = "941686de-a2d1-482c-8851-af1f9c0bcb3a", Email = "example35@gmail.com", EmailConfirmed = false, FirstName = "Sam", LastName = "Paul", LockoutEnabled = false, PasswordHash = "0978687687", PhoneNumberConfirmed = false, TwoFactorEnabled = false }
+                    );
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
-                    b.HasOne("gtdtimer.Timer.DAL.Entities.Role")
+                    b.HasOne("Timer.DAL.Timer.DAL.Entities.Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -306,7 +281,7 @@ namespace gtdtimer.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
                 {
-                    b.HasOne("gtdtimer.Timer.DAL.Entities.User")
+                    b.HasOne("Timer.DAL.Timer.DAL.Entities.User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -314,7 +289,7 @@ namespace gtdtimer.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
-                    b.HasOne("gtdtimer.Timer.DAL.Entities.User")
+                    b.HasOne("Timer.DAL.Timer.DAL.Entities.User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -322,12 +297,12 @@ namespace gtdtimer.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
                 {
-                    b.HasOne("gtdtimer.Timer.DAL.Entities.Role")
+                    b.HasOne("Timer.DAL.Timer.DAL.Entities.Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("gtdtimer.Timer.DAL.Entities.User")
+                    b.HasOne("Timer.DAL.Timer.DAL.Entities.User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -335,9 +310,40 @@ namespace gtdtimer.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
-                    b.HasOne("gtdtimer.Timer.DAL.Entities.User")
+                    b.HasOne("Timer.DAL.Timer.DAL.Entities.User")
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Timer.DAL.Timer.DAL.Entities.Message", b =>
+                {
+                    b.HasOne("Timer.DAL.Timer.DAL.Entities.User", "User")
+                        .WithMany("Messages")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Timer.DAL.Timer.DAL.Entities.Preset", b =>
+                {
+                    b.HasOne("Timer.DAL.Timer.DAL.Entities.User", "User")
+                        .WithMany("Presets")
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("Timer.DAL.Timer.DAL.Entities.Tasks", b =>
+                {
+                    b.HasOne("Timer.DAL.Timer.DAL.Entities.User", "User")
+                        .WithMany("Tasks")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Timer.DAL.Timer.DAL.Entities.Timer", b =>
+                {
+                    b.HasOne("Timer.DAL.Timer.DAL.Entities.Preset", "Preset")
+                        .WithMany("Timers")
+                        .HasForeignKey("PresetId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

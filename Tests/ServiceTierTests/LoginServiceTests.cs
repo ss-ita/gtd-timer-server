@@ -1,5 +1,5 @@
 ﻿using Common.Exceptions;
-using Common.Model;
+using Common.ModelsDTO;
 using gtdtimer.Services;
 using Microsoft.AspNet.Identity;
 using Moq;
@@ -28,7 +28,7 @@ namespace ServiceTierTests
         [Test]
         public void CreateToken()
         {
-            LoginModel model = new LoginModel { Email = "test@gmail.com", Password = "12345" };
+            LoginDTO model = new LoginDTO { Email = "test@gmail.com", Password = "12345" };
             User user = new User() { PasswordHash = "12345", Email = "test@gmail.com" };
 
             userManager.Setup(_ => _.FindByEmailAsync(model.Email)).ReturnsAsync(user);
@@ -42,7 +42,7 @@ namespace ServiceTierTests
         [Test]
         public void LoginTest_Throws_UserNotFoundException()
         {
-            LoginModel model = new LoginModel { Email = "", Password = "12345" };
+            LoginDTO model = new LoginDTO { Email = "", Password = "12345" };
             User user = null;
 
             userManager.Setup(_ => _.FindByEmailAsync(model.Email)).ReturnsAsync(user);
@@ -56,13 +56,13 @@ namespace ServiceTierTests
         [Test]
         public void LoginTest_Throws_IncorrectPasswordException()
         {
-            LoginModel model = new LoginModel { Email = "", Password = "12345" };
+            LoginDTO model = new LoginDTO { Email = "", Password = "12345" };
             User user = new User() { PasswordHash = "1234" };
 
             userManager.Setup(_ => _.FindByEmailAsync(model.Email)).ReturnsAsync(user);
             unitOfWork.Setup(_ => _.UserManager).Returns(userManager.Object);
 
-            var ex = Assert.Throws<IncorrectPasswordException>(() => subject.CreateToken(model));
+            var ex = Assert.Throws<IncorectLoginException>(() => subject.CreateToken(model));
 
             Assert.That(ex.Message, Is.EqualTo(Common.Constant.Constants.ErrorMessageIncorrectPassword));
         }

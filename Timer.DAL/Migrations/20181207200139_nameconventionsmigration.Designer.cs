@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Timer.DAL.Timer.DAL.Entities;
 
-namespace gtdtimer.Migrations
+namespace Timer.DAL.Migrations
 {
     [DbContext(typeof(TimerContext))]
-    [Migration("20181206110536_UserSeedData2")]
-    partial class UserSeedData2
+    [Migration("20181207200139_nameconventionsmigration")]
+    partial class nameconventionsmigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,40 @@ namespace gtdtimer.Migrations
                 .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("gtdtimer.Timer.DAL.Entities.Message", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Text");
+
+                    b.Property<int>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Messages");
+                });
+
+            modelBuilder.Entity("gtdtimer.Timer.DAL.Entities.Preset", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name");
+
+                    b.Property<int?>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Presets");
+                });
 
             modelBuilder.Entity("gtdtimer.Timer.DAL.Entities.Role", b =>
                 {
@@ -44,6 +78,52 @@ namespace gtdtimer.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
+                });
+
+            modelBuilder.Entity("gtdtimer.Timer.DAL.Entities.Task", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description");
+
+                    b.Property<DateTime>("FinishTime");
+
+                    b.Property<string>("GroupName");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<string>("Name");
+
+                    b.Property<DateTime>("StartTime");
+
+                    b.Property<int>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Tasks");
+                });
+
+            modelBuilder.Entity("gtdtimer.Timer.DAL.Entities.Timer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<TimeSpan>("Interval");
+
+                    b.Property<string>("Name");
+
+                    b.Property<int>("PresetId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PresetId");
+
+                    b.ToTable("Timers");
                 });
 
             modelBuilder.Entity("gtdtimer.Timer.DAL.Entities.User", b =>
@@ -102,7 +182,9 @@ namespace gtdtimer.Migrations
                     b.ToTable("AspNetUsers");
 
                     b.HasData(
-                        new { Id = 77, AccessFailedCount = 0, ConcurrencyStamp = "da7b23a8-1978-4caf-8493-23c4ec617063", Email = "example@gmail.com", EmailConfirmed = false, FirstName = "Alice", LastName = "Smith", LockoutEnabled = false, PasswordHash = "1234567", PhoneNumberConfirmed = false, TwoFactorEnabled = false }
+                        new { Id = 300, AccessFailedCount = 0, ConcurrencyStamp = "0d13f334-13e6-4f85-992e-64ec253ff59c", Email = "example33@gmail.com", EmailConfirmed = false, FirstName = "Alice", LastName = "Smith", LockoutEnabled = false, PasswordHash = "1234567", PhoneNumberConfirmed = false, TwoFactorEnabled = false },
+                        new { Id = 301, AccessFailedCount = 0, ConcurrencyStamp = "f12d3c7c-5960-442c-bb9c-7717253fda15", Email = "example34@gmail.com", EmailConfirmed = false, FirstName = "Bob", LastName = "Johns", LockoutEnabled = false, PasswordHash = "54237829", PhoneNumberConfirmed = false, TwoFactorEnabled = false },
+                        new { Id = 302, AccessFailedCount = 0, ConcurrencyStamp = "0dadb0f8-312a-492e-8aeb-faff137cd4da", Email = "example35@gmail.com", EmailConfirmed = false, FirstName = "Sam", LastName = "Paul", LockoutEnabled = false, PasswordHash = "0978687687", PhoneNumberConfirmed = false, TwoFactorEnabled = false }
                     );
                 });
 
@@ -187,6 +269,37 @@ namespace gtdtimer.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("gtdtimer.Timer.DAL.Entities.Message", b =>
+                {
+                    b.HasOne("gtdtimer.Timer.DAL.Entities.User", "User")
+                        .WithMany("Messages")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("gtdtimer.Timer.DAL.Entities.Preset", b =>
+                {
+                    b.HasOne("gtdtimer.Timer.DAL.Entities.User", "User")
+                        .WithMany("Presets")
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("gtdtimer.Timer.DAL.Entities.Task", b =>
+                {
+                    b.HasOne("gtdtimer.Timer.DAL.Entities.User", "User")
+                        .WithMany("Tasks")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("gtdtimer.Timer.DAL.Entities.Timer", b =>
+                {
+                    b.HasOne("gtdtimer.Timer.DAL.Entities.Preset", "Preset")
+                        .WithMany("Timers")
+                        .HasForeignKey("PresetId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>

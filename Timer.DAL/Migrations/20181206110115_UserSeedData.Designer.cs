@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Timer.DAL.Timer.DAL.Entities;
 
-namespace gtdtimer.Migrations
+namespace Timer.DAL.Migrations
 {
     [DbContext(typeof(TimerContext))]
     [Migration("20181206110115_UserSeedData")]

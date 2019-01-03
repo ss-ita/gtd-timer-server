@@ -35,7 +35,7 @@ namespace gtdtimer.Services
 
             if(user.PasswordHash != model.Password)
             {
-                throw new IncorrectPasswordException();
+                throw new IncorectLoginException();
             }
 
             var token = GenerateToken(user);

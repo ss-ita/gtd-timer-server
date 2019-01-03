@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Timer.DAL.Timer.DAL.Entities;
 
-namespace gtdtimer.Migrations
+namespace Timer.DAL.Migrations
 {
     [DbContext(typeof(TimerContext))]
-    [Migration("20181206111230_messagemigration")]
-    partial class messagemigration
+    [Migration("20181206113009_presetsnull")]
+    partial class presetsnull
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -52,7 +52,7 @@ namespace gtdtimer.Migrations
 
                     b.Property<TimeSpan>("PresetWorkTime");
 
-                    b.Property<int>("UserId");
+                    b.Property<int?>("UserId");
 
                     b.HasKey("Id");
 
@@ -84,6 +84,33 @@ namespace gtdtimer.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
+                });
+
+            modelBuilder.Entity("gtdtimer.Timer.DAL.Entities.Task", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("FinishTime");
+
+                    b.Property<DateTime>("Goal");
+
+                    b.Property<string>("GroupName");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<DateTime>("StartTime");
+
+                    b.Property<string>("TaskName");
+
+                    b.Property<int>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Tasks");
                 });
 
             modelBuilder.Entity("gtdtimer.Timer.DAL.Entities.User", b =>
@@ -237,6 +264,13 @@ namespace gtdtimer.Migrations
                 {
                     b.HasOne("gtdtimer.Timer.DAL.Entities.User", "User")
                         .WithMany("Presets")
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("gtdtimer.Timer.DAL.Entities.Task", b =>
+                {
+                    b.HasOne("gtdtimer.Timer.DAL.Entities.User", "User")
+                        .WithMany("Tasks")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

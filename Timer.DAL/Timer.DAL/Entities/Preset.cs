@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Timer.DAL.Timer.DAL.Entities
 {
@@ -6,8 +7,6 @@ namespace Timer.DAL.Timer.DAL.Entities
     {
         public int Id { get; set; }
         public string Name { get; set; }
-
-        public IEnumerable<Timer> Timers { get; set; }
 
         public int? UserId { get; set; }
         public User User { get; set; }

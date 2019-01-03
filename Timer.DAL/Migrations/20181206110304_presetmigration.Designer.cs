@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Timer.DAL.Timer.DAL.Entities;
 
-namespace gtdtimer.Migrations
+namespace Timer.DAL.Migrations
 {
     [DbContext(typeof(TimerContext))]
-    [Migration("20181205132203_EFCoreCodeFirstmigration")]
-    partial class EFCoreCodeFirstmigration
+    [Migration("20181206110304_presetmigration")]
+    partial class presetmigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,29 @@ namespace gtdtimer.Migrations
                 .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("gtdtimer.Timer.DAL.Entities.Preset", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<TimeSpan>("PresetBigBreakTimeTime");
+
+                    b.Property<string>("PresetName");
+
+                    b.Property<TimeSpan>("PresetSmalBreakTime");
+
+                    b.Property<TimeSpan>("PresetWorkTime");
+
+                    b.Property<int>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Presets");
+                });
 
             modelBuilder.Entity("gtdtimer.Timer.DAL.Entities.Role", b =>
                 {
@@ -183,6 +206,14 @@ namespace gtdtimer.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("gtdtimer.Timer.DAL.Entities.Preset", b =>
+                {
+                    b.HasOne("gtdtimer.Timer.DAL.Entities.User", "User")
+                        .WithMany("Presets")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>

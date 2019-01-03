@@ -5,6 +5,7 @@ namespace Common.ModelsDTO
 {
     public class UserDTO
     {
+
         [Required]
         public string FirstName { get; set; }
 

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace gtdtimer.Migrations
+namespace Timer.DAL.Migrations
 {
     public partial class UserSeedData : Migration
     {

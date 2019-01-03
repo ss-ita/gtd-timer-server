@@ -18,5 +18,19 @@ namespace Timer.DAL.Extensions
 
             return user;
         }
+
+        public static UserDTO ToUserDTO(this User user)
+        {
+            UserDTO userDTO = new UserDTO
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Password = user.PasswordHash,
+                PasswordConfirm = user.PasswordHash
+            };
+
+            return userDTO;
+        }
     }
 }
