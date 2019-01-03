@@ -22,7 +22,7 @@ namespace gtdtimerTests.Controllers
         public void Setup()
         {
             usersService = new Mock<IUsersService>();
-            userIdentityService= new Mock<IUserIdentityService>();
+            userIdentityService = new Mock<IUserIdentityService>();
             subject = new UserController(userIdentityService.Object, usersService.Object);
         }
 
@@ -61,8 +61,8 @@ namespace gtdtimerTests.Controllers
 
             var actual = (OkResult)subject.Post(model);
 
-            Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
             usersService.Verify(_ => _.Create(model), Times.Once);
+            Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
         }
 
         [Test]
@@ -75,6 +75,35 @@ namespace gtdtimerTests.Controllers
             var ex = Assert.Throws<UserAlreadyExistsException>(() => subject.Post(model));
 
             Assert.That(ex.Message, Is.EqualTo("User with such email address already exists"));
+        }
+
+        [Test]
+        public void Put()
+        {
+            int userID = 1;
+            User user = new User();
+            UpdatePasswordDTO model = new UpdatePasswordDTO();
+
+            userIdentityService.Setup(_ => _.GetUserId()).Returns(userID);
+            usersService.Setup(_ => _.Get(userID)).Returns(user);
+
+            var actual = (OkResult)subject.Put(model);
+
+            usersService.Verify(_ => _.Update(userID, model), Times.Once);
+            Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
+        }
+
+        [Test]
+        public void Delete()
+        {
+            int userID = 1;
+
+            userIdentityService.Setup(_ => _.GetUserId()).Returns(userID);
+
+            var actual = (OkResult)subject.Delete();
+
+            usersService.Verify(_ => _.Delete(userID), Times.Once);
+            Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
         }
     }
 }
