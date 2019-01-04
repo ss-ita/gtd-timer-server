@@ -9,7 +9,7 @@ using Timer.DAL.Timer.DAL.Entities;
 
 namespace Timer.DAL.Timer.DAL.Repositories
 {
-    public class UserRepository : IUserStore<User, int>, IUserEmailStore<User, int>, IRepository<User>, IQueryableUserStore<User,int>
+    public class UserRepository : IUserStoreRepository
     {
         public TimerContext timerContext { get; set; }
 
@@ -171,6 +171,33 @@ namespace Timer.DAL.Timer.DAL.Repositories
         public void Save()
         {
             timerContext.SaveChanges();
+        }
+
+        public Task SetPasswordHashAsync(User user, string passwordHash)
+        {
+            if (user == null)
+            {
+                throw new ArgumentNullException("user");
+            }
+
+            user.PasswordHash = passwordHash;
+
+            return Task.FromResult(0);
+        }
+
+        public Task<string> GetPasswordHashAsync(User user)
+        {
+            if (user == null)
+            {
+                throw new ArgumentNullException("user");
+            }
+
+            return Task.FromResult<string>(user.PasswordHash);
+        }
+
+        public Task<bool> HasPasswordAsync(User user)
+        {
+            return Task.FromResult<bool>(!String.IsNullOrEmpty(user.PasswordHash));
         }
     }
 }

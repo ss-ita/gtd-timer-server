@@ -33,7 +33,7 @@ namespace gtdtimer.Services
                 throw new UserNotFoundException();
             }
 
-            if(user.PasswordHash != model.Password)
+            if(!userManager.UserManager.CheckPasswordAsync(user, model.Password).Result)
             {
                 throw new IncorectLoginException();
             }

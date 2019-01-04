@@ -12,7 +12,6 @@ namespace Timer.DAL.Extensions
                 FirstName = userDTO.FirstName,
                 LastName = userDTO.LastName,
                 Email = userDTO.Email,
-                PasswordHash = userDTO.Password,
                 UserName = userDTO.Email
             };
 

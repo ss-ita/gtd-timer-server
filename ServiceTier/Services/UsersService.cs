@@ -27,19 +27,19 @@ namespace ServiceTier.Services
             }
 
             User user = model.ToUser();
-            unitOfWork.UserManager.CreateAsync(user).GetAwaiter().GetResult();
+            unitOfWork.UserManager.CreateAsync(user, model.Password).GetAwaiter().GetResult();
             unitOfWork.Save();
         }
 
         public void Update(int id, UpdatePasswordDTO model)
         {
             User user = Get(id);
-            if (user.PasswordHash != model.PasswordOld)
+            if (!unitOfWork.UserManager.CheckPasswordAsync(user, model.PasswordOld).Result)
             {
                 throw new IncorrectPasswordException();
             }
 
-            user.PasswordHash = model.PasswordNew;
+            var result = unitOfWork.UserManager.ChangePasswordAsync(id, model.PasswordOld, model.PasswordNew).Result;
             unitOfWork.Save();
         }
 
