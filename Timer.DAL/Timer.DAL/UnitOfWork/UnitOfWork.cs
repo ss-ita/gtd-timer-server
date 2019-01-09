@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNet.Identity;
-using Microsoft.AspNetCore.Identity;
-using System;
+﻿using System;
 
 using Timer.DAL.Timer.DAL.Entities;
 using Timer.DAL.Timer.DAL.Repositories;
@@ -12,6 +10,7 @@ namespace Timer.DAL.Timer.DAL.UnitOfWork
         private TimerContext context;
         private Lazy<IApplicationUserManager<User, int>> userManager;
         private Lazy<IRepository<Role>> roles;
+        private Lazy<IRepository<UserRole>> userRoles;
         private Lazy<IRepository<Preset>> presets;
         private Lazy<IRepository<Timer.DAL.Entities.Timer>> timers;
         private bool disposed;
@@ -51,7 +50,16 @@ namespace Timer.DAL.Timer.DAL.UnitOfWork
             }
         }
 
-        public UnitOfWork(TimerContext context, IApplicationUserManager<User, int> applicationUserManager, IRepository<Role> role, IRepository<Preset> preset, IRepository<Timer.DAL.Entities.Timer> timer)
+        public IRepository<UserRole> UserRoles
+        {
+            get => userRoles.Value;
+            set
+            {
+                userRoles = new Lazy<IRepository<UserRole>>(() => value);
+            }
+        }
+
+        public UnitOfWork(TimerContext context, IApplicationUserManager<User, int> applicationUserManager, IRepository<Role> role, IRepository<Preset> preset, IRepository<Timer.DAL.Entities.Timer> timer, IRepository<UserRole> userRole)
         {
             this.context = context;
             this.disposed = false;
@@ -59,6 +67,7 @@ namespace Timer.DAL.Timer.DAL.UnitOfWork
             this.Roles = role;
             this.Presets = preset;
             this.Timers = timer;
+            this.UserRoles = userRole;
         }
 
         public void Save()

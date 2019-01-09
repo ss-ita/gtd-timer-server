@@ -12,5 +12,7 @@
         public const string PasswordRegularExpression = @"^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=.,\-_!])([a-zA-Z0-9 @#$%^&+=*.,\-_!]){8,}$";
         public const string ErrorMessageUserNotFound = "User does not Exist!";
         public const string ErrorMessageIncorrectPassword = "Incorrect password entered";
+        public const string AdminRole = "Admin";
+        public const string SuperAdminRole = "SuperAdmin";
     }
 }

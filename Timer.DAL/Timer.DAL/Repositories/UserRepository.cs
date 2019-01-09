@@ -9,7 +9,7 @@ using Timer.DAL.Timer.DAL.Entities;
 
 namespace Timer.DAL.Timer.DAL.Repositories
 {
-    public class UserRepository : IUserStoreRepository
+    public class UserRepository : IUserStore<User, int>, IUserEmailStore<User, int>, IRepository<User>, IQueryableUserStore<User,int>, IUserRoleStore<User, int>
     {
         public TimerContext timerContext { get; set; }
 
@@ -173,6 +173,61 @@ namespace Timer.DAL.Timer.DAL.Repositories
             timerContext.SaveChanges();
         }
 
+        public async Task<IList<string>> GetRolesAsync(User user)
+        {
+            List<string> roles = (from userRole in timerContext.UserRoles
+                                  join role in timerContext.Roles
+                                on userRole.RoleId equals role.Id
+                                  where userRole.UserId == user.Id
+                                  select role.Name).ToList<string>();
+            return await Task.FromResult((IList<string>)roles);
+        }
+
+        public Task AddToRoleAsync(User user, string roleName)
+        {
+            var roleToAdd = (from role in timerContext.Roles
+                             where role.Name == roleName
+                             select role).First();
+            UserRole userRole = new UserRole
+            {
+                RoleId = roleToAdd.Id,
+                UserId = user.Id,
+                User = user,
+                Role = roleToAdd
+            };
+            timerContext.UserRoles.Add(userRole);
+            return timerContext.SaveChangesAsync();
+        }
+
+        public Task RemoveFromRoleAsync(User user, string roleName)
+        {
+            var roleToRemove = (from role in timerContext.Roles
+                                where role.Name == roleName
+                                select role).First();
+            UserRole userRole = new UserRole
+            {
+                RoleId = roleToRemove.Id,
+                UserId = user.Id,
+                User = user,
+                Role = roleToRemove
+            };
+            timerContext.UserRoles.Remove(userRole);
+            return timerContext.SaveChangesAsync();
+        }
+
+        public async Task<bool> IsInRoleAsync(User user, string roleName)
+        {
+            var check = (from role in timerContext.Roles
+             where role.Name == roleName
+             select role).First();
+
+            if (check != null)
+            {
+                return false;
+            }
+            return true;
+        }
+        
         public Task SetPasswordHashAsync(User user, string passwordHash)
         {
             if (user == null)

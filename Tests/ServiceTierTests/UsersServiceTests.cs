@@ -1,5 +1,6 @@
 using Common.Exceptions;
 using Common.ModelsDTO;
+using Common.Constant;
 using Microsoft.AspNet.Identity;
 using Moq;
 using NUnit.Framework;
@@ -7,6 +8,7 @@ using ServiceTier.Services;
 using Timer.DAL.Timer.DAL.Entities;
 using Timer.DAL.Timer.DAL.Repositories;
 using Timer.DAL.Timer.DAL.UnitOfWork;
+using System.Collections.Generic;
 
 namespace ServiceTierTests
 {
@@ -30,8 +32,9 @@ namespace ServiceTierTests
             int userID = 1;
             User user = new User();
             var userRepository = new Mock<IUserStore<User, int>>();
+            var timerContext = new Mock<TimerContext>();
 
-            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object));
+            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
             userRepository.Setup(_ => _.FindByIdAsync(userID)).ReturnsAsync(user);
 
             var actual = subject.Get(userID);
@@ -44,8 +47,9 @@ namespace ServiceTierTests
         {
             UserDTO model = new UserDTO { Email = "" };
             var userRepository = new Mock<IUserEmailStore<User, int>>();
+            var timerContext = new Mock<TimerContext>();
 
-            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object));
+            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
             userRepository.Setup(_ => _.FindByEmailAsync(model.Email)).ReturnsAsync((User)null);
 
             subject.Create(model);
@@ -59,8 +63,9 @@ namespace ServiceTierTests
             UserDTO model = new UserDTO { Email = "" };
             User user = new User();
             var userRepository = new Mock<IUserEmailStore<User, int>>();
+            var timerContext = new Mock<TimerContext>();
 
-            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object));
+            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
             userRepository.Setup(_ => _.FindByEmailAsync(model.Email)).ReturnsAsync(user);
 
             var ex = Assert.Throws<UserAlreadyExistsException>(() => subject.Create(model));
@@ -76,8 +81,9 @@ namespace ServiceTierTests
             UpdatePasswordDTO model = new UpdatePasswordDTO { PasswordOld = password };
             User user = new User { PasswordHash = password };
 
+            var timerContext = new Mock<TimerContext>();
             var userRepository = new Mock<IUserEmailStore<User, int>>();
-            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object));
+            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
             userRepository.Setup(_ => _.FindByIdAsync(userId)).ReturnsAsync(user);
 
             subject.Update(userId, model);
@@ -93,7 +99,8 @@ namespace ServiceTierTests
             User user = new User { PasswordHash = "password" };
 
             var userRepository = new Mock<IUserEmailStore<User, int>>();
-            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object));
+            var timerContext = new Mock<TimerContext>();
+            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
             userRepository.Setup(_ => _.FindByIdAsync(userId)).ReturnsAsync(user);
 
             var ex = Assert.Throws<IncorrectPasswordException>(() => subject.Update(userId, model));
@@ -107,8 +114,9 @@ namespace ServiceTierTests
             int userId = 1;
             User user = new User();
             var userRepository = new Mock<IUserEmailStore<User, int>>();
+            var timerContext = new Mock<TimerContext>();
 
-            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object));
+            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
             userRepository.Setup(_ => _.FindByIdAsync(userId)).ReturnsAsync(user);
 
             subject.Delete(userId);
@@ -123,6 +131,58 @@ namespace ServiceTierTests
             subject.Dispose();
 
             unitOfWork.Verify(_ => _.Dispose(), Times.Once);
+        }
+
+        [Test]
+        public void AddRoleTest_ReturnsOkRequest_WhenModelCorectAsync()
+        {
+            RoleDTO model = new RoleDTO() { Email = Common.Constant.Constants.CorectEmail, Role = Common.Constant.Constants.AdminRole };
+            User user = new User();
+            var roles = new List<string>();
+
+            var timerContext = new Mock<TimerContext>();
+            var userRepository = new Mock<IUserStore<User, int>>();
+            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
+            unitOfWork.Setup(_ => _.UserManager.FindByEmailAsync(model.Email)).ReturnsAsync(user);
+            unitOfWork.Setup(_ => _.UserManager.GetRolesAsync(user.Id)).ReturnsAsync(roles);
+            unitOfWork.Setup(_ => _.UserManager.AddToRoleAsync(user.Id, model.Role));
+
+            subject.AddToRoleAsync(model);
+
+            unitOfWork.Verify(_ => _.UserManager.AddToRoleAsync(user.Id, model.Role), Times.Once);
+        }
+
+        [Test]
+        public async System.Threading.Tasks.Task RemoveRoleTest_ReturnsOkRequest_WhenModelCorectAsync()
+        {
+            RoleDTO model = new RoleDTO() { Email = Common.Constant.Constants.CorectEmail, Role = Common.Constant.Constants.AdminRole };
+            User user = new User();
+
+            var timerContext = new Mock<TimerContext>();
+            var userRepository = new Mock<IUserStore<User, int>>();
+            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
+            unitOfWork.Setup(_ => _.UserManager.FindByEmailAsync(model.Email)).ReturnsAsync(user);
+            unitOfWork.Setup(_ => _.UserManager.RemoveFromRoleAsync(user.Id, model.Role));
+
+            subject.RemoveFromRolesAsync(model);
+
+            unitOfWork.Verify(_ => _.UserManager.RemoveFromRoleAsync(user.Id, model.Role), Times.Once);
+        }
+
+        [Test]
+        public async System.Threading.Tasks.Task GetAllEmailTest_ReturnsOkRequestAsync()
+        {
+            var emails = new List<string>();
+
+            var userRepository = new Mock<IUserEmailStore<User, int>>();
+            var timerContext = new Mock<TimerContext>();
+
+            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
+            unitOfWork.Setup(_ => _.UserManager.GetAllEmails()).ReturnsAsync(emails);
+
+            var actual = await subject.GetUsersEmailsAsync();
+
+            Assert.AreSame(actual, emails); ;
         }
     }
 }

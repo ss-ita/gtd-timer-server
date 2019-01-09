@@ -30,5 +30,25 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:gtdtimer.Controllers.UserController.AddToRole(Common.ModelsDTO.RoleDTO)">
+            <summary>
+            Add role
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:gtdtimer.Controllers.UserController.RemoveFromRoles(Common.ModelsDTO.RoleDTO)">
+            <summary>
+            RemoveRole
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:gtdtimer.Controllers.UserController.GetUsersEmailsAsync">
+            <summary>
+            Get users emails
+            </summary>
+            <returns></returns>
+        </member>
     </members>
 </doc>

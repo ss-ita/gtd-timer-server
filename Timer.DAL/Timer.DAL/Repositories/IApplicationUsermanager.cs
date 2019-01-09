@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 
@@ -16,6 +14,11 @@ namespace Timer.DAL.Timer.DAL.Repositories
         Task<TUser> FindByNameAsync(string userName);
         Task<IdentityResult> SetEmailAsync(TKey userId, string email);
         Task<TUser> FindByEmailAsync(string email);
+        Task<IList<string>> GetRolesAsync(TKey key);
+        Task<IdentityResult> AddToRoleAsync(TKey key, string roleName);
+        Task<IdentityResult> RemoveFromRoleAsync(TKey key, string roleName);
+        Task<bool> IsInRoleAsync(TKey key, string roleName);
+        Task<IList<string>> GetAllEmails();
         Task<bool> CheckPasswordAsync(TUser user, string password);
         Task<IdentityResult> ChangePasswordAsync(TKey userId, string currentPassword, string newPassword);
     }

@@ -14,6 +14,7 @@ namespace Timer.DAL.Timer.DAL.Entities
         public IEnumerable<Preset> Presets { get; set; }
         public IEnumerable<Message> Messages { get; set; }
         public IEnumerable<Tasks> Tasks { get; set; }
+        public ICollection<UserRole> UserRoles { get; set; }
 
         public User()
         {

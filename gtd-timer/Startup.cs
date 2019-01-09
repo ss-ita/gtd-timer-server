@@ -67,6 +67,7 @@ namespace gtd_timer
             services.AddScoped<IRepository<Timer.DAL.Timer.DAL.Entities.Timer>, Repository<Timer.DAL.Timer.DAL.Entities.Timer>>();
             services.AddScoped<IRepository<Preset>, Repository<Preset>>();
             services.AddScoped<IRepository<Role>, Repository<Role>>();
+            services.AddScoped<IRepository<UserRole>, Repository<UserRole>>();
             services.AddScoped<IApplicationUserManager<User, int>, ApplicationUserManager>();
             services.AddScoped<IUserStore<User,int>, UserRepository>(); 
 

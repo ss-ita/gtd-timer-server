@@ -1,5 +1,8 @@
 ﻿using Common.Exceptions;
 using Common.ModelsDTO;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Timer.DAL.Extensions;
 using Timer.DAL.Timer.DAL.Entities;
 using Timer.DAL.Timer.DAL.UnitOfWork;
@@ -55,6 +58,47 @@ namespace ServiceTier.Services
             var userToFind = unitOfWork.UserManager.FindByEmailAsync(model.Email).Result;
 
             return userToFind != null;
+        }
+
+        public async Task AddToRoleAsync(RoleDTO model)
+        {
+            var user = unitOfWork.UserManager.FindByEmailAsync(model.Email).Result;
+
+            if (user == null)
+            {
+                throw new UserNotFoundException();
+            }
+
+            var roles = await unitOfWork.UserManager.GetRolesAsync(user.Id);
+
+            foreach (string role in roles)
+            {
+                if (role == model.Role)
+                {
+                    throw new Exception("Role already exist");
+                }
+            }
+
+            await unitOfWork.UserManager.AddToRoleAsync(user.Id, model.Role);
+        }
+
+        public async Task RemoveFromRolesAsync(RoleDTO model)
+        {
+            var user = unitOfWork.UserManager.FindByEmailAsync(model.Email).Result;
+
+            if (user == null)
+            {
+                throw new UserNotFoundException();
+            }
+
+            await unitOfWork.UserManager.RemoveFromRoleAsync(user.Id, model.Role);
+        }
+
+        public async Task<IList<string>> GetUsersEmailsAsync()
+        {
+            var emailsList = await unitOfWork.UserManager.GetAllEmails();
+
+            return emailsList;
         }
     }
 }
