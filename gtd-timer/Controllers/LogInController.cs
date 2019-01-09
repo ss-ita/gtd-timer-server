@@ -24,5 +24,21 @@ namespace gtdtimer.Controllers
 
             return Ok(token);
         }
+
+        [HttpPost("[action]")]
+        public IActionResult GoogleLogin([FromBody] SocialAuthDTO accessToken)
+        {
+            var token = logInService.CreateTokenWithGoogle(accessToken);
+
+            return Ok(token);
+        }
+
+        [HttpPost("[action]")]
+        public IActionResult FacebookLogin([FromBody] SocialAuthDTO accessToken)
+        {
+            var token = logInService.CreateTokenWithFacebook(accessToken);
+
+            return Ok(token);
+        }
     }
 }

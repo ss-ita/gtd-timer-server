@@ -12,12 +12,15 @@ using Microsoft.IdentityModel.Tokens;
 using Common.Exceptions;
 using Newtonsoft.Json;
 using Common.IoC;
+using System.Net.Http;
+using Timer.DAL.Extensions;
 
 namespace gtdtimer.Services
 {
     public class LogInService : ILogInService
     {
         private IUnitOfWork userManager;
+        private static readonly HttpClient Client = new HttpClient();
 
         public LogInService(IUnitOfWork userManager)
         {
@@ -33,39 +36,60 @@ namespace gtdtimer.Services
                 throw new UserNotFoundException();
             }
 
-            if(!userManager.UserManager.CheckPasswordAsync(user, model.Password).Result)
+            if (!userManager.UserManager.CheckPasswordAsync(user, model.Password).Result)
             {
                 throw new LoginFailedException();
             }
 
-            var token = GenerateToken(user);
+            var token = JWTManager.GenerateToken(user);
 
             return token;
         }
 
-        private static string GenerateToken(User user)
+        public string CreateTokenWithGoogle(SocialAuthDTO accessToken)
         {
-            var claims = new[]
+            string userInfoResponse = Client.GetStringAsync($"{Constants.GoogleResponsePath}{accessToken.AccessToken}").Result;
+
+            var userInfo = JsonConvert.DeserializeObject<GoogleAuthUserData>(userInfoResponse);
+            User user = userManager.UserManager.FindByEmailAsync(userInfo.Email).Result;
+
+            if (user == null)
             {
-                new Claim(Constants.ClaimUserId, user.Id.ToString()),
-                new Claim(JwtRegisteredClaimNames.Sub, user.Email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-            };
+                user = userInfo.ToUser();
+                var result = userManager.UserManager.CreateAsync(user, Convert.ToBase64String(Guid.NewGuid().ToByteArray()).Substring(0, 8)).Result;
 
-            var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(IoCContainer.Configuration["JWTSecretKey"]));
+                if (!result.Succeeded)
+                {
+                    throw new UserNotAddedException();
+                }
+            }
 
-            var token = new JwtSecurityToken(
-                expires: DateTime.UtcNow.AddHours(Constants.Validity),
-                claims: claims,
-                signingCredentials: new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256),
-                issuer: "Tokens:Issuer",
-                audience: "Tokens:Audience"
-                );
+            string jwt = JWTManager.GenerateToken(user);
 
-            var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
-
-            return JsonConvert.SerializeObject(new { access_token = tokenString });
+            return jwt;
         }
 
+        public string CreateTokenWithFacebook(SocialAuthDTO accessToken)
+        {
+            string userInfoResponse = Client.GetStringAsync($"{Constants.FacebookResponsePath}{accessToken.AccessToken}").Result;
+
+            var userInfo = JsonConvert.DeserializeObject<FacebookAuthUserData>(userInfoResponse);
+            User user = userManager.UserManager.FindByEmailAsync(userInfo.Email).Result;
+
+            if (user == null)
+            {
+                user = userInfo.ToUser();
+                var result = userManager.UserManager.CreateAsync(user, Convert.ToBase64String(Guid.NewGuid().ToByteArray()).Substring(0, 8)).Result;
+
+                if (!result.Succeeded)
+                {
+                    throw new UserNotAddedException();
+                }
+            }
+
+            string jwt = JWTManager.GenerateToken(user);
+
+            return jwt;
+        }
     }
 }

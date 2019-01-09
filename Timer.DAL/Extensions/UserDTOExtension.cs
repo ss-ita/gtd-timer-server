@@ -31,5 +31,31 @@ namespace Timer.DAL.Extensions
 
             return userDTO;
         }
+
+        public static User ToUser(this GoogleAuthUserData socialAuthUser)
+        {
+            User user = new User
+            {
+                FirstName = socialAuthUser.FirstName,
+                LastName = socialAuthUser.LastName,
+                Email = socialAuthUser.Email,
+                UserName = socialAuthUser.Email
+            };
+
+            return user;
+        }
+
+        public static User ToUser(this FacebookAuthUserData socialAuthUser)
+        {
+            User user = new User
+            {
+                FirstName = socialAuthUser.FirstName,
+                LastName = socialAuthUser.LastName,
+                Email = socialAuthUser.Email,
+                UserName = socialAuthUser.Email
+            };
+
+            return user;
+        }
     }
 }

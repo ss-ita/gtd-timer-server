@@ -66,6 +66,9 @@ namespace gtdtimer.Middleware
                 case StandartPresetException _:
                     exceptionCode = HttpStatusCode.BadRequest;
                     break;
+                case UserNotAddedException _:
+                    exceptionCode = HttpStatusCode.NoContent;
+                    break;
                 default:
                     exceptionCode = HttpStatusCode.InternalServerError;
                     break;
