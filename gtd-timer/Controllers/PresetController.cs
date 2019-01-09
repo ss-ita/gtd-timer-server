@@ -12,11 +12,13 @@ namespace gtdtimer.Controllers
     {
         private readonly IUserIdentityService userIdentityService;
         private readonly IPresetService presetService;
+        private readonly ITimerService timerService;
 
-        public PresetController(IUserIdentityService userIdentityService, IPresetService presetService)
+        public PresetController(IUserIdentityService userIdentityService, IPresetService presetService, ITimerService timerService)
         {
             this.userIdentityService = userIdentityService;
             this.presetService = presetService;
+            this.timerService = timerService;
         }
 
         [HttpGet("[action]")]
@@ -31,7 +33,7 @@ namespace gtdtimer.Controllers
         public IActionResult GetAllCustomPresets()
         {
             var userid = userIdentityService.GetUserId();
-            var query = presetService.GetAllCustomPresets(userid);
+            var query = presetService.GetAllCustomPresetsByUserId(userid);
 
             return Ok(query);
         }
@@ -63,7 +65,7 @@ namespace gtdtimer.Controllers
         [HttpPut("[action]")]
         public IActionResult UpdateTimer([FromBody]TimerDTO timerDTO)
         {
-            presetService.UpdateTimer(timerDTO);
+            timerService.UpdateTimer(timerDTO);
 
             return Ok();
         }
@@ -79,7 +81,8 @@ namespace gtdtimer.Controllers
         [HttpDelete("[action]")]
         public IActionResult DeleteTimer(int timerid)
         {
-            presetService.DeleteTimer(timerid);
+            timerService.DeleteTimer(timerid);
+
 
             return Ok();
         }

@@ -60,6 +60,7 @@ namespace gtd_timer
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ILogInService, LogInService>();
             services.AddScoped<IPresetService, PresetService>();
+            services.AddScoped<ITimerService, TimerService>();
             services.AddScoped<IUsersService, UsersService>();
             services.AddScoped<IUserIdentityService, UserIdentityService>();
 

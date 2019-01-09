@@ -35,7 +35,7 @@ namespace gtdtimer.Services
 
             if(!userManager.UserManager.CheckPasswordAsync(user, model.Password).Result)
             {
-                throw new IncorectLoginException();
+                throw new LoginFailedException();
             }
 
             var token = GenerateToken(user);

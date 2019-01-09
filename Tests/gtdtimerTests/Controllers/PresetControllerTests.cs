@@ -18,6 +18,7 @@ namespace gtdtimerTests.Controllers
     public class PresetControllerTests
     {
         private Mock<IPresetService> presetService;
+        private Mock<ITimerService> timerService;
         private Mock<IUserIdentityService> userIdentityService;
         private Mock<IUnitOfWork> unitOfWork;
 
@@ -27,9 +28,11 @@ namespace gtdtimerTests.Controllers
         public void Setup()
         {
             presetService = new Mock<IPresetService>();
+            timerService = new Mock<ITimerService>();
             userIdentityService = new Mock<IUserIdentityService>();
             unitOfWork = new Mock<IUnitOfWork>();
-            subject = new PresetController(userIdentityService.Object, presetService.Object);
+            subject = new PresetController(userIdentityService.Object, presetService.Object,timerService.Object);
+
         }
 
         [Test]

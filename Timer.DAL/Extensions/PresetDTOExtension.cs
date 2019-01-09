@@ -11,28 +11,23 @@ namespace Timer.DAL.Extensions
     {
         public static Preset ToPreset(this PresetDTO presetDTO)
         {
-
-            Preset preset = new Preset
+            return new Preset
             {
                 Name = presetDTO.PresetName,
                 Id = presetDTO.Id,
                 UserId = presetDTO.UserId
             };
-
-            return preset;
         }
 
         public static PresetDTO ToPresetDTO(this Preset preset,List<TimerDTO> timers)
         {
-            PresetDTO presetDTO = new PresetDTO
+            return new PresetDTO
             {
-               PresetName=preset.Name,
-               Id=preset.Id,
-               Timers=timers,
-               UserId=preset.UserId
+                PresetName = preset.Name,
+                Id = preset.Id,
+                Timers = timers,
+                UserId = preset.UserId
             };
-
-            return presetDTO;
         }
     }
 }

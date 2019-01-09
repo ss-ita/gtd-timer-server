@@ -10,22 +10,21 @@ namespace ServiceTier.Services
 {
     public class PresetService : BaseService, IPresetService
     {
-        public PresetService(IUnitOfWork unitOfWork) : base(unitOfWork)
+        private readonly ITimerService timerService;
+
+        public PresetService(IUnitOfWork unitOfWork, ITimerService timerService) : base(unitOfWork)
         {
-
+            this.timerService = timerService;
         }
-
         public void CreatePreset(PresetDTO presetDTO)
         {
             Preset preset = presetDTO.ToPreset();
             unitOfWork.Presets.Create(preset);
             unitOfWork.Save();
-            var presets = unitOfWork.Presets.GetAll();
             foreach (var timer in presetDTO.Timers)
             {
                 timer.PresetId = preset.Id;
-                unitOfWork.Timers.Create(timer.ToTimer());
-                unitOfWork.Save();
+                timerService.CreateTimer(timer);
             }
         }
 
@@ -33,23 +32,6 @@ namespace ServiceTier.Services
         {
             Preset preset = presetDTO.ToPreset();
             unitOfWork.Presets.Update(preset);
-            unitOfWork.Save();
-        }
-
-        public void UpdateTimer(TimerDTO timerDTO)
-        {
-            Timer.DAL.Timer.DAL.Entities.Timer timer = timerDTO.ToTimer();
-            unitOfWork.Timers.Update(timer);
-            unitOfWork.Save();
-        }
-
-        public void CreateTimer(TimerDTO timerDTO)
-        {
-            if(unitOfWork.Presets.GetByID(timerDTO.PresetId)==null)
-            {
-                throw new Exception("such preset doesn't exist");
-            }
-            unitOfWork.Timers.Create(timerDTO.ToTimer());
             unitOfWork.Save();
         }
 
@@ -74,20 +56,11 @@ namespace ServiceTier.Services
                 throw new Exception("such preset doesn't exist");
             }
             var preset = unitOfWork.Presets.GetByID(presetid);
-            var timers = unitOfWork.Timers.GetAll();
-            List<TimerDTO> timerDTOs = new List<TimerDTO>();
-            foreach (var t in timers)
-            {
-                if (t.PresetId == preset.Id)
-                {
-                    timerDTOs.Add(t.ToTimerDTO());
-                }
-            }
-
-            return preset.ToPresetDTO(timerDTOs);
+            
+          return preset.ToPresetDTO(timerService.GetAllTimersByPresetId(presetid));
         }
 
-        public IQueryable<PresetDTO> GetAllCustomPresets(int userid)
+        public IQueryable<PresetDTO> GetAllCustomPresetsByUserId(int userid)
         {
             var listOfPresetsDTO = new List<PresetDTO>();
             var presets = unitOfWork.Presets.GetAll();
@@ -98,18 +71,13 @@ namespace ServiceTier.Services
                 throw new NotImplementedException();
             }
 
-            foreach (var p in presets)
+            foreach (var preset in presets)
             {
-                List<TimerDTO> timerDTOs = new List<TimerDTO>();
-                foreach (var t in timers)
+                if (preset.UserId == userid)
                 {
-                    if (t.PresetId == p.Id)
-                    {
-                        timerDTOs.Add(t.ToTimerDTO());
-                    }
+                    List<TimerDTO> timerDTOs = timerService.GetAllTimersByPresetId(preset.Id);
+                    listOfPresetsDTO.Add(preset.ToPresetDTO(timerDTOs));
                 }
-                if (p.UserId==userid)
-                listOfPresetsDTO.Add(p.ToPresetDTO(timerDTOs));
             }
 
             return listOfPresetsDTO.AsQueryable();
@@ -125,29 +93,17 @@ namespace ServiceTier.Services
                 throw new NotImplementedException();
             }
 
-            foreach (var p in presets)
+            foreach (var preset in presets)
             {
-                List<TimerDTO> timerDTOs = new List<TimerDTO>();
-                foreach (var t in timers)
+                if (preset.UserId == null)
                 {
-                    if (t.PresetId == p.Id)
-                    {
-                        timerDTOs.Add(t.ToTimerDTO());
-                    }
-                }
-                if (p.UserId == null)
-                {
-                    listOfPresetsDTO.Add(p.ToPresetDTO(timerDTOs));
+                    var timerDTOs= timerService.GetAllTimersByPresetId(preset.Id);
+                    listOfPresetsDTO.Add(preset.ToPresetDTO(timerDTOs));
                 }
             }
 
             return listOfPresetsDTO.AsQueryable();
         }
 
-        public void DeleteTimer(int timerid)
-        {
-            unitOfWork.Timers.Delete(timerid);
-            unitOfWork.Save();
-        }
     }
 }

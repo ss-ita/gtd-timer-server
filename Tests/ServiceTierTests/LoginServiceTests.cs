@@ -62,7 +62,7 @@ namespace ServiceTierTests
             userManager.Setup(_ => _.FindByEmailAsync(model.Email)).ReturnsAsync(user);
             unitOfWork.Setup(_ => _.UserManager).Returns(userManager.Object);
 
-            var ex = Assert.Throws<IncorectLoginException>(() => subject.CreateToken(model));
+            var ex = Assert.Throws<LoginFailedException>(() => subject.CreateToken(model));
 
             Assert.That(ex.Message, Is.EqualTo(Common.Constant.Constants.ErrorMessageIncorrectPassword));
         }

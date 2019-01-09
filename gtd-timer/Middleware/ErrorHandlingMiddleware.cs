@@ -55,7 +55,7 @@ namespace gtdtimer.Middleware
                 case UserAlreadyExistsException _:
                     exceptionCode = HttpStatusCode.Conflict;
                     break;
-                case IncorectLoginException _:
+                case LoginFailedException _:
                     exceptionCode = HttpStatusCode.BadRequest;
                     break;
                 case IncorrectPasswordException _:

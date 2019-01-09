@@ -11,13 +11,10 @@ namespace ServiceTier.Services
     public interface IPresetService : IBaseService
     {
         void CreatePreset(PresetDTO presetDTO);
-        void CreateTimer(TimerDTO timerDTO);
         void UpdatePreset(PresetDTO presetDTO);
-        void UpdateTimer(TimerDTO timerDTO);
-        void DeleteTimer(int timerid);
         void DeletePresetById(int presetid);
         PresetDTO GetPresetById(int presetid);
         IQueryable<PresetDTO> GetAllStandardPresets();
-        IQueryable<PresetDTO> GetAllCustomPresets(int userid);
+        IQueryable<PresetDTO> GetAllCustomPresetsByUserId(int userid);
     }
 }
