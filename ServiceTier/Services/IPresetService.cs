@@ -14,7 +14,7 @@ namespace ServiceTier.Services
         void UpdatePreset(PresetDTO presetDTO);
         void DeletePresetById(int presetid);
         PresetDTO GetPresetById(int presetid);
-        IQueryable<PresetDTO> GetAllStandardPresets();
-        IQueryable<PresetDTO> GetAllCustomPresetsByUserId(int userid);
+        List<PresetDTO> GetAllStandardPresets();
+        List<PresetDTO> GetAllCustomPresetsByUserId(int userid);
     }
 }

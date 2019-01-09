@@ -17,7 +17,7 @@ namespace Common.ModelsDTO
     {
         public int Id { get; set; }
         public string PresetName { get; set; }
-      
+
         public IEnumerable<TimerDTO> Timers { get; set; }
         public int? UserId { get; set; }
     }

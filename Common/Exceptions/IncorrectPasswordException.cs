@@ -5,9 +5,9 @@ namespace Common.Exceptions
 {
     public class IncorrectPasswordException : Exception
     {
-        private const string UserExistExceptionMessage = "Incorrect password entered";
+        private const string IncorrectPasswordExceptionMessage = "Incorrect password entered";
 
-        public IncorrectPasswordException() : base(UserExistExceptionMessage)
+        public IncorrectPasswordException() : base(IncorrectPasswordExceptionMessage)
         {
         }
 

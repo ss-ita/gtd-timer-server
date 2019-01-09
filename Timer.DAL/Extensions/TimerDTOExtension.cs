@@ -1,13 +1,14 @@
 ﻿using Common.ModelsDTO;
 using System;
+using MyTimer=Timer.DAL.Timer.DAL.Entities;
 
 namespace Timer.DAL.Extensions
 {
     public static class TimerDTOExtension
     {
-        public static Timer.DAL.Entities.Timer ToTimer(this TimerDTO timerDTO)
+        public static MyTimer.Timer ToTimer(this TimerDTO timerDTO)
         {
-            return new Timer.DAL.Entities.Timer
+            return new MyTimer.Timer
             {
                 Name = timerDTO.Name,
                 Interval = TimeSpan.Parse(timerDTO.Interval),
@@ -16,7 +17,7 @@ namespace Timer.DAL.Extensions
             };
         }
 
-        public static TimerDTO ToTimerDTO(this Timer.DAL.Entities.Timer timer)
+        public static TimerDTO ToTimerDTO(this MyTimer.Timer timer)
         {
             return new TimerDTO
             {

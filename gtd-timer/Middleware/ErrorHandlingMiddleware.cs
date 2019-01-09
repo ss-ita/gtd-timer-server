@@ -52,6 +52,9 @@ namespace gtdtimer.Middleware
                 case UserNotFoundException _:
                     exceptionCode = HttpStatusCode.NoContent;
                     break;
+                case PresetNotFoundException _:
+                    exceptionCode = HttpStatusCode.NotFound;
+                    break;
                 case UserAlreadyExistsException _:
                     exceptionCode = HttpStatusCode.Conflict;
                     break;
@@ -59,6 +62,8 @@ namespace gtdtimer.Middleware
                     exceptionCode = HttpStatusCode.BadRequest;
                     break;
                 case IncorrectPasswordException _:
+                case LoginFailedException _:
+                case StandartPresetException _:
                     exceptionCode = HttpStatusCode.BadRequest;
                     break;
                 default:

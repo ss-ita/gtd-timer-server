@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Common.Exceptions;
 using Common.ModelsDTO;
 using Timer.DAL.Extensions;
 using Timer.DAL.Timer.DAL.Entities;
@@ -39,11 +40,11 @@ namespace ServiceTier.Services
         {
             if (unitOfWork.Presets.GetByID(presetid) == null)
             {
-                throw new Exception("such preset doesn't exist");
+                throw new PresetNotFoundException();
             }
             if (unitOfWork.Presets.GetByID(presetid).UserId == null)
             {
-                throw new Exception("this preset is standard");
+                throw new StandartPresetException();
             }
             unitOfWork.Presets.Delete(presetid);
             unitOfWork.Save();
@@ -53,23 +54,18 @@ namespace ServiceTier.Services
         {
             if (unitOfWork.Presets.GetByID(presetid) == null)
             {
-                throw new Exception("such preset doesn't exist");
+                throw new PresetNotFoundException();
             }
             var preset = unitOfWork.Presets.GetByID(presetid);
-            
-          return preset.ToPresetDTO(timerService.GetAllTimersByPresetId(presetid));
+
+            return preset.ToPresetDTO(timerService.GetAllTimersByPresetId(presetid));
         }
 
-        public IQueryable<PresetDTO> GetAllCustomPresetsByUserId(int userid)
+        public List<PresetDTO> GetAllCustomPresetsByUserId(int userid)
         {
             var listOfPresetsDTO = new List<PresetDTO>();
             var presets = unitOfWork.Presets.GetAll();
             var timers = unitOfWork.Timers.GetAll();
-
-            if (presets == null)
-            {
-                throw new NotImplementedException();
-            }
 
             foreach (var preset in presets)
             {
@@ -80,18 +76,14 @@ namespace ServiceTier.Services
                 }
             }
 
-            return listOfPresetsDTO.AsQueryable();
+            return listOfPresetsDTO;
         }
 
-        public IQueryable<PresetDTO> GetAllStandardPresets()
+        public List<PresetDTO> GetAllStandardPresets()
         {
             var listOfPresetsDTO = new List<PresetDTO>();
             var presets = unitOfWork.Presets.GetAll();
             var timers = unitOfWork.Timers.GetAll();
-            if (presets == null)
-            {
-                throw new NotImplementedException();
-            }
 
             foreach (var preset in presets)
             {
@@ -102,7 +94,7 @@ namespace ServiceTier.Services
                 }
             }
 
-            return listOfPresetsDTO.AsQueryable();
+            return listOfPresetsDTO;
         }
 
     }

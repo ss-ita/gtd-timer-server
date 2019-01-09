@@ -1,4 +1,6 @@
-﻿using Common.ModelsDTO;
+
+using Common.Exceptions;
+using Common.ModelsDTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +21,7 @@ namespace ServiceTier.Services
         {
             if (unitOfWork.Presets.GetByID(timerDTO.PresetId) == null)
             {
-                throw new Exception("such preset doesn't exist");
+                throw new PresetNotFoundException();
             }
             unitOfWork.Timers.Create(timerDTO.ToTimer());
             unitOfWork.Save();

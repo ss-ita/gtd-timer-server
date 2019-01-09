@@ -49,6 +49,7 @@ namespace gtdtimer.Controllers
         [HttpPost("[action]")]
         public IActionResult Post([FromBody]PresetDTO presetDTO)
         {
+            presetDTO.UserId = userIdentityService.GetUserId();
             presetService.CreatePreset(presetDTO);
 
             return Ok();
@@ -57,6 +58,7 @@ namespace gtdtimer.Controllers
         [HttpPut("[action]")]
         public IActionResult UpdatePreset([FromBody]PresetDTO presetDTO)
         {
+            presetDTO.UserId = userIdentityService.GetUserId();
             presetService.UpdatePreset(presetDTO);
 
             return Ok();
@@ -82,7 +84,6 @@ namespace gtdtimer.Controllers
         public IActionResult DeleteTimer(int timerid)
         {
             timerService.DeleteTimer(timerid);
-
 
             return Ok();
         }
