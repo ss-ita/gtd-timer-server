@@ -1,4 +1,4 @@
-﻿using Common.ModelsDTO;
+using Common.ModelsDTO;
 using System;
 using MyTimer=Timer.DAL.Timer.DAL.Entities;
 

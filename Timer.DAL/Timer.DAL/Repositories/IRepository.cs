@@ -1,10 +1,13 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Timer.DAL.Timer.DAL.Repositories
 {
     public interface IRepository<TEntity>
     {
-        IQueryable<TEntity> GetAll();
+        IEnumerable<TEntity> GetAllEntities();
+        IEnumerable<TEntity> GetAllEntitiesByFilter(Func<TEntity, bool> filter);
         TEntity GetByID(object id);
         void Create(TEntity entity);
         void Delete(object id);

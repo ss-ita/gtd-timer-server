@@ -9,8 +9,8 @@ using Timer.DAL.Timer.DAL.Entities;
 
 namespace Timer.DAL.Timer.DAL.Repositories
 {
-    public class UserRepository :IUserStoreRepository
-    { 
+    public class UserRepository : IUserStoreRepository
+    {
         public TimerContext timerContext { get; set; }
 
         public IQueryable<User> Users { get; }
@@ -137,9 +137,13 @@ namespace Timer.DAL.Timer.DAL.Repositories
             GC.SuppressFinalize(this);
         }
 
-        public IQueryable<User> GetAll()
+        public IEnumerable<User> GetAllEntities()
         {
             return timerContext.Users;
+        }
+        public IEnumerable<User> GetAllEntitiesByFilter(Func<User,bool> filter)
+        {
+            return timerContext.Users.Where(filter);
         }
         public User GetByID(object id)
         {

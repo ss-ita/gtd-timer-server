@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Timer.DAL.Timer.DAL.Entities
+namespace Common.ModelsDTO
 {
-    public class Tasks
+    public class TaskDTO
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -12,8 +12,6 @@ namespace Timer.DAL.Timer.DAL.Entities
         public TimeSpan? Goal { get; set; }
         public bool IsActive { get; set; }
         public bool IsRunning { get; set; }
-
         public int UserId { get; set; }
-        public User User { get; set; }
     }
 }

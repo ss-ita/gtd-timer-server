@@ -53,6 +53,7 @@ namespace gtdtimer.Middleware
                     exceptionCode = HttpStatusCode.NoContent;
                     break;
                 case PresetNotFoundException _:
+                case TaskNotFoundException _:
                     exceptionCode = HttpStatusCode.NotFound;
                     break;
                 case UserAlreadyExistsException _:

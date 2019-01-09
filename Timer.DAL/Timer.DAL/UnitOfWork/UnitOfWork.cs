@@ -10,9 +10,11 @@ namespace Timer.DAL.Timer.DAL.UnitOfWork
         private TimerContext context;
         private Lazy<IApplicationUserManager<User, int>> userManager;
         private Lazy<IRepository<Role>> roles;
+        private Lazy<IRepository<Tasks>> tasks;
         private Lazy<IRepository<UserRole>> userRoles;
         private Lazy<IRepository<Preset>> presets;
         private Lazy<IRepository<Timer.DAL.Entities.Timer>> timers;
+
         private bool disposed;
 
         public IApplicationUserManager<User, int> UserManager
@@ -29,6 +31,15 @@ namespace Timer.DAL.Timer.DAL.UnitOfWork
             set
             {
                 roles = new Lazy<IRepository<Role>>(() => value);
+            }
+        }
+
+        public IRepository<Tasks> Tasks
+        {
+            get => tasks.Value;
+            set
+            {
+                tasks = new Lazy<IRepository<Tasks>>(() => value);
             }
         }
 
@@ -59,12 +70,13 @@ namespace Timer.DAL.Timer.DAL.UnitOfWork
             }
         }
 
-        public UnitOfWork(TimerContext context, IApplicationUserManager<User, int> applicationUserManager, IRepository<Role> role, IRepository<Preset> preset, IRepository<Timer.DAL.Entities.Timer> timer, IRepository<UserRole> userRole)
+        public UnitOfWork(TimerContext context, IApplicationUserManager<User, int> applicationUserManager, IRepository<Role> role, IRepository<Preset> preset, IRepository<Timer.DAL.Entities.Timer> timer, IRepository<Tasks> tasks, IRepository<UserRole> userRole)
         {
             this.context = context;
             this.disposed = false;
             this.UserManager = applicationUserManager;
             this.Roles = role;
+            this.Tasks = tasks;
             this.Presets = preset;
             this.Timers = timer;
             this.UserRoles = userRole;

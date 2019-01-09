@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Timer.DAL.Timer.DAL.Entities;
@@ -16,9 +18,14 @@ namespace Timer.DAL.Timer.DAL.Repositories
             this.dbSet = context.Set<TEntity>();
         }
 
-        public IQueryable<TEntity> GetAll()
+        public IEnumerable<TEntity> GetAllEntities()
         {
             return this.dbSet;
+        }
+
+        public IEnumerable<TEntity> GetAllEntitiesByFilter(Func<TEntity, bool> filter)
+        {
+            return this.dbSet.Where(filter);
         }
 
         public TEntity GetByID(object id)

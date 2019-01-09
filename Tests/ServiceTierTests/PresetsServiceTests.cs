@@ -121,8 +121,8 @@ namespace ServiceTierTests
             var presetRepository = new Mock<IRepository<Preset>>();
 
             unitOfWork.Setup(_ => _.Presets).Returns(presetRepository.Object);
-            unitOfWork.Setup(_ => _.Presets.GetAll()).Returns(presets.AsQueryable());
-            unitOfWork.Setup(_ => _.Timers.GetAll()).Returns(timers.AsQueryable());
+            unitOfWork.Setup(_ => _.Presets.GetAllEntities()).Returns(presets.AsQueryable());
+            unitOfWork.Setup(_ => _.Timers.GetAllEntities()).Returns(timers.AsQueryable());
 
             Assert.AreEqual(subject.GetAllStandardPresets()[0].PresetName, preset.Name);
         }
@@ -138,8 +138,8 @@ namespace ServiceTierTests
             var presetRepository = new Mock<IRepository<Preset>>();
 
             unitOfWork.Setup(_ => _.Presets).Returns(presetRepository.Object);
-            unitOfWork.Setup(_ => _.Presets.GetAll()).Returns(presets.AsQueryable());
-            unitOfWork.Setup(_ => _.Timers.GetAll()).Returns(timers.AsQueryable());
+            unitOfWork.Setup(_ => _.Presets.GetAllEntities()).Returns(presets.AsQueryable());
+            unitOfWork.Setup(_ => _.Timers.GetAllEntities()).Returns(timers.AsQueryable());
 
             Assert.AreEqual(subject.GetAllCustomPresetsByUserId(userid)[0].PresetName, preset.Name);
         }

@@ -62,11 +62,13 @@ namespace gtd_timer
             services.AddScoped<IPresetService, PresetService>();
             services.AddScoped<ITimerService, TimerService>();
             services.AddScoped<IUsersService, UsersService>();
+            services.AddScoped<ITaskService, TaskService>();
             services.AddScoped<IUserIdentityService, UserIdentityService>();
 
             services.AddScoped<IRepository<Timer.DAL.Timer.DAL.Entities.Timer>, Repository<Timer.DAL.Timer.DAL.Entities.Timer>>();
             services.AddScoped<IRepository<Preset>, Repository<Preset>>();
             services.AddScoped<IRepository<Role>, Repository<Role>>();
+            services.AddScoped<IRepository<Tasks>, Repository<Tasks>>();
             services.AddScoped<IRepository<UserRole>, Repository<UserRole>>();
             services.AddScoped<IApplicationUserManager<User, int>, ApplicationUserManager>();
             services.AddScoped<IUserStore<User,int>, UserRepository>(); 

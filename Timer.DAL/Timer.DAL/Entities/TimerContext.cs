@@ -26,7 +26,6 @@ namespace Timer.DAL.Timer.DAL.Entities
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-
             builder.Entity<UserRole>(userRole =>
             {
                 userRole.HasKey(ur => new { ur.UserId, ur.RoleId });
@@ -41,7 +40,6 @@ namespace Timer.DAL.Timer.DAL.Entities
                     .HasForeignKey(ur => ur.UserId)
                     .IsRequired();
             });
-
             builder.Entity<User>().HasData(
                 new User
                 {

@@ -11,6 +11,7 @@ namespace Timer.DAL.Timer.DAL.UnitOfWork
         IApplicationUserManager<User,int> UserManager { get; set; }
 
         IRepository<Role> Roles { get; set; }
+        IRepository<Tasks> Tasks { get; set; }
         IRepository<Preset> Presets { get; set; }
         IRepository<UserRole> UserRoles { get; set; }
         IRepository<Timer.DAL.Entities.Timer> Timers { get; set; }

@@ -39,7 +39,7 @@ namespace ServiceTier.Services
             User user = Get(id);
             if (!unitOfWork.UserManager.CheckPasswordAsync(user, model.PasswordOld).Result)
             {
-                throw new IncorrectPasswordException();
+                throw new LoginFailedException();
             }
 
             var result = unitOfWork.UserManager.ChangePasswordAsync(id, model.PasswordOld, model.PasswordNew).Result;

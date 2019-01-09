@@ -5,9 +5,9 @@ namespace Common.Exceptions
 {
     public class LoginFailedException : Exception
     {
-        private const string IncorectLoginExceptionMessage = "Invalid credentials entered";
+        private const string LoginFailedExceptionnMessage = "Incorrect credentials entered";
 
-        public LoginFailedException() : base(IncorectLoginExceptionMessage)
+        public LoginFailedException() : base(LoginFailedExceptionnMessage)
         {
         }
 

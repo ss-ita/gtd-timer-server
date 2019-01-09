@@ -22,6 +22,7 @@ namespace ServiceTier.Services
             Preset preset = presetDTO.ToPreset();
             unitOfWork.Presets.Create(preset);
             unitOfWork.Save();
+
             foreach (var timer in presetDTO.Timers)
             {
                 timer.PresetId = preset.Id;
@@ -57,15 +58,14 @@ namespace ServiceTier.Services
                 throw new PresetNotFoundException();
             }
             var preset = unitOfWork.Presets.GetByID(presetid);
-
             return preset.ToPresetDTO(timerService.GetAllTimersByPresetId(presetid));
         }
 
         public List<PresetDTO> GetAllCustomPresetsByUserId(int userid)
         {
             var listOfPresetsDTO = new List<PresetDTO>();
-            var presets = unitOfWork.Presets.GetAll();
-            var timers = unitOfWork.Timers.GetAll();
+            var presets = unitOfWork.Presets.GetAllEntities();
+            var timers = unitOfWork.Timers.GetAllEntities();
 
             foreach (var preset in presets)
             {
@@ -82,8 +82,8 @@ namespace ServiceTier.Services
         public List<PresetDTO> GetAllStandardPresets()
         {
             var listOfPresetsDTO = new List<PresetDTO>();
-            var presets = unitOfWork.Presets.GetAll();
-            var timers = unitOfWork.Timers.GetAll();
+            var presets = unitOfWork.Presets.GetAllEntities();
+            var timers = unitOfWork.Timers.GetAllEntities();
 
             foreach (var preset in presets)
             {
