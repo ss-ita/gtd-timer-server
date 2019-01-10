@@ -3,6 +3,7 @@
 using ServiceTier.Services;
 using Common.ModelsDTO;
 using Microsoft.AspNetCore.Authorization;
+using Common.Exceptions;
 
 namespace gtdtimer.Controllers
 {
@@ -21,7 +22,7 @@ namespace gtdtimer.Controllers
             this.timerService = timerService;
         }
 
-        [HttpGet("[action]")]
+        [HttpGet("GetPreset/{presetid}")]
         public IActionResult GetPreset(int presetid)
         {
             var preset = presetService.GetPresetById(presetid);
@@ -72,15 +73,19 @@ namespace gtdtimer.Controllers
             return Ok();
         }
 
-        [HttpDelete("[action]")]
+        [HttpDelete("DeletePreset/{presetid}")]
         public IActionResult DeletePreset(int presetid)
         {
+            if ((presetService.GetPresetById(presetid).UserId == null) || (presetService.GetPresetById(presetid).UserId != userIdentityService.GetUserId()))
+            {
+                throw new AccessDeniedException();
+            }
             presetService.DeletePresetById(presetid);
 
             return Ok();
         }
 
-        [HttpDelete("[action]")]
+        [HttpDelete("DeleteTimer/{timerid}")]
         public IActionResult DeleteTimer(int timerid)
         {
             timerService.DeleteTimer(timerid);

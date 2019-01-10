@@ -9,15 +9,15 @@ using Timer.DAL.Timer.DAL.Entities;
 
 namespace Timer.DAL.Timer.DAL.Repositories
 {
-    public class UserRepository : IUserStoreRepository
-    {
-        public TimerContext timerContext { get; set; }
+    public class UserRepository :IUserStoreRepository
+    { 
+        public TimerContext TimerContext { get; set; }
 
         public IQueryable<User> Users { get; }
 
         public UserRepository(TimerContext context)
         {
-            timerContext = context;
+            TimerContext = context;
         }
 
         public async Task CreateAsync(User user)
@@ -27,7 +27,7 @@ namespace Timer.DAL.Timer.DAL.Repositories
                 throw new ArgumentNullException("user");
             }
 
-            timerContext.Users.Add(user);
+            TimerContext.Users.Add(user);
             await SaveChanges();
         }
 
@@ -38,32 +38,32 @@ namespace Timer.DAL.Timer.DAL.Repositories
                 throw new ArgumentNullException("user");
             }
 
-            timerContext.Users.Attach(user);
-            timerContext.Entry(user).State = EntityState.Modified;
+            TimerContext.Users.Attach(user);
+            TimerContext.Entry(user).State = EntityState.Modified;
             await SaveChanges();
         }
 
         public async Task DeleteAsync(User user)
         {
-            if (timerContext.Entry(user).State == EntityState.Detached)
+            if (TimerContext.Entry(user).State == EntityState.Detached)
             {
-                timerContext.Users.Attach(user);
+                TimerContext.Users.Attach(user);
             }
 
-            timerContext.Users.Remove(user);
-            await timerContext.SaveChangesAsync();
+           TimerContext.Users.Remove(user);
+            await TimerContext.SaveChangesAsync();
         }
 
         public async Task<User> FindByIdAsync(int userId)
         {
-            return await timerContext.Users.FindAsync(userId);
+            return await TimerContext.Users.FindAsync(userId);
         }
 
         public async Task<User> FindByNameAsync(string userName)
         {
             User userRes = await Task.Run(() =>
             {
-                var user = timerContext.Users.Where(userToFind => userToFind.UserName == userName).ToList<User>();
+                var user = TimerContext.Users.Where(userToFind => userToFind.UserName == userName).ToList<User>();
                 if (user.Count == 0)
                     return null;
                 else return user[0];
@@ -78,7 +78,7 @@ namespace Timer.DAL.Timer.DAL.Repositories
                 throw new ArgumentNullException("user");
             }
 
-            User userToUpdate = await timerContext.Users.FindAsync(user);
+            User userToUpdate = await TimerContext.Users.FindAsync(user);
             userToUpdate.Email = email;
         }
 
@@ -89,7 +89,7 @@ namespace Timer.DAL.Timer.DAL.Repositories
                 throw new ArgumentNullException("user");
             }
 
-            User userToReturnEmail = await timerContext.Users.FindAsync(user.Id);
+            User userToReturnEmail = await TimerContext.Users.FindAsync(user.Id);
             return userToReturnEmail.Email;
         }
 
@@ -100,7 +100,7 @@ namespace Timer.DAL.Timer.DAL.Repositories
                 throw new ArgumentNullException("user");
             }
 
-            User userToReturnEmailConfirmed = await timerContext.Users.FindAsync(user.Id);
+            User userToReturnEmailConfirmed = await TimerContext.Users.FindAsync(user.Id);
             return userToReturnEmailConfirmed.EmailConfirmed;
         }
 
@@ -111,13 +111,13 @@ namespace Timer.DAL.Timer.DAL.Repositories
                 throw new ArgumentNullException("user");
             }
 
-            User userToConfrim = await timerContext.Users.FindAsync(user.Id);
+            User userToConfrim = await TimerContext.Users.FindAsync(user.Id);
             user.EmailConfirmed = bl;
         }
 
         public async Task<User> FindByEmailAsync(string email)
         {
-            List<User> list = timerContext.Users.Where(userToFind => userToFind.Email == email).ToList<User>();
+            List<User> list = TimerContext.Users.Where(userToFind => userToFind.Email == email).ToList<User>();
             if (list.Count == 0)
             {
                 return null;
@@ -127,60 +127,60 @@ namespace Timer.DAL.Timer.DAL.Repositories
 
         private async Task SaveChanges()
         {
-            await timerContext.SaveChangesAsync();
+            await TimerContext.SaveChangesAsync();
         }
 
         public void Dispose()
         {
-            if (timerContext != null)
-                timerContext.Dispose();
+            if (TimerContext != null)
+                TimerContext.Dispose();
             GC.SuppressFinalize(this);
         }
 
         public IEnumerable<User> GetAllEntities()
         {
-            return timerContext.Users;
+            return TimerContext.Users;
         }
         public IEnumerable<User> GetAllEntitiesByFilter(Func<User,bool> filter)
         {
-            return timerContext.Users.Where(filter);
+            return TimerContext.Users.Where(filter);
         }
         public User GetByID(object id)
         {
-            return timerContext.Users.Find(id);
+            return TimerContext.Users.Find(id);
         }
         public void Create(User entity)
         {
-            timerContext.Users.Add(entity);
+            TimerContext.Users.Add(entity);
         }
         public void Delete(object id)
         {
-            User entity = timerContext.Users.Find(id);
+            User entity = TimerContext.Users.Find(id);
             if (entity != null)
-                timerContext.Users.Remove(entity);
+                TimerContext.Users.Remove(entity);
         }
 
         public void Delete(User entityToDelete)
         {
-            if (timerContext.Entry(entityToDelete).State == EntityState.Detached)
+            if (TimerContext.Entry(entityToDelete).State == EntityState.Detached)
             {
-                timerContext.Users.Attach(entityToDelete);
+                TimerContext.Users.Attach(entityToDelete);
             }
-            timerContext.Users.Remove(entityToDelete);
+            TimerContext.Users.Remove(entityToDelete);
         }
         public void Update(User entityToUpdate)
         {
-            timerContext.Entry(entityToUpdate).State = EntityState.Modified;
+            TimerContext.Entry(entityToUpdate).State = EntityState.Modified;
         }
         public void Save()
         {
-            timerContext.SaveChanges();
+            TimerContext.SaveChanges();
         }
 
         public async Task<IList<string>> GetRolesAsync(User user)
         {
-            List<string> roles = (from userRole in timerContext.UserRoles
-                                  join role in timerContext.Roles
+            List<string> roles = (from userRole in TimerContext.UserRoles
+                                  join role in TimerContext.Roles
                                 on userRole.RoleId equals role.Id
                                   where userRole.UserId == user.Id
                                   select role.Name).ToList<string>();
@@ -189,7 +189,7 @@ namespace Timer.DAL.Timer.DAL.Repositories
 
         public Task AddToRoleAsync(User user, string roleName)
         {
-            var roleToAdd = (from role in timerContext.Roles
+            var roleToAdd = (from role in TimerContext.Roles
                              where role.Name == roleName
                              select role).First();
             UserRole userRole = new UserRole
@@ -199,13 +199,13 @@ namespace Timer.DAL.Timer.DAL.Repositories
                 User = user,
                 Role = roleToAdd
             };
-            timerContext.UserRoles.Add(userRole);
-            return timerContext.SaveChangesAsync();
+            TimerContext.UserRoles.Add(userRole);
+            return TimerContext.SaveChangesAsync();
         }
 
         public Task RemoveFromRoleAsync(User user, string roleName)
         {
-            var roleToRemove = (from role in timerContext.Roles
+            var roleToRemove = (from role in TimerContext.Roles
                                 where role.Name == roleName
                                 select role).First();
             UserRole userRole = new UserRole
@@ -215,13 +215,13 @@ namespace Timer.DAL.Timer.DAL.Repositories
                 User = user,
                 Role = roleToRemove
             };
-            timerContext.UserRoles.Remove(userRole);
-            return timerContext.SaveChangesAsync();
+            TimerContext.UserRoles.Remove(userRole);
+            return TimerContext.SaveChangesAsync();
         }
 
         public async Task<bool> IsInRoleAsync(User user, string roleName)
         {
-            var check = (from role in timerContext.Roles
+            var check = (from role in TimerContext.Roles
              where role.Name == roleName
              select role).First();
 

@@ -92,7 +92,7 @@ namespace ServiceTierTests
         }
 
         [Test]
-        public void Update_Throws_IncorrectPasswordException()
+        public void Update_Throws_PasswordMismatchException()
         {
             int userId = 1;
             UpdatePasswordDTO model = new UpdatePasswordDTO();
@@ -103,7 +103,7 @@ namespace ServiceTierTests
             unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
             userRepository.Setup(_ => _.FindByIdAsync(userId)).ReturnsAsync(user);
 
-            var ex = Assert.Throws<IncorrectPasswordException>(() => subject.Update(userId, model));
+            var ex = Assert.Throws<PasswordMismatchException>(() => subject.Update(userId, model));
 
             Assert.That(ex.Message, Is.EqualTo("Incorrect password entered"));
         }

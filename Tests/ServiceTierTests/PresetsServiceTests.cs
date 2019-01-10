@@ -16,9 +16,14 @@ namespace ServiceTierTests
 {
     class PresetsServiceTests
     {
+        Preset preset = new Preset { Name = "preset", UserId = 1, Id = 1 };
+        int presetid = 1;
+        int userid = 1;
+        List<Preset> presets = new List<Preset>();
+        List<Timer.DAL.Timer.DAL.Entities.Timer> timers = new List<Timer.DAL.Timer.DAL.Entities.Timer>();
         private Mock<IUnitOfWork> unitOfWork;
         private Mock<ITimerService> timerService;
-
+        
         private PresetService subject;
 
         [SetUp]
@@ -27,13 +32,13 @@ namespace ServiceTierTests
             unitOfWork = new Mock<IUnitOfWork>();
             timerService = new Mock<ITimerService>();
             subject = new PresetService(unitOfWork.Object,timerService.Object);
+            presets.Add(preset);
         }
 
         [Test]
         public void CreatePreset()
         {
             List<TimerDTO> timers = new List<TimerDTO>();
-            Preset preset = new Preset { Name="preset", UserId=315 };
             var presetRepository = new Mock<IRepository<Preset>>();
 
             unitOfWork.Setup(_ => _.Presets).Returns(presetRepository.Object);
@@ -47,7 +52,6 @@ namespace ServiceTierTests
         public void UpdatePreset()
         {
             List<TimerDTO> timers = new List<TimerDTO>();
-            Preset preset = new Preset { Name = "preset", UserId = 315 };
             var presetRepository = new Mock<IRepository<Preset>>();
 
             unitOfWork.Setup(_ => _.Presets).Returns(presetRepository.Object);
@@ -60,7 +64,6 @@ namespace ServiceTierTests
         [Test]
         public void ThrowsExceptionPresetDelete()
         {
-            int presetid = 1;
             var presetRepository = new Mock<IRepository<Preset>>();
 
             unitOfWork.Setup(_ => _.Presets).Returns(presetRepository.Object);
@@ -73,7 +76,6 @@ namespace ServiceTierTests
         [Test]
         public void ThrowsExceptionGetPresetById()
         {
-            int presetid = 1;
             var presetRepository = new Mock<IRepository<Preset>>();
 
             unitOfWork.Setup(_ => _.Presets).Returns(presetRepository.Object);
@@ -86,8 +88,6 @@ namespace ServiceTierTests
         [Test]
         public void PresetDelete()
         {
-            int presetid = 1;
-            Preset preset = new Preset { Name = "preset",UserId = 2, Id = 1 };
             var presetRepository = new Mock<IRepository<Preset>>();
 
             unitOfWork.Setup(_ => _.Presets).Returns(presetRepository.Object);
@@ -101,8 +101,6 @@ namespace ServiceTierTests
         [Test]
         public void GetPresetById()
         {
-            int presetid = 1;
-            Preset preset = new Preset { Name = "preset", UserId = 2, Id = 1 };
             var presetRepository = new Mock<IRepository<Preset>>();
 
             unitOfWork.Setup(_ => _.Presets).Returns(presetRepository.Object);
@@ -114,27 +112,19 @@ namespace ServiceTierTests
         [Test]
         public void GetAllStandartPresets()
         {
-            List<Preset> presets = new List<Preset>();
-            List<Timer.DAL.Timer.DAL.Entities.Timer> timers = new List<Timer.DAL.Timer.DAL.Entities.Timer>();
-            Preset preset = new Preset { Name = "preset", Id = 1 };
-            presets.Add(preset);
             var presetRepository = new Mock<IRepository<Preset>>();
 
             unitOfWork.Setup(_ => _.Presets).Returns(presetRepository.Object);
             unitOfWork.Setup(_ => _.Presets.GetAllEntities()).Returns(presets.AsQueryable());
             unitOfWork.Setup(_ => _.Timers.GetAllEntities()).Returns(timers.AsQueryable());
-
+            preset.UserId = null;
+            
             Assert.AreEqual(subject.GetAllStandardPresets()[0].PresetName, preset.Name);
         }
 
         [Test]
         public void GetAllCustomPresets()
         {
-            int userid = 1;
-            List<Preset> presets = new List<Preset>();
-            List<Timer.DAL.Timer.DAL.Entities.Timer> timers = new List<Timer.DAL.Timer.DAL.Entities.Timer>();
-            Preset preset = new Preset { Name = "preset", Id = 1, UserId=1 };
-            presets.Add(preset);
             var presetRepository = new Mock<IRepository<Preset>>();
 
             unitOfWork.Setup(_ => _.Presets).Returns(presetRepository.Object);

@@ -5,23 +5,23 @@ using System.Text;
 
 namespace Common.Exceptions
 {
-    public class StandartPresetException : Exception
+    public class AccessDeniedException : Exception
     {
         public string ResourceReferenceProperty { get; set; }
 
-        public StandartPresetException() : base("This preset is standard")
+        public AccessDeniedException() : base("This preset isn't yours")
         {
 
         }
-        public StandartPresetException(string message) : base(message)
+        public AccessDeniedException(string message) : base(message)
         {
 
         }
-        public StandartPresetException(string message, Exception inner) : base(message, inner)
+        public AccessDeniedException(string message, Exception inner) : base(message, inner)
         {
 
         }
-        protected StandartPresetException(SerializationInfo info, StreamingContext context)
+        protected AccessDeniedException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
             ResourceReferenceProperty = info.GetString("ResourceReferenceProperty");

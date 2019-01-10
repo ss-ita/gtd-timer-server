@@ -43,10 +43,6 @@ namespace ServiceTier.Services
             {
                 throw new PresetNotFoundException();
             }
-            if (unitOfWork.Presets.GetByID(presetid).UserId == null)
-            {
-                throw new StandartPresetException();
-            }
             unitOfWork.Presets.Delete(presetid);
             unitOfWork.Save();
         }
@@ -61,37 +57,31 @@ namespace ServiceTier.Services
             return preset.ToPresetDTO(timerService.GetAllTimersByPresetId(presetid));
         }
 
-        public List<PresetDTO> GetAllCustomPresetsByUserId(int userid)
+        public IList<PresetDTO> GetAllCustomPresetsByUserId(int userid)
         {
             var listOfPresetsDTO = new List<PresetDTO>();
-            var presets = unitOfWork.Presets.GetAllEntities();
+            var presets = unitOfWork.Presets.GetAllEntitiesByFilter(preset=>preset.UserId==userid);
             var timers = unitOfWork.Timers.GetAllEntities();
 
             foreach (var preset in presets)
             {
-                if (preset.UserId == userid)
-                {
                     List<TimerDTO> timerDTOs = timerService.GetAllTimersByPresetId(preset.Id);
                     listOfPresetsDTO.Add(preset.ToPresetDTO(timerDTOs));
-                }
             }
 
             return listOfPresetsDTO;
         }
 
-        public List<PresetDTO> GetAllStandardPresets()
+        public IList<PresetDTO> GetAllStandardPresets()
         {
             var listOfPresetsDTO = new List<PresetDTO>();
-            var presets = unitOfWork.Presets.GetAllEntities();
+            var presets = unitOfWork.Presets.GetAllEntitiesByFilter(preset=>preset.UserId==null);
             var timers = unitOfWork.Timers.GetAllEntities();
 
             foreach (var preset in presets)
             {
-                if (preset.UserId == null)
-                {
                     var timerDTOs= timerService.GetAllTimersByPresetId(preset.Id);
                     listOfPresetsDTO.Add(preset.ToPresetDTO(timerDTOs));
-                }
             }
 
             return listOfPresetsDTO;

@@ -42,14 +42,11 @@ namespace ServiceTier.Services
 
         public List<TimerDTO> GetAllTimersByPresetId(int presetid)
         {
-            var timers = unitOfWork.Timers.GetAllEntities();
+            var timers = unitOfWork.Timers.GetAllEntitiesByFilter(timer=>timer.PresetId==presetid);
             List<TimerDTO> timerDTOs = new List<TimerDTO>();
             foreach (var timer in timers)
             {
-                if (timer.PresetId == presetid)
-                {
                     timerDTOs.Add(timer.ToTimerDTO());
-                }
             }
 
             return timerDTOs;

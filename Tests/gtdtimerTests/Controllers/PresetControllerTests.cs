@@ -17,6 +17,11 @@ namespace gtdtimerTests.Controllers
     [TestFixture]
     public class PresetControllerTests
     {
+        int timerid = 2;
+        int presetID = 2;
+        int userid = 315;
+        TimerDTO timerDTO = new TimerDTO { Name = "timer", Id = 2 };
+        PresetDTO presetDTO = new PresetDTO { PresetName = "string", UserId = 315, Id = 2 };
         private Mock<IPresetService> presetService;
         private Mock<ITimerService> timerService;
         private Mock<IUsersService> usersService;
@@ -39,7 +44,6 @@ namespace gtdtimerTests.Controllers
         [Test]
         public void GetPresetById()
         {
-            int presetID = 2;
             PresetDTO presetDTO = new PresetDTO();
             presetService.Setup(_ => _.GetPresetById(presetID)).Returns(presetDTO);
 
@@ -64,7 +68,6 @@ namespace gtdtimerTests.Controllers
         [Test]
         public void GetAllCustomPresets()
         {
-            int userid = 315;
             userIdentityService.Setup(_ => _.GetUserId()).Returns(userid);
             List<PresetDTO> presets = new List<PresetDTO>();
             presetService.Setup(_ => _.GetAllCustomPresetsByUserId(userid)).Returns(presets);
@@ -78,9 +81,7 @@ namespace gtdtimerTests.Controllers
         [Test]
         public void Post()
         {
-            int userid = 315;
             userIdentityService.Setup(_ => _.GetUserId()).Returns(userid);
-            PresetDTO presetDTO = new PresetDTO { PresetName = "string" };
 
             var actual = (OkResult)subject.CreatePreset(presetDTO);
 
@@ -91,9 +92,7 @@ namespace gtdtimerTests.Controllers
         [Test]
         public void UpdatePreset()
         {
-            int userid = 315;
             userIdentityService.Setup(_ => _.GetUserId()).Returns(userid);
-            PresetDTO presetDTO = new PresetDTO { PresetName = "string", UserId = 315, Id=2 };
 
             var actual = (OkResult)subject.UpdatePreset(presetDTO);
 
@@ -104,8 +103,6 @@ namespace gtdtimerTests.Controllers
         [Test]
         public void UpdateTimer()
         {
-            TimerDTO timerDTO = new TimerDTO { Name="timer", Id = 2 };
-
             var actual = (OkResult)subject.UpdateTimer(timerDTO);
 
             Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
@@ -115,18 +112,17 @@ namespace gtdtimerTests.Controllers
         [Test]
         public void DeletePreset()
         {
-            int presetid = 8;
-
-            var actual = (OkResult)subject.DeletePreset(presetid);
+            userIdentityService.Setup(_ => _.GetUserId()).Returns(userid);
+            presetService.Setup(_ => _.GetPresetById(presetID)).Returns(presetDTO);
+            var actual = (OkResult)subject.DeletePreset(presetID);
 
             Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
-            presetService.Verify(_ => _.DeletePresetById(presetid), Times.Once);
+            presetService.Verify(_ => _.DeletePresetById(presetID), Times.Once);
         }
 
         [Test]
         public void DeleteTimer()
         {
-            int timerid = 2;
 
             var actual = (OkResult)subject.DeleteTimer(timerid);
 
