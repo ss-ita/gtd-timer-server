@@ -85,9 +85,10 @@ namespace ServiceTierTests
             User user = new User { PasswordHash = password };
 
             var timerContext = new Mock<TimerContext>();
-            var userRepository = new Mock<IUserEmailStore<User, int>>();
+            var userRepository = new Mock<IUserStore<User, int>>();
             unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
-            userRepository.Setup(_ => _.FindByIdAsync(userId)).ReturnsAsync(user);
+            unitOfWork.Setup(_ => _.UserManager.FindByIdAsync(userId)).ReturnsAsync(user);
+            unitOfWork.Setup(_ => _.UserManager.CheckPasswordAsync(user, model.PasswordOld)).ReturnsAsync(true);
 
             subject.Update(userId, model);
 
@@ -101,10 +102,11 @@ namespace ServiceTierTests
             UpdatePasswordDTO model = new UpdatePasswordDTO();
             User user = new User { PasswordHash = "password" };
 
-            var userRepository = new Mock<IUserEmailStore<User, int>>();
+            var userRepository = new Mock<IUserStore<User, int>>();
             var timerContext = new Mock<TimerContext>();
             unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
-            userRepository.Setup(_ => _.FindByIdAsync(userId)).ReturnsAsync(user);
+            unitOfWork.Setup(_ => _.UserManager.FindByIdAsync(userId)).ReturnsAsync(user);
+            unitOfWork.Setup(_ => _.UserManager.CheckPasswordAsync(user, model.PasswordOld)).ReturnsAsync(false);
 
             var ex = Assert.Throws<PasswordMismatchException>(() => subject.Update(userId, model));
 
