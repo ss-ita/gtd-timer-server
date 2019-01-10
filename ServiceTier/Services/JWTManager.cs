@@ -10,9 +10,9 @@ using Timer.DAL.Timer.DAL.Entities;
 
 namespace ServiceTier.Services
 {
-    class JWTManager
+    public class JWTManager
     {
-        public static string GenerateToken(User user)
+        public virtual string GenerateToken(User user)
         {
             var claims = new[]
                         {
@@ -24,7 +24,7 @@ namespace ServiceTier.Services
             var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(IoCContainer.Configuration["JWTSecretKey"]));
 
             var token = new JwtSecurityToken(
-                expires: DateTime.UtcNow.AddHours(Constants.Validity),
+                expires: DateTime.UtcNow.AddHours(Constants.TokenExpirationInHours),
                 claims: claims,
                 signingCredentials: new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256),
                 issuer: "Tokens:Issuer",

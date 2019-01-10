@@ -52,6 +52,26 @@ namespace LoginControllerTests
 
                 Assert.That(ex.Message, Is.EqualTo("User does not Exist!"));
             }
+
+            [Test]
+            public void GoogleLoginTest_ReturnsOkRequest_WhenTokenCorect()
+            {
+                SocialAuthDTO model = new SocialAuthDTO() { AccessToken = Constants.CorectEmail };
+
+                var actual = (OkObjectResult)subject.GoogleLogin(model);
+
+                Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
+            }
+
+            [Test]
+            public void FacebookLoginTest_ReturnsOkRequest_WhenTokenCorect()
+            {
+                SocialAuthDTO model = new SocialAuthDTO() { AccessToken = Constants.CorectEmail };
+
+                var actual = (OkObjectResult)subject.FacebookLogin(model);
+
+                Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
+            }
         }
     }
 }

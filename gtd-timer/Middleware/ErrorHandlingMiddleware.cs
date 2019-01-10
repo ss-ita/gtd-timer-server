@@ -64,9 +64,6 @@ namespace gtdtimer.Middleware
                 case AccessDeniedException _:
                     exceptionCode = HttpStatusCode.BadRequest;
                     break;
-                case UserNotAddedException _:
-                    exceptionCode = HttpStatusCode.NoContent;
-                    break;
                 default:
                     exceptionCode = HttpStatusCode.InternalServerError;
                     break;
