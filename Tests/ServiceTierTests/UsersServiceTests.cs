@@ -9,6 +9,7 @@ using Timer.DAL.Timer.DAL.Entities;
 using Timer.DAL.Timer.DAL.Repositories;
 using Timer.DAL.Timer.DAL.UnitOfWork;
 using System.Collections.Generic;
+using Timer.DAL.Extensions;
 
 namespace ServiceTierTests
 {
@@ -46,11 +47,13 @@ namespace ServiceTierTests
         public void Create()
         {
             UserDTO model = new UserDTO { Email = "" };
-            var userRepository = new Mock<IUserEmailStore<User, int>>();
+            var userRepository = new Mock<IUserStore<User, int>>();
             var timerContext = new Mock<TimerContext>();
+            User user = model.ToUser();
 
             unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
-            userRepository.Setup(_ => _.FindByEmailAsync(model.Email)).ReturnsAsync((User)null);
+            unitOfWork.Setup(_ => _.UserManager.FindByEmailAsync(model.Email)).ReturnsAsync((User)null);
+            unitOfWork.Setup(_ => _.UserManager.AddToRoleAsync(user.Id, Common.Constant.Constants.UserRole));
 
             subject.Create(model);
 

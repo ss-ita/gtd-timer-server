@@ -1,4 +1,5 @@
-﻿using Common.Exceptions;
+﻿using Common.Constant;
+using Common.Exceptions;
 using Common.ModelsDTO;
 using System;
 using System.Collections.Generic;
@@ -31,6 +32,7 @@ namespace ServiceTier.Services
 
             User user = model.ToUser();
             unitOfWork.UserManager.CreateAsync(user, model.Password).GetAwaiter().GetResult();
+            unitOfWork.UserManager.AddToRoleAsync(user.Id, Constants.UserRole);
             unitOfWork.Save();
         }
 
