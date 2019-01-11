@@ -5,13 +5,13 @@ using System.Text;
 
 namespace Common.ModelsDTO
 {
-    public class FacebookAuthUserData
+    public class FacebookAuthUserData: BaseAuthUserData
     {
         [JsonProperty("email")]
-        public string Email { get; set; }
+        public override string Email { get; set; }
         [JsonProperty("first_name")]
-        public string FirstName { get; set; }
+        public override string FirstName { get; set; }
         [JsonProperty("last_name")]
-        public string LastName { get; set; }
+        public override string LastName { get; set; }
     }
 }

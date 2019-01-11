@@ -5,15 +5,13 @@ using System.Text;
 
 namespace Common.ModelsDTO
 {
-    public class GoogleAuthUserData
+    public class GoogleAuthUserData: BaseAuthUserData
     {
         [JsonProperty("email")] 
-        public string Email { get; set; }
+        public override string Email { get; set; }
         [JsonProperty("given_name")]
-        public string FirstName { get; set; }
+        public override string FirstName { get; set; }
         [JsonProperty("family_name")]
-        public string LastName { get; set; }
-        [JsonProperty("name")]
-        public string Name { get; set; }
+        public override string LastName { get; set; }
     }
 }
