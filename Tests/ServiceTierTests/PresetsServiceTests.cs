@@ -115,8 +115,8 @@ namespace ServiceTierTests
             var presetRepository = new Mock<IRepository<Preset>>();
 
             unitOfWork.Setup(_ => _.Presets).Returns(presetRepository.Object);
-            unitOfWork.Setup(_ => _.Presets.GetAllEntities()).Returns(presets.AsQueryable());
-            unitOfWork.Setup(_ => _.Timers.GetAllEntities()).Returns(timers.AsQueryable());
+            unitOfWork.Setup(_ => _.Presets.GetAllEntitiesByFilter(It.IsAny<Func<Preset, bool>>())).Returns(presets);
+            unitOfWork.Setup(_ => _.Timers.GetAllEntities()).Returns(timers);
             preset.UserId = null;
             
             Assert.AreEqual(subject.GetAllStandardPresets()[0].PresetName, preset.Name);
@@ -128,8 +128,8 @@ namespace ServiceTierTests
             var presetRepository = new Mock<IRepository<Preset>>();
 
             unitOfWork.Setup(_ => _.Presets).Returns(presetRepository.Object);
-            unitOfWork.Setup(_ => _.Presets.GetAllEntities()).Returns(presets.AsQueryable());
-            unitOfWork.Setup(_ => _.Timers.GetAllEntities()).Returns(timers.AsQueryable());
+            unitOfWork.Setup(_ => _.Presets.GetAllEntitiesByFilter(It.IsAny<Func<Preset, bool>>())).Returns(presets);
+            unitOfWork.Setup(_ => _.Timers.GetAllEntities()).Returns(timers);
 
             Assert.AreEqual(subject.GetAllCustomPresetsByUserId(userid)[0].PresetName, preset.Name);
         }

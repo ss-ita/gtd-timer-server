@@ -157,7 +157,7 @@ namespace gtdtimerTests.Controllers
             var actual = (OkResult)subject.UpdateTaskStatus(model);
 
             Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
-            taskService.Verify(_ => _.UpdateTaskStatus(model), Times.Once);
+            taskService.Verify(_ => _.SwitchArchivedStatus(model), Times.Once);
         }
 
         [Test]

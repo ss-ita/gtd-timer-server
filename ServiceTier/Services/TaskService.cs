@@ -40,26 +40,14 @@ namespace ServiceTier.Services
 
         public IEnumerable<TaskDTO> GetAllTasks()
         {
-            var listOfTasksDTO = new List<TaskDTO>();
-            var tasks = unitOfWork.Tasks.GetAllEntities();
-
-            foreach (var task in tasks)
-            {
-                listOfTasksDTO.Add(task.ToTaskDTO());
-            }
+            var listOfTasksDTO = unitOfWork.Tasks.GetAllEntities().Select(task => task.ToTaskDTO()).ToList();
 
             return listOfTasksDTO;
         }
 
         public IEnumerable<TaskDTO> GetAllTasksByUserId(int userId)
         {
-            var listOfTasksDTO = new List<TaskDTO>();
-            var tasks = unitOfWork.Tasks.GetAllEntitiesByFilter(user => user.UserId == userId);
-
-            foreach (var task in tasks)
-            {
-                listOfTasksDTO.Add(task.ToTaskDTO());
-            }
+            var listOfTasksDTO = unitOfWork.Tasks.GetAllEntitiesByFilter(user => user.UserId == userId).Select(task => task.ToTaskDTO()).ToList();
 
             return listOfTasksDTO;
         }
@@ -83,7 +71,7 @@ namespace ServiceTier.Services
             unitOfWork.Save();
         }
 
-        public void UpdateTaskStatus(TaskDTO model)
+        public void SwitchArchivedStatus(TaskDTO model)
         {
             model.IsActive = !model.IsActive;
 
@@ -130,52 +118,28 @@ namespace ServiceTier.Services
 
         public IEnumerable<TaskDTO> GetAllActiveTasks()
         {
-            var listOfTasksDTO = new List<TaskDTO>();
-            var tasks = unitOfWork.Tasks.GetAllEntitiesByFilter(task => task.IsActive == true);
-
-            foreach (var task in tasks)
-            {
-                listOfTasksDTO.Add(task.ToTaskDTO());
-            }
+            var listOfTasksDTO = unitOfWork.Tasks.GetAllEntitiesByFilter(task => task.IsActive == true).Select(task => task.ToTaskDTO()).ToList();
 
             return listOfTasksDTO;
         }
 
         public IEnumerable<TaskDTO> GetAllActiveTasksByUserId(int userId)
         {
-            var listOfTasksDTO = new List<TaskDTO>();
-            var tasks = unitOfWork.Tasks.GetAllEntitiesByFilter((task) => (task.UserId == userId && task.IsActive == true));
-
-            foreach (var task in tasks)
-            {
-                listOfTasksDTO.Add(task.ToTaskDTO());
-            }
-
+            var listOfTasksDTO = unitOfWork.Tasks.GetAllEntitiesByFilter((task) => (task.UserId == userId && task.IsActive == true)).Select(task => task.ToTaskDTO()).ToList();
+            
             return listOfTasksDTO;
         }
 
         public IEnumerable<TaskDTO> GetAllArchivedTasks()
         {
-            var listOfTasksDTO = new List<TaskDTO>();
-            var tasks = unitOfWork.Tasks.GetAllEntitiesByFilter(task => task.IsActive == false);
-
-            foreach (var task in tasks)
-            {
-                listOfTasksDTO.Add(task.ToTaskDTO());
-            }
+            var listOfTasksDTO = unitOfWork.Tasks.GetAllEntitiesByFilter(task => task.IsActive == false).Select(task => task.ToTaskDTO()).ToList();
 
             return listOfTasksDTO;
         }
 
         public IEnumerable<TaskDTO> GetAllArchivedTasksByUserId(int userId)
         {
-            var listOfTasksDTO = new List<TaskDTO>();
-            var tasks = unitOfWork.Tasks.GetAllEntitiesByFilter((task) => (task.UserId == userId && task.IsActive == false));
-
-            foreach (var task in tasks)
-            {
-                listOfTasksDTO.Add(task.ToTaskDTO());
-            }
+            var listOfTasksDTO = unitOfWork.Tasks.GetAllEntitiesByFilter((task) => (task.UserId == userId && task.IsActive == false)).Select(task => task.ToTaskDTO()).ToList();
 
             return listOfTasksDTO;
         }

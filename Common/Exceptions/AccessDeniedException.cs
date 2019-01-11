@@ -9,7 +9,7 @@ namespace Common.Exceptions
     {
         public string ResourceReferenceProperty { get; set; }
 
-        public AccessDeniedException() : base("This preset isn't yours")
+        public AccessDeniedException() : base("You are not the owner of this preset!")
         {
 
         }

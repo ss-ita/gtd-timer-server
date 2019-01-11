@@ -42,12 +42,7 @@ namespace ServiceTier.Services
 
         public List<TimerDTO> GetAllTimersByPresetId(int presetid)
         {
-            var timers = unitOfWork.Timers.GetAllEntitiesByFilter(timer=>timer.PresetId==presetid);
-            List<TimerDTO> timerDTOs = new List<TimerDTO>();
-            foreach (var timer in timers)
-            {
-                    timerDTOs.Add(timer.ToTimerDTO());
-            }
+            var timerDTOs = unitOfWork.Timers.GetAllEntitiesByFilter(timer=>timer.PresetId==presetid).Select(timer => timer.ToTimerDTO()).ToList();           
 
             return timerDTOs;
         }

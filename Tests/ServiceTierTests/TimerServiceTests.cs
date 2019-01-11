@@ -83,7 +83,7 @@ namespace ServiceTierTests
             var timerRepository = new Mock<IRepository<Timer.DAL.Timer.DAL.Entities.Timer>>();
 
             unitOfWork.Setup(_ => _.Timers).Returns(timerRepository.Object);
-            unitOfWork.Setup(_ => _.Timers.GetAllEntities()).Returns(timers.AsQueryable());
+            unitOfWork.Setup(_ => _.Timers.GetAllEntitiesByFilter(It.IsAny<Func<Timer.DAL.Timer.DAL.Entities.Timer, bool>>())).Returns(timers);
 
             Assert.AreEqual(subject.GetAllTimersByPresetId(presetid)[0].Interval,timerDTOs[0].Interval);
         }
