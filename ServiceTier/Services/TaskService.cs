@@ -71,6 +71,7 @@ namespace ServiceTier.Services
             {
                 throw new TaskNotFoundException();
             }
+
             return task.ToTaskDTO();
         }
 
@@ -82,15 +83,12 @@ namespace ServiceTier.Services
             unitOfWork.Save();
         }
 
-        public void UpdateTaskStatus(int taskId, bool newStatus)
+        public void UpdateTaskStatus(TaskDTO model)
         {
-            Tasks task = unitOfWork.Tasks.GetByID(taskId);
-            if (task == null)
-            {
-                throw new TaskNotFoundException();
-            }
-            task.IsActive = newStatus;           
-            
+            model.IsActive = !model.IsActive;
+
+            var task = model.ToTask();
+
             unitOfWork.Tasks.Update(task);
             unitOfWork.Save();
         }
@@ -102,6 +100,7 @@ namespace ServiceTier.Services
             {
                 throw new TaskNotFoundException();
             }
+
             task.ElapsedTime = TimeSpan.Zero;
             task.Goal = null;
             task.LastStartTime = task.LastStartTime.Date;
@@ -145,11 +144,7 @@ namespace ServiceTier.Services
         public IEnumerable<TaskDTO> GetAllActiveTasksByUserId(int userId)
         {
             var listOfTasksDTO = new List<TaskDTO>();
-            var tasks = unitOfWork.Tasks.GetAllEntitiesByFilter(
-                (task) => 
-                (task.UserId == userId && 
-                task.IsActive == true)
-                );
+            var tasks = unitOfWork.Tasks.GetAllEntitiesByFilter((task) => (task.UserId == userId && task.IsActive == true));
 
             foreach (var task in tasks)
             {
@@ -175,11 +170,7 @@ namespace ServiceTier.Services
         public IEnumerable<TaskDTO> GetAllArchivedTasksByUserId(int userId)
         {
             var listOfTasksDTO = new List<TaskDTO>();
-            var tasks = unitOfWork.Tasks.GetAllEntitiesByFilter(
-                (task) => 
-                (task.UserId == userId && 
-                task.IsActive == false)
-                );
+            var tasks = unitOfWork.Tasks.GetAllEntitiesByFilter((task) => (task.UserId == userId && task.IsActive == false));
 
             foreach (var task in tasks)
             {

@@ -49,7 +49,7 @@ namespace gtdtimer.Controllers
             return Ok(allTasks);
         }
 
-        [HttpGet("[action]")]
+        [HttpGet("GetTaskById/{taskID}")]
         public IActionResult GetTaskById(int taskId)
         {
 
@@ -114,9 +114,10 @@ namespace gtdtimer.Controllers
         }
 
         [HttpPut("[action]")]
-        public IActionResult UpdateTaskStatus(int taskId, bool newStatus)
+        public IActionResult UpdateTaskStatus(TaskDTO model)
         {
-            taskService.UpdateTaskStatus(taskId, newStatus);
+            model.UserId = userIdentityService.GetUserId();
+            taskService.UpdateTaskStatus(model);
 
             return Ok();
         }
@@ -141,7 +142,7 @@ namespace gtdtimer.Controllers
             return Ok("Timer has been paused.");
         }
 
-        [HttpPut("[action]")]
+        [HttpPut("ResetTask/{taskId}")]
         public IActionResult ResetTask(int taskId)
         {
             taskService.ResetTask(taskId);

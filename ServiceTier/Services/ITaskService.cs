@@ -17,7 +17,7 @@ namespace ServiceTier.Services
         void CreateTask(TaskDTO taskDTO);
         void UpdateTask(TaskDTO taskDTO);
         void DeleteTaskById(int taskId);
-        void UpdateTaskStatus(int taskId, bool newStatus);
+        void UpdateTaskStatus(TaskDTO taskDTO);
         void ResetTask(int taskId);
         void StartTask(TaskDTO taskDTO);
         void PauseTask(TaskDTO taskDTO);

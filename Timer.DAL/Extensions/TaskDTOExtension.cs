@@ -1,6 +1,7 @@
 ﻿using Timer.DAL.Timer.DAL.Entities;
 
 using Common.ModelsDTO;
+using System;
 
 namespace Timer.DAL.Extensions
 {
@@ -13,7 +14,7 @@ namespace Timer.DAL.Extensions
                 Id = taskDTO.Id,
                 Name = taskDTO.Name,
                 Description = taskDTO.Description,
-                ElapsedTime = taskDTO.ElapsedTime,
+                ElapsedTime = TimeSpan.FromMilliseconds(taskDTO.ElapsedTime),
                 Goal = taskDTO.Goal,
                 LastStartTime = taskDTO.LastStartTime,
                 IsActive = taskDTO.IsActive,
@@ -31,7 +32,7 @@ namespace Timer.DAL.Extensions
                 Id = task.Id,
                 Name = task.Name,
                 Description = task.Description,
-                ElapsedTime = task.ElapsedTime,
+                ElapsedTime = (int)task.ElapsedTime.TotalMilliseconds,
                 Goal = task.Goal,
                 LastStartTime = task.LastStartTime,
                 IsActive = task.IsActive,
