@@ -114,7 +114,7 @@ namespace gtdtimer.Controllers
         }
 
         [HttpPut("[action]")]
-        public IActionResult UpdateTaskStatus([FromBody]TaskDTO model)
+        public IActionResult SwitchArchivedStatus([FromBody]TaskDTO model)
         {
             model.UserId = userIdentityService.GetUserId();
             taskService.SwitchArchivedStatus(model);

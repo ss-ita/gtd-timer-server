@@ -149,12 +149,12 @@ namespace gtdtimerTests.Controllers
         }
 
         [Test]
-        public void UpdateTaskStatus()
+        public void SwitchArchivedStatus()
         {
             var userId = 315;
             userIdentityService.Setup(_ => _.GetUserId()).Returns(userId);
             TaskDTO model = new TaskDTO();
-            var actual = (OkResult)subject.UpdateTaskStatus(model);
+            var actual = (OkResult)subject.SwitchArchivedStatus(model);
 
             Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
             taskService.Verify(_ => _.SwitchArchivedStatus(model), Times.Once);

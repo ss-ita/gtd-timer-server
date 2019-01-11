@@ -126,7 +126,7 @@ namespace ServiceTier.Services
         public IEnumerable<TaskDTO> GetAllActiveTasksByUserId(int userId)
         {
             var listOfTasksDTO = unitOfWork.Tasks.GetAllEntitiesByFilter((task) => (task.UserId == userId && task.IsActive == true)).Select(task => task.ToTaskDTO()).ToList();
-            
+
             return listOfTasksDTO;
         }
 
