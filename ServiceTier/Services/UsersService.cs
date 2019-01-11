@@ -23,7 +23,7 @@ namespace ServiceTier.Services
             return user;
         }
 
-        public void Create(UserDTO model)
+        public async Task CreateAsync(UserDTO model)
         {
             if (UserExists(model))
             {
@@ -32,7 +32,7 @@ namespace ServiceTier.Services
 
             User user = model.ToUser();
             unitOfWork.UserManager.CreateAsync(user, model.Password).GetAwaiter().GetResult();
-            unitOfWork.UserManager.AddToRoleAsync(user.Id, Constants.UserRole);
+            await unitOfWork.UserManager.AddToRoleAsync(user.Id, Constants.UserRole);
             unitOfWork.Save();
         }
 

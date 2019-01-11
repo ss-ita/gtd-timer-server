@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Common.ModelsDTO;
 using gtdtimer.Attributes;
 using ServiceTier.Services;
+using Common.Constant;
 
 namespace gtdtimer.Controllers
 {
@@ -23,7 +24,7 @@ namespace gtdtimer.Controllers
             this.userIdentityService = userIdentityService;
         }
 
-
+        [Authorize(Roles = Constants.AdminRole)]
         [HttpGet("[action]")]
         public IActionResult GetAllTasks()
         {
@@ -33,6 +34,7 @@ namespace gtdtimer.Controllers
             return Ok(allTasks);
         }
 
+        [Authorize(Roles = Constants.AdminRole)]
         [HttpGet("[action]")]
         public IActionResult GetAllActiveTasks()
         {
@@ -41,6 +43,7 @@ namespace gtdtimer.Controllers
             return Ok(allTasks);
         }
 
+        [Authorize(Roles = Constants.AdminRole)]
         [HttpGet("[action]")]
         public IActionResult GetAllArchivedTasks()
         {
