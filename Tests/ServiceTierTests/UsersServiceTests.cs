@@ -55,9 +55,9 @@ namespace ServiceTierTests
             unitOfWork.Setup(_ => _.UserManager.FindByEmailAsync(model.Email)).ReturnsAsync((User)null);
             unitOfWork.Setup(_ => _.UserManager.AddToRoleAsync(user.Id, Common.Constant.Constants.UserRole));
 
-            await subject.CreateAsync(model);
+            subject.CreateAsync(model);
 
-            unitOfWork.Verify(_ => _.Save(), Times.Once);
+            unitOfWork.Verify(_ => _.UserManager.AddToRoleAsync(user.Id, Common.Constant.Constants.UserRole), Times.Once);
         }
 
         [Test]
@@ -71,9 +71,9 @@ namespace ServiceTierTests
             unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
             userRepository.Setup(_ => _.FindByEmailAsync(model.Email)).ReturnsAsync(user);
 
-            var ex = Assert.Throws<UserAlreadyExistsException>(() => subject.CreateAsync(model));
+            var ex = Assert.Throws<System.AggregateException>(() => subject.CreateAsync(model).Wait());
 
-            Assert.That(ex.Message, Is.EqualTo("User with such email address already exists"));
+            Assert.That(ex.Message, Is.EqualTo("One or more errors occurred. (User with such email address already exists)"));
         }
 
         [Test]

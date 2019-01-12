@@ -163,11 +163,13 @@ namespace gtdtimerTests.Controllers
         [Test]
         public void ResetTask()
         {
-            var taskId = 2;
-            var actual = (OkResult)subject.ResetTask(taskId);
+            var userId = 315;
+            userIdentityService.Setup(_ => _.GetUserId()).Returns(userId);
+            TaskDTO model = new TaskDTO();
+            var actual = (OkResult)subject.ResetTask(model);
 
             Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
-            taskService.Verify(_ => _.ResetTask(taskId), Times.Once);
+            taskService.Verify(_ => _.ResetTask(model), Times.Once);
         }
 
         [Test]
@@ -176,11 +178,10 @@ namespace gtdtimerTests.Controllers
             var userId = 315;
             userIdentityService.Setup(_ => _.GetUserId()).Returns(userId);
             TaskDTO model = new TaskDTO();
-            var actual = (OkObjectResult)subject.StartTask(model);
+            var actual = (OkResult)subject.StartTask(model);
 
             Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
             taskService.Verify(_ => _.StartTask(model), Times.Once);
-            Assert.That(actual.Value, Is.EqualTo("Timer has started."));
         }
 
         [Test]
@@ -189,11 +190,10 @@ namespace gtdtimerTests.Controllers
             var userId = 315;
             userIdentityService.Setup(_ => _.GetUserId()).Returns(userId);
             TaskDTO model = new TaskDTO();
-            var actual = (OkObjectResult)subject.PauseTask(model);
+            var actual = (OkResult)subject.PauseTask(model);
 
             Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
             taskService.Verify(_ => _.PauseTask(model), Times.Once);
-            Assert.That(actual.Value, Is.EqualTo("Timer has been paused."));
         }
     }
 }

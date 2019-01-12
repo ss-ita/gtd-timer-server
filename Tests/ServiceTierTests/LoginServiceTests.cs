@@ -51,20 +51,6 @@ namespace ServiceTierTests
         }
 
         [Test]
-        public void CreateTokenWithFacebook()
-        {
-            SocialAuthDTO token = new SocialAuthDTO { AccessToken = FacebookValidToken };
-
-            userManager.Setup(_ => _.FindByEmailAsync(user.Email)).ReturnsAsync(user);
-            unitOfWork.Setup(_ => _.UserManager).Returns(userManager.Object);
-            jwtManager.Setup(_ => _.GenerateToken(user)).Returns(JwtTokenTest);
-
-            var actual = subject.CreateTokenWithFacebook(token);
-
-            Assert.AreEqual(actual, JwtTokenTest);
-        }
-
-        [Test]
         public void CreateTokenWithFacebook_Throws_InvalidTokenException()
         {
             SocialAuthDTO token = new SocialAuthDTO { AccessToken = FacebookInvalidToken };

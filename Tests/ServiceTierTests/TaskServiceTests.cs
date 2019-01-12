@@ -95,14 +95,11 @@ namespace ServiceTierTests
         [Test]
         public void ResetTask()
         {
-            int taskId = 2;
-            Tasks task = new Tasks();
+            TaskDTO task = new TaskDTO();
             var taskRepository = new Mock<IRepository<Tasks>>();
 
             unitOfWork.Setup(_ => _.Tasks).Returns(taskRepository.Object);
-            unitOfWork.Setup(_ => _.Tasks.GetByID(taskId)).Returns(task);
-
-            subject.ResetTask(taskId);
+            subject.ResetTask(task);
 
             unitOfWork.Verify(_ => _.Save(), Times.Once);
         }
