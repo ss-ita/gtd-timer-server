@@ -47,33 +47,36 @@ namespace ServiceTierTests
         public void Create()
         {
             UserDTO model = new UserDTO { Email = "" };
-            var userRepository = new Mock<IUserStore<User, int>>();
+            var userManager = new Mock<IApplicationUserManager<User, int>>();
             var timerContext = new Mock<TimerContext>();
-            User user = model.ToUser();
+            var identity = new IdentityResult();
+            User user = new User();
 
-            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
-            unitOfWork.Setup(_ => _.UserManager.FindByEmailAsync(model.Email)).ReturnsAsync((User)null);
-            unitOfWork.Setup(_ => _.UserManager.AddToRoleAsync(user.Id, Common.Constant.Constants.UserRole));
+            unitOfWork.Setup(_ => _.UserManager).Returns(userManager.Object);
+            userManager.Setup(_ => _.FindByEmailAsync(model.Email)).ReturnsAsync((User)null);
+            userManager.Setup(_ => _.CreateAsync(user, model.Password)).ReturnsAsync(identity);
+            userManager.Setup(_ => _.AddToRoleAsync(user.Id, Common.Constant.Constants.UserRole)).ReturnsAsync(identity);
 
-            subject.CreateAsync(model);
+            subject.Create(model);
 
-            unitOfWork.Verify(_ => _.UserManager.AddToRoleAsync(user.Id, Common.Constant.Constants.UserRole), Times.Once);
+            unitOfWork.Verify(_ => _.Save(), Times.Once);
+            userManager.Verify(_ => _.CreateAsync(It.IsAny<User>(), model.Password), Times.Once);
+            userManager.Verify(_ => _.AddToRoleAsync(user.Id, Common.Constant.Constants.UserRole), Times.Once);
         }
 
         [Test]
         public void Create_Throws_UserAlreadyExistsException()
         {
             UserDTO model = new UserDTO { Email = "" };
+            var userManager = new Mock<IApplicationUserManager<User, int>>();
             User user = new User();
-            var userRepository = new Mock<IUserEmailStore<User, int>>();
-            var timerContext = new Mock<TimerContext>();
 
-            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
-            userRepository.Setup(_ => _.FindByEmailAsync(model.Email)).ReturnsAsync(user);
+            unitOfWork.Setup(_ => _.UserManager).Returns(userManager.Object);
+            userManager.Setup(_ => _.FindByEmailAsync(model.Email)).ReturnsAsync(user);
 
-            var ex = Assert.Throws<System.AggregateException>(() => subject.CreateAsync(model).Wait());
+            var ex = Assert.Throws<UserAlreadyExistsException>(() => subject.Create(model));
 
-            Assert.That(ex.Message, Is.EqualTo("One or more errors occurred. (User with such email address already exists)"));
+            Assert.That(ex.Message, Is.EqualTo("User with such email address already exists"));
         }
 
         [Test]

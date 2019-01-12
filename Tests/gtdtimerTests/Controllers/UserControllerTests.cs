@@ -63,7 +63,7 @@ namespace gtdtimerTests.Controllers
 
             var actual = (OkResult)subject.Post(model);
 
-            usersService.Verify(_ => _.CreateAsync(model), Times.Once);
+            usersService.Verify(_ => _.Create(model), Times.Once);
             Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
         }
 
@@ -72,7 +72,7 @@ namespace gtdtimerTests.Controllers
         {
             UserDTO model = new UserDTO();
 
-            usersService.Setup(_ => _.CreateAsync(model)).Throws(new UserAlreadyExistsException());
+            usersService.Setup(_ => _.Create(model)).Throws(new UserAlreadyExistsException());
 
             var ex = Assert.Throws<UserAlreadyExistsException>(() => subject.Post(model));
 
