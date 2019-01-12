@@ -44,7 +44,7 @@ namespace ServiceTierTests
         }
 
         [Test]
-        public void Create()
+        public async System.Threading.Tasks.Task CreateAsync()
         {
             UserDTO model = new UserDTO { Email = "" };
             var userRepository = new Mock<IUserStore<User, int>>();
@@ -55,7 +55,7 @@ namespace ServiceTierTests
             unitOfWork.Setup(_ => _.UserManager.FindByEmailAsync(model.Email)).ReturnsAsync((User)null);
             unitOfWork.Setup(_ => _.UserManager.AddToRoleAsync(user.Id, Common.Constant.Constants.UserRole));
 
-            subject.Create(model);
+            await subject.CreateAsync(model);
 
             unitOfWork.Verify(_ => _.Save(), Times.Once);
         }
@@ -71,7 +71,7 @@ namespace ServiceTierTests
             unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
             userRepository.Setup(_ => _.FindByEmailAsync(model.Email)).ReturnsAsync(user);
 
-            var ex = Assert.Throws<UserAlreadyExistsException>(() => subject.Create(model));
+            var ex = Assert.Throws<UserAlreadyExistsException>(() => subject.CreateAsync(model));
 
             Assert.That(ex.Message, Is.EqualTo("User with such email address already exists"));
         }

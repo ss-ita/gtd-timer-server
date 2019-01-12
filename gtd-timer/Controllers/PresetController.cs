@@ -39,6 +39,7 @@ namespace gtdtimer.Controllers
             return Ok(query);
         }
 
+        [AllowAnonymous]
         [HttpGet("[action]")]
         public IActionResult GetAllStandardPresets()
         {

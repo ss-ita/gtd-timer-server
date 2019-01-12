@@ -49,7 +49,7 @@ namespace gtdtimer.Controllers
         [HttpPost]
         public ActionResult Post([FromBody]UserDTO model)
         {
-            usersService.Create(model);
+            usersService.CreateAsync(model);
 
             return Ok();
         }
