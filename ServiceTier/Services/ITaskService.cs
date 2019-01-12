@@ -18,7 +18,7 @@ namespace ServiceTier.Services
         void UpdateTask(TaskDTO taskDTO);
         void DeleteTaskById(int taskId);
         void SwitchArchivedStatus(TaskDTO taskDTO);
-        void ResetTask(int taskId);
+        void ResetTask(TaskDTO taskDTO);
         void StartTask(TaskDTO taskDTO);
         void PauseTask(TaskDTO taskDTO);
     }

@@ -24,6 +24,10 @@ namespace gtdtimer.Controllers
             this.userIdentityService = userIdentityService;
         }
 
+        /// <summary>
+        /// Returns all users' tasks.
+        /// </summary>
+        /// <returns></returns>
         [Authorize(Roles = Constants.AdminRole)]
         [HttpGet("[action]")]
         public IActionResult GetAllTasks()
@@ -34,6 +38,10 @@ namespace gtdtimer.Controllers
             return Ok(allTasks);
         }
 
+        /// <summary>
+        /// Returns all users' active tasks.
+        /// </summary>
+        /// <returns></returns>
         [Authorize(Roles = Constants.AdminRole)]
         [HttpGet("[action]")]
         public IActionResult GetAllActiveTasks()
@@ -43,6 +51,10 @@ namespace gtdtimer.Controllers
             return Ok(allTasks);
         }
 
+        /// <summary>
+        /// Returns all users' archived tasks.
+        /// </summary>
+        /// <returns></returns>
         [Authorize(Roles = Constants.AdminRole)]
         [HttpGet("[action]")]
         public IActionResult GetAllArchivedTasks()
@@ -52,6 +64,11 @@ namespace gtdtimer.Controllers
             return Ok(allTasks);
         }
 
+        /// <summary>
+        /// Returns user's task by id.
+        /// </summary>
+        /// <param name="taskId"></param>
+        /// <returns></returns>
         [HttpGet("GetTaskById/{taskID}")]
         public IActionResult GetTaskById(int taskId)
         {
@@ -61,6 +78,10 @@ namespace gtdtimer.Controllers
             return Ok(task);
         }
 
+        /// <summary>
+        /// Returns all user's tasks.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("[action]")]
         public IActionResult GetAllTasksByUserId()
         {
@@ -70,6 +91,10 @@ namespace gtdtimer.Controllers
             return Ok(tasks);
         }
 
+        /// <summary>
+        /// Returns all user's active tasks.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("[action]")]
         public IActionResult GetAllActiveTasksByUserId()
         {
@@ -79,6 +104,10 @@ namespace gtdtimer.Controllers
             return Ok(tasks);
         }
 
+        /// <summary>
+        /// Returns all user's archived tasks.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("[action]")]
         public IActionResult GetAllArchivedTasksByUserId()
         {
@@ -88,6 +117,11 @@ namespace gtdtimer.Controllers
             return Ok(tasks);
         }
 
+        /// <summary>
+        /// Creates a task.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [ValidateModel]
         [HttpPost("[action]")]
         public IActionResult CreateTask([FromBody]TaskDTO model)
@@ -98,6 +132,11 @@ namespace gtdtimer.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Updates the task.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [ValidateModel]
         [HttpPut("[action]")]
         public IActionResult UpdateTask([FromBody]TaskDTO model)
@@ -108,6 +147,11 @@ namespace gtdtimer.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Deletes the task by id.
+        /// </summary>
+        /// <param name="taskId"></param>
+        /// <returns></returns>
         [HttpDelete("DeleteTask/{taskId}")]
         public IActionResult DeleteTask(int taskId)
         {
@@ -116,6 +160,12 @@ namespace gtdtimer.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Changes IsActive status of the task.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [ValidateModel]
         [HttpPut("[action]")]
         public IActionResult SwitchArchivedStatus([FromBody]TaskDTO model)
         {
@@ -125,6 +175,11 @@ namespace gtdtimer.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Sets IsRunning status of the task to true.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [ValidateModel]
         [HttpPut("[action]")]
         public IActionResult StartTask([FromBody]TaskDTO model)
@@ -132,9 +187,14 @@ namespace gtdtimer.Controllers
             model.UserId = userIdentityService.GetUserId();
             taskService.StartTask(model);
 
-            return Ok("Timer has started.");
+            return Ok();
         }
 
+        /// <summary>
+        /// Sets IsRunning status of the task to false.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [ValidateModel]
         [HttpPut("[action]")]
         public IActionResult PauseTask([FromBody]TaskDTO model)
@@ -142,13 +202,20 @@ namespace gtdtimer.Controllers
             model.UserId = userIdentityService.GetUserId();
             taskService.PauseTask(model);
 
-            return Ok("Timer has been paused.");
+            return Ok();
         }
 
-        [HttpPut("ResetTask/{taskId}")]
-        public IActionResult ResetTask(int taskId)
+        /// <summary>
+        /// Resets task's properties.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [ValidateModel]
+        [HttpPut("[action]")]
+        public IActionResult ResetTask([FromBody]TaskDTO model)
         {
-            taskService.ResetTask(taskId);
+            model.UserId = userIdentityService.GetUserId();
+            taskService.ResetTask(model);
 
             return Ok();
         }

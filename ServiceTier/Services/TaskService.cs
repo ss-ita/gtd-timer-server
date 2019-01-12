@@ -81,18 +81,14 @@ namespace ServiceTier.Services
             unitOfWork.Save();
         }
 
-        public void ResetTask(int taskId)
+        public void ResetTask(TaskDTO model)
         {
-            var task = unitOfWork.Tasks.GetByID(taskId);
-            if (task == null)
-            {
-                throw new TaskNotFoundException();
-            }
+            model.ElapsedTime = 0;
+            model.Goal = null;
+            model.LastStartTime = model.LastStartTime.Date;
+            model.IsRunning = false;
 
-            task.ElapsedTime = TimeSpan.Zero;
-            task.Goal = null;
-            task.LastStartTime = task.LastStartTime.Date;
-            task.IsRunning = false;
+            var task = model.ToTask();
 
             unitOfWork.Tasks.Update(task);
             unitOfWork.Save();
