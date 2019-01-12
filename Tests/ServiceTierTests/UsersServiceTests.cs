@@ -44,7 +44,7 @@ namespace ServiceTierTests
         }
 
         [Test]
-        public void Create()
+        public async System.Threading.Tasks.Task CreateAsync()
         {
             UserDTO model = new UserDTO { Email = "" };
             var userManager = new Mock<IApplicationUserManager<User, int>>();
