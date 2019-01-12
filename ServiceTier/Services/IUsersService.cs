@@ -8,7 +8,7 @@ namespace ServiceTier.Services
     public interface IUsersService : IBaseService
     {
         User Get(int id);
-        Task CreateAsync(UserDTO model);
+        void Create(UserDTO model);
         void Update(int id, UpdatePasswordDTO model);
         void Delete(int id);
         Task AddToRoleAsync(RoleDTO model);
