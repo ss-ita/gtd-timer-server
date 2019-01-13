@@ -1,0 +1,146 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>gtdtimer</name>
+    </assembly>
+    <members>
+        <member name="M:gtdtimer.Controllers.TasksController.GetAllTasks">
+            <summary>
+            Returns all users' tasks.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:gtdtimer.Controllers.TasksController.GetAllActiveTasks">
+            <summary>
+            Returns all users' active tasks.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:gtdtimer.Controllers.TasksController.GetAllArchivedTasks">
+            <summary>
+            Returns all users' archived tasks.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:gtdtimer.Controllers.TasksController.GetTaskById(System.Int32)">
+            <summary>
+            Returns user's task by id.
+            </summary>
+            <param name="taskId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:gtdtimer.Controllers.TasksController.GetAllTasksByUserId">
+            <summary>
+            Returns all user's tasks.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:gtdtimer.Controllers.TasksController.GetAllActiveTasksByUserId">
+            <summary>
+            Returns all user's active tasks.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:gtdtimer.Controllers.TasksController.GetAllArchivedTasksByUserId">
+            <summary>
+            Returns all user's archived tasks.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:gtdtimer.Controllers.TasksController.CreateTask(Common.ModelsDTO.TaskDTO)">
+            <summary>
+            Creates a task.
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:gtdtimer.Controllers.TasksController.UpdateTask(Common.ModelsDTO.TaskDTO)">
+            <summary>
+            Updates the task.
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:gtdtimer.Controllers.TasksController.DeleteTask(System.Int32)">
+            <summary>
+            Deletes the task by id.
+            </summary>
+            <param name="taskId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:gtdtimer.Controllers.TasksController.SwitchArchivedStatus(Common.ModelsDTO.TaskDTO)">
+            <summary>
+            Changes IsActive status of the task.
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:gtdtimer.Controllers.TasksController.StartTask(Common.ModelsDTO.TaskDTO)">
+            <summary>
+            Sets IsRunning status of the task to true.
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:gtdtimer.Controllers.TasksController.PauseTask(Common.ModelsDTO.TaskDTO)">
+            <summary>
+            Sets IsRunning status of the task to false.
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:gtdtimer.Controllers.TasksController.ResetTask(Common.ModelsDTO.TaskDTO)">
+            <summary>
+            Resets task's properties.
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:gtdtimer.Controllers.UserController.Get">
+            <summary>
+            Retrieve current user.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:gtdtimer.Controllers.UserController.Post(Common.ModelsDTO.UserDTO)">
+            <summary>
+            Create user.
+            </summary>
+            <param name="model">The DTO model of User entity</param>
+            <returns></returns>
+        </member>
+        <member name="M:gtdtimer.Controllers.UserController.Put(Common.ModelsDTO.UpdatePasswordDTO)">
+            <summary>
+            Update current user password.
+            </summary>
+            <param name="model">The DTO model of Password entity</param>
+            <returns></returns>
+        </member>
+        <member name="M:gtdtimer.Controllers.UserController.Delete">
+            <summary>
+            Delete current user.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:gtdtimer.Controllers.UserController.AddToRole(Common.ModelsDTO.RoleDTO)">
+            <summary>
+            Add role
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:gtdtimer.Controllers.UserController.RemoveFromRoles(Common.ModelsDTO.RoleDTO)">
+            <summary>
+            RemoveRole
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:gtdtimer.Controllers.UserController.GetUsersEmailsAsync">
+            <summary>
+            Get users emails
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
