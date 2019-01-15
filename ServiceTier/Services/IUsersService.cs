@@ -1,6 +1,7 @@
-﻿using Common.ModelsDTO;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+
+using Common.ModelsDTO;
 using Timer.DAL.Timer.DAL.Entities;
 
 namespace ServiceTier.Services
@@ -9,7 +10,7 @@ namespace ServiceTier.Services
     {
         User Get(int id);
         void Create(UserDTO model);
-        void Update(int id, UpdatePasswordDTO model);
+        void UpdatePassword(int id, UpdatePasswordDTO model);
         void Delete(int id);
         Task AddToRoleAsync(RoleDTO model);
         Task RemoveFromRolesAsync(RoleDTO model);

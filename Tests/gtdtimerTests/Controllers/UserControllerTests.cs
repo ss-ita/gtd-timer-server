@@ -1,13 +1,14 @@
-﻿using Common.Constant;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Net;
+
+using Common.Constant;
 using Common.Exceptions;
 using Common.ModelsDTO;
 using gtdtimer.Controllers;
-using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using ServiceTier.Services;
-using System;
-using System.Net;
 using Timer.DAL.Timer.DAL.Entities;
 
 namespace gtdtimerTests.Controllers
@@ -91,7 +92,7 @@ namespace gtdtimerTests.Controllers
 
             var actual = (OkResult)subject.Put(model);
 
-            usersService.Verify(_ => _.Update(userID, model), Times.Once);
+            usersService.Verify(_ => _.UpdatePassword(userID, model), Times.Once);
             Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
         }
 

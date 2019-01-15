@@ -9,7 +9,7 @@ using Timer.DAL.Timer.DAL.Entities;
 
 namespace Timer.DAL.Timer.DAL.Repositories
 {
-    public class UserRepository :IUserStoreRepository
+    public class UserRepository: IUserStoreRepository
     { 
         public TimerContext TimerContext { get; set; }
 

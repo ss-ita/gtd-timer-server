@@ -12,7 +12,6 @@ namespace Timer.DAL.Timer.DAL.Entities
         public TimeSpan? Goal { get; set; }
         public bool IsActive { get; set; }
         public bool IsRunning { get; set; }
-
         public int UserId { get; set; }
         public User User { get; set; }
     }

@@ -1,17 +1,18 @@
-﻿using Common.Constant;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
+
+using Common.Constant;
 using Common.Exceptions;
 using Common.ModelsDTO;
 using gtdtimer.Attributes;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using ServiceTier.Services;
-using System.Threading.Tasks;
 
 namespace gtdtimer.Controllers
 {
     [Route("api/[controller]")]
     [Authorize]
-    public class UserController : ControllerBase
+    public class UserController: ControllerBase
     {
         private readonly IUserIdentityService userIdentityService;
         private readonly IUsersService usersService;
@@ -64,7 +65,7 @@ namespace gtdtimer.Controllers
         public ActionResult Put([FromBody]UpdatePasswordDTO model)
         {
             var userId = userIdentityService.GetUserId();
-            usersService.Update(userId, model);
+            usersService.UpdatePassword(userId, model);
 
             return Ok();
         }
@@ -87,8 +88,7 @@ namespace gtdtimer.Controllers
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        [AllowAnonymous]
-        //[Authorize(Roles = Constants.AdminRole)]
+        [Authorize(Roles = Constants.AdminRole)]
         [HttpPost("AddRole")]
         public IActionResult AddToRole([FromBody]RoleDTO model)
         {

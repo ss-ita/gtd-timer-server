@@ -94,20 +94,21 @@ namespace gtd_timer
             }
             );
 
-            /*services.AddSwaggerGen(c =>
+            services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc(
                     IoCContainer.Configuration.GetValue<string>("SwaggerDocument:Name"),
-                    new Info {
+                    new Info
+                    {
                         Title = IoCContainer.Configuration.GetValue<string>("SwaggerDocument:Title"),
-                        Version =  IoCContainer.Configuration.GetValue<string>("SwaggerDocument:Version")
-                        });
+                        Version = IoCContainer.Configuration.GetValue<string>("SwaggerDocument:Version")
+                    });
 
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.XML";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
 
                 c.IncludeXmlComments(xmlPath);
-            });*/
+            });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
@@ -123,14 +124,14 @@ namespace gtd_timer
             {
                 app.UseHsts();
             }
-            /*app.UseSwagger();
+            app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint(
                     $"/swagger/{IoCContainer.Configuration.GetValue<string>("SwaggerDocument:Name")}/swagger.json",
                     IoCContainer.Configuration.GetValue<string>("SwaggerDocument:Name")
                     );
-            });*/
+            });
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));

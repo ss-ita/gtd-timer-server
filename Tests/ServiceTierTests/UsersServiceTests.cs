@@ -1,15 +1,14 @@
+using Microsoft.AspNet.Identity;
+using System.Collections.Generic;
+
 using Common.Exceptions;
 using Common.ModelsDTO;
-using Common.Constant;
-using Microsoft.AspNet.Identity;
 using Moq;
 using NUnit.Framework;
 using ServiceTier.Services;
 using Timer.DAL.Timer.DAL.Entities;
 using Timer.DAL.Timer.DAL.Repositories;
 using Timer.DAL.Timer.DAL.UnitOfWork;
-using System.Collections.Generic;
-using Timer.DAL.Extensions;
 
 namespace ServiceTierTests
 {
@@ -93,7 +92,7 @@ namespace ServiceTierTests
             unitOfWork.Setup(_ => _.UserManager.FindByIdAsync(userId)).ReturnsAsync(user);
             unitOfWork.Setup(_ => _.UserManager.CheckPasswordAsync(user, model.PasswordOld)).ReturnsAsync(true);
 
-            subject.Update(userId, model);
+            subject.UpdatePassword(userId, model);
 
             unitOfWork.Verify(_ => _.Save(), Times.Once);
         }
@@ -111,7 +110,7 @@ namespace ServiceTierTests
             unitOfWork.Setup(_ => _.UserManager.FindByIdAsync(userId)).ReturnsAsync(user);
             unitOfWork.Setup(_ => _.UserManager.CheckPasswordAsync(user, model.PasswordOld)).ReturnsAsync(false);
 
-            var ex = Assert.Throws<PasswordMismatchException>(() => subject.Update(userId, model));
+            var ex = Assert.Throws<PasswordMismatchException>(() => subject.UpdatePassword(userId, model));
 
             Assert.That(ex.Message, Is.EqualTo("Incorrect password entered"));
         }
