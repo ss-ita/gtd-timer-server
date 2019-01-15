@@ -7,14 +7,14 @@ using Timer.DAL.Timer.DAL.Entities;
 
 namespace Timer.DAL.Timer.DAL.Repositories
 {
-    public class Repository<TEntity> : IRepository<TEntity> where TEntity:class
+    public class Repository<TEntity>: IRepository<TEntity> where TEntity:class
     {
-        internal TimerContext context;
+        internal TimerContext TimerContext;
         internal DbSet<TEntity> dbSet;
 
         public Repository(TimerContext context)
         {
-            this.context = context;
+            this.TimerContext = context;
             this.dbSet = context.Set<TEntity>();
         }
 
@@ -46,7 +46,7 @@ namespace Timer.DAL.Timer.DAL.Repositories
 
         public void Delete(TEntity entityToDelete)
         {
-            if (context.Entry(entityToDelete).State == EntityState.Detached)
+            if (this.TimerContext.Entry(entityToDelete).State == EntityState.Detached)
             {
                 dbSet.Attach(entityToDelete);
             }
@@ -56,12 +56,12 @@ namespace Timer.DAL.Timer.DAL.Repositories
         public void Update(TEntity entityToUpdate)
         {
             dbSet.Attach(entityToUpdate);
-            context.Entry(entityToUpdate).State = EntityState.Modified;
+            this.TimerContext.Entry(entityToUpdate).State = EntityState.Modified;
         }
 
         public void Save()
         {
-            context.SaveChanges();
+            this.TimerContext.SaveChanges();
         }
     }
 }
