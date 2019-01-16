@@ -3,6 +3,7 @@ using Common.IoC;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -12,14 +13,19 @@ namespace ServiceTier.Services
 {
     public class JWTManager
     {
-        public virtual string GenerateToken(User user)
+        public virtual string GenerateToken(User user, IList<string> userRoles)
         {
-            var claims = new[]
-                        {
+            var claims = new List<Claim>
+            {
                 new Claim(Constants.ClaimUserId, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
+
+            foreach (var userRole in userRoles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, userRole));
+            }
 
             var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(IoCContainer.Configuration["JWTSecretKey"]));
 
