@@ -1,9 +1,10 @@
-﻿using Common.Constant;
-using Common.Exceptions;
-using Common.ModelsDTO;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+
+using Common.Constant;
+using Common.Exceptions;
+using Common.ModelsDTO;
 using Timer.DAL.Extensions;
 using Timer.DAL.Timer.DAL.Entities;
 using Timer.DAL.Timer.DAL.UnitOfWork;
@@ -36,7 +37,7 @@ namespace ServiceTier.Services
             unitOfWork.Save();
         }
 
-        public void Update(int id, UpdatePasswordDTO model)
+        public void UpdatePassword(int id, UpdatePasswordDTO model)
         {
             User user = Get(id);
             if (!unitOfWork.UserManager.CheckPasswordAsync(user, model.PasswordOld).Result)

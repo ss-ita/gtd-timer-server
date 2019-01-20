@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+using Common.Constant;
 using Common.ModelsDTO;
 using gtdtimer.Attributes;
 using ServiceTier.Services;
-using Common.Constant;
 
 namespace gtdtimer.Controllers
 {

@@ -42,7 +42,8 @@ namespace gtdtimer.Services
                 throw new LoginFailedException();
             }
 
-            var token = jwtManager.GenerateToken(user);
+            var userRoles = userManager.UserManager.GetRolesAsync(user.Id).Result;
+            var token = jwtManager.GenerateToken(user, userRoles);
 
             return token;
         }
@@ -89,7 +90,8 @@ namespace gtdtimer.Services
                 }
             }
 
-            string jwt = jwtManager.GenerateToken(user);
+            var userRoles = userManager.UserManager.GetRolesAsync(user.Id).Result;
+            string jwt = jwtManager.GenerateToken(user, userRoles);
 
             return jwt;
         }

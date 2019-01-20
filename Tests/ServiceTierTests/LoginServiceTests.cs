@@ -6,6 +6,7 @@ using Moq;
 using NUnit.Framework;
 using ServiceTier.Services;
 using System;
+using System.Collections.Generic;
 using Timer.DAL.Timer.DAL.Entities;
 using Timer.DAL.Timer.DAL.Repositories;
 using Timer.DAL.Timer.DAL.UnitOfWork;
@@ -38,12 +39,17 @@ namespace ServiceTierTests
         [Test]
         public void CreateToken()
         {
-            LoginDTO model = new LoginDTO { Email = "sashatymoshchuk07@gmail.com", Password = "12345" };
+            User user1 = new User { PasswordHash = "12345", Email = "sashatymoshchuk07@gmail.com" };
 
-            userManager.Setup(_ => _.FindByEmailAsync(model.Email)).ReturnsAsync(user);
-            userManager.Setup(_ => _.CheckPasswordAsync(user, model.Password)).ReturnsAsync(model.Password == user.PasswordHash);
+            LoginDTO model = new LoginDTO { Email = "sashatymoshchuk07@gmail.com", Password = "12345" };
+            IList<string> Roles = new List<string>() { "Admin", "User" };
+
+
+            userManager.Setup(_ => _.FindByEmailAsync(model.Email)).ReturnsAsync(user1);
+            userManager.Setup(_ => _.CheckPasswordAsync(user1, model.Password)).ReturnsAsync(model.Password == user.PasswordHash);
             unitOfWork.Setup(_ => _.UserManager).Returns(userManager.Object);
-            jwtManager.Setup(_ => _.GenerateToken(user)).Returns(JwtTokenTest);
+            unitOfWork.Setup(_ => _.UserManager.GetRolesAsync(user1.Id)).ReturnsAsync(Roles);
+            jwtManager.Setup(_ => _.GenerateToken(user1, Roles)).Returns(JwtTokenTest);
 
             var actual = subject.CreateToken(model);
 
@@ -54,10 +60,12 @@ namespace ServiceTierTests
         public void CreateTokenWithFacebook_Throws_InvalidTokenException()
         {
             SocialAuthDTO token = new SocialAuthDTO { AccessToken = FacebookInvalidToken };
+            IList<string> Roles = new List<string>();
 
             userManager.Setup(_ => _.FindByEmailAsync(user.Email)).ReturnsAsync(user);
             unitOfWork.Setup(_ => _.UserManager).Returns(userManager.Object);
-            jwtManager.Setup(_ => _.GenerateToken(user)).Returns(JwtTokenTest);
+            unitOfWork.Setup(_ => _.UserManager.GetRolesAsync(user.Id)).ReturnsAsync(Roles);
+            jwtManager.Setup(_ => _.GenerateToken(user, Roles)).Returns(JwtTokenTest);
 
             var ex = Assert.Throws<Exception>(() => subject.CreateTokenWithFacebook(token));
 
@@ -68,10 +76,12 @@ namespace ServiceTierTests
         public void CreateTokenWithGoogle_Throws_InvalidTokenException()
         {
             SocialAuthDTO token = new SocialAuthDTO { AccessToken = GoogleInvalidToken };
+            IList<string> Roles = new List<string>();
 
             userManager.Setup(_ => _.FindByEmailAsync(user.Email)).ReturnsAsync(user);
             unitOfWork.Setup(_ => _.UserManager).Returns(userManager.Object);
-            jwtManager.Setup(_ => _.GenerateToken(user)).Returns(JwtTokenTest);
+            unitOfWork.Setup(_ => _.UserManager.GetRolesAsync(user.Id)).ReturnsAsync(Roles);
+            jwtManager.Setup(_ => _.GenerateToken(user, Roles)).Returns(JwtTokenTest);
 
             var ex = Assert.Throws<Exception>(() => subject.CreateTokenWithGoogle(token));
 

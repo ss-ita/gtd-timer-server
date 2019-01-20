@@ -98,10 +98,11 @@ namespace gtd_timer
             {
                 c.SwaggerDoc(
                     IoCContainer.Configuration.GetValue<string>("SwaggerDocument:Name"),
-                    new Info {
+                    new Info
+                    {
                         Title = IoCContainer.Configuration.GetValue<string>("SwaggerDocument:Title"),
-                        Version =  IoCContainer.Configuration.GetValue<string>("SwaggerDocument:Version")
-                        });
+                        Version = IoCContainer.Configuration.GetValue<string>("SwaggerDocument:Version")
+                    });
 
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.XML";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);

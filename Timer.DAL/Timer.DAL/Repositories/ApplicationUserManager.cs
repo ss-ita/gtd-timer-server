@@ -7,7 +7,7 @@ using Timer.DAL.Timer.DAL.Entities;
 
 namespace Timer.DAL.Timer.DAL.Repositories
 {
-    public class ApplicationUserManager : UserManager<User, int>, IApplicationUserManager<User,int>
+    public class ApplicationUserManager: UserManager<User, int>, IApplicationUserManager<User,int>
     {
         TimerContext timerContext { get; set; }
 

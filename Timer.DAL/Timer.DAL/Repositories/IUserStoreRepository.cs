@@ -6,7 +6,7 @@ using Timer.DAL.Timer.DAL.Entities;
 
 namespace Timer.DAL.Timer.DAL.Repositories
 {
-    interface IUserStoreRepository : IUserEmailStore<User, int>, IUserStore<User, int>, IRepository<User>, IQueryableUserStore<User, int>, IUserPasswordStore<User, int>, IUserRoleStore<User, int>
+    interface IUserStoreRepository: IUserEmailStore<User, int>, IQueryableUserStore<User, int>, IUserPasswordStore<User, int>, IUserRoleStore<User, int>
     {
 
     }

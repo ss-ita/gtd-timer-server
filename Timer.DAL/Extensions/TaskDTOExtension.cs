@@ -1,7 +1,7 @@
-﻿using Timer.DAL.Timer.DAL.Entities;
+﻿using System;
 
 using Common.ModelsDTO;
-using System;
+using Timer.DAL.Timer.DAL.Entities;
 
 namespace Timer.DAL.Extensions
 {
