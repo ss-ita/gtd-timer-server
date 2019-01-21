@@ -141,43 +141,45 @@ namespace ServiceTierTests
         }
 
         [Test]
-        public void AddRoleTest_ReturnsOkRequest_WhenModelCorectAsync()
+        public void AddRoleTest_ReturnsOkRequest_WhenModelCorect()
         {
             RoleDTO model = new RoleDTO() { Email = Common.Constant.Constants.CorectEmail, Role = Common.Constant.Constants.AdminRole };
             User user = new User();
             var roles = new List<string>();
+            var identity = new IdentityResult();
 
             var timerContext = new Mock<TimerContext>();
             var userRepository = new Mock<IUserStore<User, int>>();
             unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
             unitOfWork.Setup(_ => _.UserManager.FindByEmailAsync(model.Email)).ReturnsAsync(user);
             unitOfWork.Setup(_ => _.UserManager.GetRolesAsync(user.Id)).ReturnsAsync(roles);
-            unitOfWork.Setup(_ => _.UserManager.AddToRoleAsync(user.Id, model.Role));
+            unitOfWork.Setup(_ => _.UserManager.AddToRoleAsync(user.Id, model.Role)).ReturnsAsync(identity);
 
-            subject.AddToRoleAsync(model);
+            subject.AddToRole(model);
 
             unitOfWork.Verify(_ => _.UserManager.AddToRoleAsync(user.Id, model.Role), Times.Once);
         }
 
         [Test]
-        public async System.Threading.Tasks.Task RemoveRoleTest_ReturnsOkRequest_WhenModelCorectAsync()
+        public void RemoveRoleTest_ReturnsOkRequest_WhenModelCorect()
         {
             RoleDTO model = new RoleDTO() { Email = Common.Constant.Constants.CorectEmail, Role = Common.Constant.Constants.AdminRole };
             User user = new User();
+            var identity = new IdentityResult();
 
             var timerContext = new Mock<TimerContext>();
             var userRepository = new Mock<IUserStore<User, int>>();
             unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
             unitOfWork.Setup(_ => _.UserManager.FindByEmailAsync(model.Email)).ReturnsAsync(user);
-            unitOfWork.Setup(_ => _.UserManager.RemoveFromRoleAsync(user.Id, model.Role));
+            unitOfWork.Setup(_ => _.UserManager.RemoveFromRoleAsync(user.Id, model.Role)).ReturnsAsync(identity);
 
-            subject.RemoveFromRolesAsync(model);
+            subject.RemoveFromRoles(model.Email, model.Role);
 
             unitOfWork.Verify(_ => _.UserManager.RemoveFromRoleAsync(user.Id, model.Role), Times.Once);
         }
 
         [Test]
-        public async System.Threading.Tasks.Task GetAllEmailTest_ReturnsOkRequestAsync()
+        public void GetAllEmailTest_ReturnsOkRequest()
         {
             var emails = new List<string>();
 
@@ -187,9 +189,128 @@ namespace ServiceTierTests
             unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
             unitOfWork.Setup(_ => _.UserManager.GetAllEmails()).ReturnsAsync(emails);
 
-            var actual = await subject.GetUsersEmailsAsync();
+            var actual = subject.GetUsersEmails();
 
             Assert.AreSame(actual, emails); ;
+        }
+
+        [Test]
+        public void GetRolesOfUserTest_ReturnsOkRequest()
+        {
+            var roles = new List<string>();
+            int id = 1;
+
+            var userRepository = new Mock<IUserEmailStore<User, int>>();
+            var timerContext = new Mock<TimerContext>();
+
+            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
+            unitOfWork.Setup(_ => _.UserManager.GetRolesAsync(id)).ReturnsAsync(roles);
+
+            var actual = subject.GetRolesOfUser(id);
+
+            Assert.AreSame(actual, roles); ;
+        }
+
+        [Test]
+        public void DeleteUserByEmailTest_ReturnsOkRequest_WhenEmailCorect()
+        {
+            string email = "";
+            User user = new User();
+            var identity = new IdentityResult();
+
+            var timerContext = new Mock<TimerContext>();
+            var userRepository = new Mock<IUserStore<User, int>>();
+            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
+            unitOfWork.Setup(_ => _.UserManager.FindByEmailAsync(email)).ReturnsAsync(user);
+            unitOfWork.Setup(_ => _.UserManager.DeleteAsync(user)).ReturnsAsync(identity);
+
+            subject.DeleteUserByEmail(email);
+
+            unitOfWork.Verify(_ => _.UserManager.DeleteAsync(user), Times.Once);
+        }
+
+        [Test]
+        public void RemoveRole_Throws_UserNotFoundException()
+        {
+            RoleDTO model = new RoleDTO() { Email = Common.Constant.Constants.CorectEmail, Role = Common.Constant.Constants.AdminRole };
+            User user = null;
+
+            var timerContext = new Mock<TimerContext>();
+            var userRepository = new Mock<IUserStore<User, int>>();
+            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
+            unitOfWork.Setup(_ => _.UserManager.FindByEmailAsync(model.Email)).ReturnsAsync(user);
+
+            var ex = Assert.Throws<UserNotFoundException>(() => subject.RemoveFromRoles(model.Email, model.Role));
+
+            Assert.That(ex.Message, Is.EqualTo("User does not Exist!"));
+        }
+
+        [Test]
+        public void AddRole_Throws_UserNotFoundException()
+        {
+            RoleDTO model = new RoleDTO() { Email = Common.Constant.Constants.CorectEmail, Role = Common.Constant.Constants.AdminRole };
+            User user = null;
+
+            var timerContext = new Mock<TimerContext>();
+            var userRepository = new Mock<IUserStore<User, int>>();
+            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
+            unitOfWork.Setup(_ => _.UserManager.FindByEmailAsync(model.Email)).ReturnsAsync(user);
+
+            var ex = Assert.Throws<UserNotFoundException>(() => subject.AddToRole(model));
+
+            Assert.That(ex.Message, Is.EqualTo("User does not Exist!"));
+        }
+
+        [Test]
+        public void AdRole_Throws_UserNotFoundException()
+        {
+            RoleDTO model = new RoleDTO() { Email = Common.Constant.Constants.CorectEmail, Role = Common.Constant.Constants.AdminRole };
+            User user = null;
+
+            var timerContext = new Mock<TimerContext>();
+            var userRepository = new Mock<IUserStore<User, int>>();
+            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
+            unitOfWork.Setup(_ => _.UserManager.FindByEmailAsync(model.Email)).ReturnsAsync(user);
+
+            var ex = Assert.Throws<UserNotFoundException>(() => subject.AddToRole(model));
+
+            Assert.That(ex.Message, Is.EqualTo("User does not Exist!"));
+        }
+
+        [Test]
+        public void DeleteUserByEmail_Throws_UserNotFoundException()
+        {
+            RoleDTO model = new RoleDTO() { Email = Common.Constant.Constants.CorectEmail, Role = Common.Constant.Constants.AdminRole };
+            User user = null;
+
+            var timerContext = new Mock<TimerContext>();
+            var userRepository = new Mock<IUserStore<User, int>>();
+            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
+            unitOfWork.Setup(_ => _.UserManager.FindByEmailAsync(model.Email)).ReturnsAsync(user);
+
+            var ex = Assert.Throws<UserNotFoundException>(() => subject.DeleteUserByEmail(model.Email));
+
+            Assert.That(ex.Message, Is.EqualTo("User does not Exist!"));
+        }
+
+        [Test]
+        public void AdRole_Throws_RoleAlreadyExist()
+        {
+            RoleDTO model = new RoleDTO() { Email = Common.Constant.Constants.CorectEmail, Role = Common.Constant.Constants.AdminRole };
+            User user = new User();
+            var roles = new List<string>();
+            roles[0] = model.Role;
+            var identity = new IdentityResult();
+
+            var timerContext = new Mock<TimerContext>();
+            var userRepository = new Mock<IUserStore<User, int>>();
+            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
+            unitOfWork.Setup(_ => _.UserManager.FindByEmailAsync(model.Email)).ReturnsAsync(user);
+            unitOfWork.Setup(_ => _.UserManager.GetRolesAsync(user.Id)).ReturnsAsync(roles);
+
+            var ex = Assert.Throws<UserNotFoundException>(() => subject.AddToRole(model));
+
+            Assert.That(ex.Message, Is.EqualTo("Role already exist"));
         }
     }
 }

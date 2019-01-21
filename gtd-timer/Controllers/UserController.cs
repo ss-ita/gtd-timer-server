@@ -92,21 +92,22 @@ namespace gtdtimer.Controllers
         [HttpPost("AddRole")]
         public IActionResult AddToRole([FromBody]RoleDTO model)
         {
-            usersService.AddToRoleAsync(model);
+            usersService.AddToRole(model);
 
             return Ok();
         }
 
         /// <summary>
-        /// RemoveRole
+        /// Remove role
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="email"></param>
+        /// <param name="role"></param>
         /// <returns></returns>
         [Authorize(Roles = Constants.SuperAdminRole)]
-        [HttpDelete("RemoveRole")]
-        public IActionResult RemoveFromRoles([FromBody]RoleDTO model)
+        [HttpDelete("RemoveRole/{email}/{role}")]
+        public IActionResult RemoveFromRoles(string email, string role)
         {
-            usersService.RemoveFromRolesAsync(model);
+            usersService.RemoveFromRoles(email, role);
 
             return Ok();
         }
@@ -117,11 +118,38 @@ namespace gtdtimer.Controllers
         /// <returns></returns>
         [Authorize(Roles = Constants.AdminRole)]
         [HttpGet("GetUsersEmails")]
-        public async Task<IActionResult> GetUsersEmailsAsync()
+        public IActionResult GetUsersEmails()
         {
-            var emailsList = await usersService.GetUsersEmailsAsync();
+            var emailsList = usersService.GetUsersEmails();
 
             return Ok(emailsList);
+        }
+
+        /// <summary>
+        /// Delete user by email
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        [Authorize(Roles = Constants.AdminRole)]
+        [HttpDelete("DeleteUserByEmail/{email}")]
+        public ActionResult DeleteUserByEmail(string email)
+        {
+            usersService.DeleteUserByEmail(email);
+
+            return Ok();
+        }
+
+        /// <summary>
+        /// Get roles of user
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("GetRolesOfUser")]
+        public ActionResult GetRolesOfUser()
+        {
+            var userId = userIdentityService.GetUserId();
+            var roles = usersService.GetRolesOfUser(userId);
+
+            return Ok(roles);
         }
     }
 }

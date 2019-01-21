@@ -12,8 +12,37 @@ namespace ServiceTier.Services
         void Create(UserDTO model);
         void UpdatePassword(int id, UpdatePasswordDTO model);
         void Delete(int id);
-        Task AddToRoleAsync(RoleDTO model);
-        Task RemoveFromRolesAsync(RoleDTO model);
-        Task<IList<string>> GetUsersEmailsAsync();
+
+        /// <summary>
+        /// Add to roles of user
+        /// </summary>
+        /// <param name="model"></param>
+        void AddToRole(RoleDTO model);
+
+        /// <summary>
+        /// Remove from roles of user
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="role"></param>
+        void RemoveFromRoles(string email, string role);
+
+        /// <summary>
+        /// Get ysers emails
+        /// </summary>
+        /// <returns></returns>
+        IList<string> GetUsersEmails();
+
+        /// <summary>
+        /// Delete user by email
+        /// </summary>
+        /// <param name="emeil"></param>
+        void DeleteUserByEmail(string emeil);
+
+        /// <summary>
+        /// Get roles of user
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        IList<string> GetRolesOfUser(int id);
     }
 }

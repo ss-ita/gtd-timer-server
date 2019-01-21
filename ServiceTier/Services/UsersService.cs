@@ -63,7 +63,11 @@ namespace ServiceTier.Services
             return userToFind != null;
         }
 
-        public async Task AddToRoleAsync(RoleDTO model)
+        /// <summary>
+        /// Add to roles of user
+        /// </summary>
+        /// <param name="model"></param>
+        public void AddToRole(RoleDTO model)
         {
             var user = unitOfWork.UserManager.FindByEmailAsync(model.Email).Result;
 
@@ -72,7 +76,7 @@ namespace ServiceTier.Services
                 throw new UserNotFoundException();
             }
 
-            var roles = await unitOfWork.UserManager.GetRolesAsync(user.Id);
+            var roles = unitOfWork.UserManager.GetRolesAsync(user.Id).Result;
 
             foreach (string role in roles)
             {
@@ -82,26 +86,65 @@ namespace ServiceTier.Services
                 }
             }
 
-            await unitOfWork.UserManager.AddToRoleAsync(user.Id, model.Role);
+            unitOfWork.UserManager.AddToRoleAsync(user.Id, model.Role).GetAwaiter();
         }
 
-        public async Task RemoveFromRolesAsync(RoleDTO model)
+        /// <summary>
+        /// Remove from roles of user
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="role"></param>
+        public void RemoveFromRoles(string email, string role)
         {
-            var user = unitOfWork.UserManager.FindByEmailAsync(model.Email).Result;
+            var user = unitOfWork.UserManager.FindByEmailAsync(email).Result;
 
             if (user == null)
             {
                 throw new UserNotFoundException();
             }
 
-            await unitOfWork.UserManager.RemoveFromRoleAsync(user.Id, model.Role);
+            unitOfWork.UserManager.RemoveFromRoleAsync(user.Id, role).GetAwaiter();
         }
 
-        public async Task<IList<string>> GetUsersEmailsAsync()
+        /// <summary>
+        /// Get ysers emails
+        /// </summary>
+        /// <returns></returns>
+        public IList<string> GetUsersEmails()
         {
-            var emailsList = await unitOfWork.UserManager.GetAllEmails();
+            var emailsList = unitOfWork.UserManager.GetAllEmails().Result;
 
             return emailsList;
+        }
+
+        /// <summary>
+        /// Delete user by email
+        /// </summary>
+        /// <param name="emeil"></param>
+        public void DeleteUserByEmail(string emeil)
+        {
+            User user = unitOfWork.UserManager.FindByEmailAsync(emeil).Result;
+
+            if (user == null)
+            {
+                throw new UserNotFoundException();
+            }
+
+            unitOfWork.UserManager.DeleteAsync(user).GetAwaiter().GetResult();
+
+            unitOfWork.Save();
+        }
+
+        /// <summary>
+        /// Get roles of user
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public IList<string> GetRolesOfUser(int id)
+        {
+            var roles = unitOfWork.UserManager.GetRolesAsync(id).Result;
+
+            return roles;
         }
     }
 }
