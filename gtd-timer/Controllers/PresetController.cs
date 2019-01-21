@@ -54,7 +54,14 @@ namespace gtdtimer.Controllers
             presetDTO.UserId = userIdentityService.GetUserId();
             presetService.CreatePreset(presetDTO);
 
-            return Ok();
+            return Ok(presetDTO);
+        }
+
+        [HttpPost("[action]")]
+        public IActionResult CreateTimer([FromBody]TimerDTO timerDTO)
+        {
+            timerService.CreateTimer(timerDTO);
+            return Ok(timerDTO);
         }
 
         [HttpPut("[action]")]

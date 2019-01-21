@@ -7,7 +7,7 @@
         public const string CorectEmail = "example33@gmail.com";
         public const string CorectPassword = "1234567";
         public const string ClaimUserId = "UserId";
-        public const int TokenExpirationInHours = 1;
+        public const int TokenExpirationInDays = 7;
         public const string PasswordInvalidMessage = "The Password field is not a valid password";
         public const string PasswordRegularExpression = @"^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=.,\-_!])([a-zA-Z0-9 @#$%^&+=*.,\-_!]){8,}$";
         public const string GoogleResponsePath = "https://www.googleapis.com/oauth2/v1/userinfo?access_token=";

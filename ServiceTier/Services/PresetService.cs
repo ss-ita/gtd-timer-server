@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using Common.Exceptions;
 using Common.ModelsDTO;
 using Timer.DAL.Extensions;
@@ -22,6 +20,7 @@ namespace ServiceTier.Services
             Preset preset = presetDTO.ToPreset();
             unitOfWork.Presets.Create(preset);
             unitOfWork.Save();
+            presetDTO.Id = preset.Id;
 
             foreach (var timer in presetDTO.Timers)
             {
@@ -33,6 +32,10 @@ namespace ServiceTier.Services
         public void UpdatePreset(PresetDTO presetDTO)
         {
             Preset preset = presetDTO.ToPreset();
+            foreach (var timer in presetDTO.Timers)
+            {
+                timerService.UpdateTimer(timer);
+            }
             unitOfWork.Presets.Update(preset);
             unitOfWork.Save();
         }
@@ -60,13 +63,13 @@ namespace ServiceTier.Services
         public IList<PresetDTO> GetAllCustomPresetsByUserId(int userid)
         {
             var listOfPresetsDTO = new List<PresetDTO>();
-            var presets = unitOfWork.Presets.GetAllEntitiesByFilter(preset=>preset.UserId==userid);
+            var presets = unitOfWork.Presets.GetAllEntitiesByFilter(preset => preset.UserId == userid);
             var timers = unitOfWork.Timers.GetAllEntities();
 
             foreach (var preset in presets)
             {
-                    List<TimerDTO> timerDTOs = timerService.GetAllTimersByPresetId(preset.Id);
-                    listOfPresetsDTO.Add(preset.ToPresetDTO(timerDTOs));
+                List<TimerDTO> timerDTOs = timerService.GetAllTimersByPresetId(preset.Id);
+                listOfPresetsDTO.Add(preset.ToPresetDTO(timerDTOs));
             }
 
             return listOfPresetsDTO;
@@ -75,13 +78,13 @@ namespace ServiceTier.Services
         public IList<PresetDTO> GetAllStandardPresets()
         {
             var listOfPresetsDTO = new List<PresetDTO>();
-            var presets = unitOfWork.Presets.GetAllEntitiesByFilter(preset=>preset.UserId==null);
+            var presets = unitOfWork.Presets.GetAllEntitiesByFilter(preset => preset.UserId == null);
             var timers = unitOfWork.Timers.GetAllEntities();
 
             foreach (var preset in presets)
             {
-                    var timerDTOs= timerService.GetAllTimersByPresetId(preset.Id);
-                    listOfPresetsDTO.Add(preset.ToPresetDTO(timerDTOs));
+                var timerDTOs = timerService.GetAllTimersByPresetId(preset.Id);
+                listOfPresetsDTO.Add(preset.ToPresetDTO(timerDTOs));
             }
 
             return listOfPresetsDTO;

@@ -30,7 +30,7 @@ namespace ServiceTier.Services
             var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(IoCContainer.Configuration["JWTSecretKey"]));
 
             var token = new JwtSecurityToken(
-                expires: DateTime.UtcNow.AddHours(Constants.TokenExpirationInHours),
+                expires: DateTime.UtcNow.AddDays(Constants.TokenExpirationInDays),
                 claims: claims,
                 signingCredentials: new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256),
                 issuer: "Tokens:Issuer",
