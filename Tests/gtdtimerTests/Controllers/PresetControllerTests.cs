@@ -1,27 +1,30 @@
-﻿using Common.Exceptions;
-using Common.ModelsDTO;
-using gtdtimer.Controllers;
+﻿//-----------------------------------------------------------------------
+// <copyright file="PresetControllerTests.cs" company="SoftServe">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+
+using System.Collections.Generic;
+using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
-using ServiceTier.Services;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using Timer.DAL.Extensions;
-using Timer.DAL.Timer.DAL.Entities;
-using Timer.DAL.Timer.DAL.UnitOfWork;
 
-namespace gtdtimerTests.Controllers
+using GtdCommon.ModelsDto;
+using GtdTimer.Controllers;
+using GtdServiceTier.Services;
+using GtdTimerDAL.UnitOfWork;
+
+namespace GtdTimerTests.Controllers
 {
     [TestFixture]
     public class PresetControllerTests
     {
-        int timerid = 2;
-        int presetID = 2;
-        int userid = 315;
-        TimerDTO timerDTO = new TimerDTO { Name = "timer", Id = 2 };
-        PresetDTO presetDTO = new PresetDTO { PresetName = "string", UserId = 315, Id = 2 };
+        private readonly int timerid = 2;
+        private readonly int presetID = 2;
+        private readonly int userid = 315;
+        private readonly TimerDto timerDto = new TimerDto { Name = "timer", Id = 2 };
+        private readonly PresetDto presetDto = new PresetDto { PresetName = "string", UserId = 315, Id = 2 };
         private Mock<IPresetService> presetService;
         private Mock<ITimerService> timerService;
         private Mock<IUsersService> usersService;
@@ -30,6 +33,9 @@ namespace gtdtimerTests.Controllers
 
         private PresetController subject;
 
+        /// <summary>
+        /// Method which is called immediately in each test run
+        /// </summary>
         [SetUp]
         public void Setup()
         {
@@ -38,25 +44,31 @@ namespace gtdtimerTests.Controllers
             usersService = new Mock<IUsersService>();
             userIdentityService = new Mock<IUserIdentityService>();
             unitOfWork = new Mock<IUnitOfWork>();
-            subject = new PresetController(userIdentityService.Object, presetService.Object,timerService.Object);
+            subject = new PresetController(userIdentityService.Object, presetService.Object, timerService.Object);
         }
 
+        /// <summary>
+        /// Get Preset By Id test
+        /// </summary>
         [Test]
         public void GetPresetById()
         {
-            PresetDTO presetDTO = new PresetDTO();
-            presetService.Setup(_ => _.GetPresetById(presetID)).Returns(presetDTO);
+            PresetDto presetDto = new PresetDto();
+            presetService.Setup(_ => _.GetPresetById(presetID)).Returns(presetDto);
 
             var actual = (OkObjectResult)subject.GetPreset(presetID);
 
             Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
-            Assert.AreSame(actual.Value, presetDTO);
+            Assert.AreSame(actual.Value, presetDto);
         }
 
+        /// <summary>
+        /// Get All Standard Presets test
+        /// </summary>
         [Test]
-        public void GetAllStandartPresets()
+        public void GetAllStandardPresets()
         {
-            List<PresetDTO> presets = new List<PresetDTO>();
+            List<PresetDto> presets = new List<PresetDto>();
             presetService.Setup(_ => _.GetAllStandardPresets()).Returns(presets);
 
             var actual = (OkObjectResult)subject.GetAllStandardPresets();
@@ -65,11 +77,14 @@ namespace gtdtimerTests.Controllers
             Assert.AreSame(actual.Value, presets);
         }
 
+        /// <summary>
+        /// Get All Custom Presets test
+        /// </summary>
         [Test]
         public void GetAllCustomPresets()
         {
             userIdentityService.Setup(_ => _.GetUserId()).Returns(userid);
-            List<PresetDTO> presets = new List<PresetDTO>();
+            List<PresetDto> presets = new List<PresetDto>();
             presetService.Setup(_ => _.GetAllCustomPresetsByUserId(userid)).Returns(presets);
 
             var actual = (OkObjectResult)subject.GetAllCustomPresets();
@@ -78,52 +93,66 @@ namespace gtdtimerTests.Controllers
             Assert.AreSame(actual.Value, presets);
         }
 
+        /// <summary>
+        /// Create preset test
+        /// </summary>
         [Test]
         public void Post()
         {
             userIdentityService.Setup(_ => _.GetUserId()).Returns(userid);
 
-            var actual = (OkResult)subject.CreatePreset(presetDTO);
+            var actual = (OkResult)subject.CreatePreset(presetDto);
 
             Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
-            presetService.Verify(_ => _.CreatePreset(presetDTO), Times.Once);
+            presetService.Verify(_ => _.CreatePreset(presetDto), Times.Once);
         }
 
+        /// <summary>
+        /// Update Preset test
+        /// </summary>
         [Test]
         public void UpdatePreset()
         {
             userIdentityService.Setup(_ => _.GetUserId()).Returns(userid);
 
-            var actual = (OkResult)subject.UpdatePreset(presetDTO);
+            var actual = (OkResult)subject.UpdatePreset(presetDto);
 
             Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
-            presetService.Verify(_ => _.UpdatePreset(presetDTO), Times.Once);
+            presetService.Verify(_ => _.UpdatePreset(presetDto), Times.Once);
         }
 
+        /// <summary>
+        /// Update Timer test
+        /// </summary>
         [Test]
         public void UpdateTimer()
         {
-            var actual = (OkResult)subject.UpdateTimer(timerDTO);
+            var actual = (OkResult)subject.UpdateTimer(timerDto);
 
             Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
-            timerService.Verify(_ => _.UpdateTimer(timerDTO), Times.Once);
+            timerService.Verify(_ => _.UpdateTimer(timerDto), Times.Once);
         }
 
+        /// <summary>
+        /// Delete Preset test
+        /// </summary>
         [Test]
         public void DeletePreset()
         {
             userIdentityService.Setup(_ => _.GetUserId()).Returns(userid);
-            presetService.Setup(_ => _.GetPresetById(presetID)).Returns(presetDTO);
+            presetService.Setup(_ => _.GetPresetById(presetID)).Returns(presetDto);
             var actual = (OkResult)subject.DeletePreset(presetID);
 
             Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
             presetService.Verify(_ => _.DeletePresetById(presetID), Times.Once);
         }
 
+        /// <summary>
+        /// Delete Timer test
+        /// </summary>
         [Test]
         public void DeleteTimer()
         {
-
             var actual = (OkResult)subject.DeleteTimer(timerid);
 
             Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);

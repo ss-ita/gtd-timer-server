@@ -1,35 +1,47 @@
-﻿using System.Collections.Generic;
+﻿//-----------------------------------------------------------------------
+// <copyright file="TaskService.cs" company="SoftServe">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+
+using System.Collections.Generic;
 using System.Linq;
 
-using Common.Exceptions;
-using Common.ModelsDTO;
-using Timer.DAL.Extensions;
-using Timer.DAL.Timer.DAL.Entities;
-using Timer.DAL.Timer.DAL.UnitOfWork;
+using GtdCommon.Exceptions;
+using GtdCommon.ModelsDto;
+using GtdTimerDAL.Extensions;
+using GtdTimerDAL.Entities;
+using GtdTimerDAL.UnitOfWork;
 
-namespace ServiceTier.Services
+namespace GtdServiceTier.Services
 {
-    public class TaskService: BaseService, ITaskService
+    /// <summary>
+    /// class which implements i unit of work interface
+    /// </summary>
+    public class TaskService : BaseService, ITaskService
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TaskService" /> class.
+        /// </summary>
+        /// <param name="unitOfWork">instance of unit of work</param>
         public TaskService(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
-
         }
 
-        public void CreateTask(TaskDTO taskDTO)
+        public void CreateTask(TaskDto taskDto)
         {
-            var task = taskDTO.ToTask();
-            unitOfWork.Tasks.Create(task);
-            unitOfWork.Save();
+            var task = taskDto.ToTask();
+            UnitOfWork.Tasks.Create(task);
+            UnitOfWork.Save();
         }
 
         public void DeleteTaskById(int taskId)
         {
-            var toDelete = unitOfWork.Tasks.GetByID(taskId);
+            var toDelete = UnitOfWork.Tasks.GetByID(taskId);
             if (toDelete != null)
             {
-                unitOfWork.Tasks.Delete(toDelete);
-                unitOfWork.Save();
+                UnitOfWork.Tasks.Delete(toDelete);
+                UnitOfWork.Save();
             }
             else
             {
@@ -37,54 +49,54 @@ namespace ServiceTier.Services
             }
         }
 
-        public IEnumerable<TaskDTO> GetAllTasks()
+        public IEnumerable<TaskDto> GetAllTasks()
         {
-            var listOfTasksDTO = unitOfWork.Tasks.GetAllEntities()
-                .Select(task => task.ToTaskDTO())
+            var listOfTasksDto = UnitOfWork.Tasks.GetAllEntities()
+                .Select(task => task.ToTaskDto())
                 .ToList();
 
-            return listOfTasksDTO;
+            return listOfTasksDto;
         }
 
-        public IEnumerable<TaskDTO> GetAllTasksByUserId(int userId)
+        public IEnumerable<TaskDto> GetAllTasksByUserId(int userId)
         {
-            var listOfTasksDTO = unitOfWork.Tasks.GetAllEntitiesByFilter(user => user.UserId == userId)
-                .Select(task => task.ToTaskDTO())
+            var listOfTasksDto = UnitOfWork.Tasks.GetAllEntitiesByFilter(user => user.UserId == userId)
+                .Select(task => task.ToTaskDto())
                 .ToList();
 
-            return listOfTasksDTO;
+            return listOfTasksDto;
         }
 
-        public TaskDTO GetTaskById(int taskId)
+        public TaskDto GetTaskById(int taskId)
         {
-            Tasks task = unitOfWork.Tasks.GetByID(taskId);
+            Tasks task = UnitOfWork.Tasks.GetByID(taskId);
             if (task == null)
             {
                 throw new TaskNotFoundException();
             }
 
-            return task.ToTaskDTO();
+            return task.ToTaskDto();
         }
 
-        public void UpdateTask(TaskDTO taskDTO)
+        public void UpdateTask(TaskDto taskDto)
         {
-            var task = taskDTO.ToTask();
+            var task = taskDto.ToTask();
 
-            unitOfWork.Tasks.Update(task);
-            unitOfWork.Save();
+            UnitOfWork.Tasks.Update(task);
+            UnitOfWork.Save();
         }
 
-        public void SwitchArchivedStatus(TaskDTO model)
+        public void SwitchArchivedStatus(TaskDto model)
         {
             model.IsActive = !model.IsActive;
 
             var task = model.ToTask();
 
-            unitOfWork.Tasks.Update(task);
-            unitOfWork.Save();
+            UnitOfWork.Tasks.Update(task);
+            UnitOfWork.Save();
         }
 
-        public void ResetTask(TaskDTO model)
+        public void ResetTask(TaskDto model)
         {
             model.ElapsedTime = 0;
             model.Goal = null;
@@ -93,62 +105,62 @@ namespace ServiceTier.Services
 
             var task = model.ToTask();
 
-            unitOfWork.Tasks.Update(task);
-            unitOfWork.Save();
+            UnitOfWork.Tasks.Update(task);
+            UnitOfWork.Save();
         }
 
-        public void StartTask(TaskDTO model)
+        public void StartTask(TaskDto model)
         {
             model.IsRunning = true;
             var task = model.ToTask();
 
-            unitOfWork.Tasks.Update(task);
-            unitOfWork.Save();
+            UnitOfWork.Tasks.Update(task);
+            UnitOfWork.Save();
         }
 
-        public void PauseTask(TaskDTO model)
+        public void PauseTask(TaskDto model)
         {
             model.IsRunning = false;
             var task = model.ToTask();
 
-            unitOfWork.Tasks.Update(task);
-            unitOfWork.Save();
+            UnitOfWork.Tasks.Update(task);
+            UnitOfWork.Save();
         }
 
-        public IEnumerable<TaskDTO> GetAllActiveTasks()
+        public IEnumerable<TaskDto> GetAllActiveTasks()
         {
-            var listOfTasksDTO = unitOfWork.Tasks.GetAllEntitiesByFilter(task => task.IsActive == true)
-                .Select(task => task.ToTaskDTO())
+            var listOfTasksDto = UnitOfWork.Tasks.GetAllEntitiesByFilter(task => task.IsActive == true)
+                .Select(task => task.ToTaskDto())
                 .ToList();
 
-            return listOfTasksDTO;
+            return listOfTasksDto;
         }
 
-        public IEnumerable<TaskDTO> GetAllActiveTasksByUserId(int userId)
+        public IEnumerable<TaskDto> GetAllActiveTasksByUserId(int userId)
         {
-            var listOfTasksDTO = unitOfWork.Tasks.GetAllEntitiesByFilter((task) => (task.UserId == userId && task.IsActive == true))
-                .Select(task => task.ToTaskDTO())
+            var listOfTasksDto = UnitOfWork.Tasks.GetAllEntitiesByFilter((task) => (task.UserId == userId && task.IsActive == true))
+                .Select(task => task.ToTaskDto())
                 .ToList();
 
-            return listOfTasksDTO;
+            return listOfTasksDto;
         }
 
-        public IEnumerable<TaskDTO> GetAllArchivedTasks()
+        public IEnumerable<TaskDto> GetAllArchivedTasks()
         {
-            var listOfTasksDTO = unitOfWork.Tasks.GetAllEntitiesByFilter(task => task.IsActive == false)
-                .Select(task => task.ToTaskDTO())
+            var listOfTasksDto = UnitOfWork.Tasks.GetAllEntitiesByFilter(task => task.IsActive == false)
+                .Select(task => task.ToTaskDto())
                 .ToList();
 
-            return listOfTasksDTO;
+            return listOfTasksDto;
         }
 
-        public IEnumerable<TaskDTO> GetAllArchivedTasksByUserId(int userId)
+        public IEnumerable<TaskDto> GetAllArchivedTasksByUserId(int userId)
         {
-            var listOfTasksDTO = unitOfWork.Tasks.GetAllEntitiesByFilter((task) => (task.UserId == userId && task.IsActive == false))
-                .Select(task => task.ToTaskDTO())
+            var listOfTasksDto = UnitOfWork.Tasks.GetAllEntitiesByFilter((task) => (task.UserId == userId && task.IsActive == false))
+                .Select(task => task.ToTaskDto())
                 .ToList();
 
-            return listOfTasksDTO;
+            return listOfTasksDto;
         }
     }
 }

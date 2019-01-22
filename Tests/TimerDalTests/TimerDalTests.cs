@@ -1,19 +1,30 @@
-using NUnit.Framework;
+//-----------------------------------------------------------------------
+// <copyright file="TimerDalTests.cs" company="SoftServe">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+
 using Microsoft.AspNet.Identity;
 using Moq;
-using Timer.DAL.Timer.DAL.Entities;
-using Timer.DAL.Timer.DAL.Repositories;
-using Timer.DAL.Timer.DAL.UnitOfWork;
+using NUnit.Framework;
 
-namespace Tests
+using GtdTimerDAL.Entities;
+using GtdTimerDAL.Repositories;
+using GtdTimerDAL.UnitOfWork;
+
+namespace GtdTimerDalTests
 {
     [TestFixture]
-    public class Tests
+    public class TimerDalTests
     {
         private Mock<TimerContext> mockContext;
         private Mock<IUserStore<User, int>> userRepository;
         private Mock<IUnitOfWork> unitOfWork;
         private Mock<IApplicationUserManager<User, int>> userManager;
+
+        /// <summary>
+        /// Method which is called immediately in each test run
+        /// </summary>
         [SetUp]
         public void Setup()
         {
@@ -23,6 +34,9 @@ namespace Tests
             userManager = new Mock<IApplicationUserManager<User, int>>();
         }
 
+        /// <summary>
+        /// create user test
+        /// </summary>
         [Test]
         public void CreateUser()
         {
@@ -42,6 +56,10 @@ namespace Tests
             unitOfWork.Object.UserManager.CreateAsync(user);
             userRepository.Verify(obj => obj.CreateAsync(user), Times.Once);
         }
+
+        /// <summary>
+        /// delete user test
+        /// </summary>
         [Test]
         public void DeleteUser()
         {
@@ -60,6 +78,10 @@ namespace Tests
             unitOfWork.Object.UserManager.DeleteAsync(user);
             userRepository.Verify(obj => obj.DeleteAsync(user), Times.Once);
         }
+
+        /// <summary>
+        /// update user test
+        /// </summary>
         [Test]
         public void UpdateUser()
         {

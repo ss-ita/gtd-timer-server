@@ -1,25 +1,45 @@
-using Common.ModelsDTO;
-using System;
-using MyTimer=Timer.DAL.Timer.DAL.Entities;
+//-----------------------------------------------------------------------
+// <copyright file="TimerDtoExtension.cs" company="SoftServe">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
 
-namespace Timer.DAL.Extensions
+using System;
+
+using GtdCommon.ModelsDto;
+using GtdTimerDAL.Entities;
+
+namespace GtdTimerDAL.Extensions
 {
-    public static class TimerDTOExtension
+    /// <summary>
+    /// TimerDtoExtension class for converting to timer and vice versa
+    /// </summary>
+    public static class TimerDtoExtension
     {
-        public static MyTimer.Timer ToTimer(this TimerDTO timerDTO)
+        /// <summary>
+        /// Convert to timer method
+        /// </summary>
+        /// <param name="timerDto"> timerDto model </param>
+        /// <returns>returns timer</returns>
+        public static Timer ToTimer(this TimerDto timerDto)
         {
-            return new MyTimer.Timer
+            return new Timer
             {
-                Name = timerDTO.Name,
-                Interval = TimeSpan.Parse(timerDTO.Interval),
-                Id = timerDTO.Id,
-                PresetId = timerDTO.PresetId
+                Name = timerDto.Name,
+                Interval = TimeSpan.Parse(timerDto.Interval),
+                Id = timerDto.Id,
+                PresetId = timerDto.PresetId
             };
         }
 
-        public static TimerDTO ToTimerDTO(this MyTimer.Timer timer)
+        /// <summary>
+        /// Convert to timerDto method
+        /// </summary>
+        /// <param name="timer"> timer model </param>
+        /// <returns>returns timerDto</returns>
+        public static TimerDto ToTimerDto(this Timer timer)
         {
-            return new TimerDTO
+            return new TimerDto
             {
                 Name = timer.Name,
                 Interval = timer.Interval.ToString(),

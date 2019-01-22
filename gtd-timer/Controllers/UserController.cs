@@ -1,22 +1,43 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿//-----------------------------------------------------------------------
+// <copyright file="UserController.cs" company="SoftServe">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
-using Common.Constant;
-using Common.Exceptions;
-using Common.ModelsDTO;
-using gtdtimer.Attributes;
-using ServiceTier.Services;
+using GtdCommon.Constant;
+using GtdCommon.Exceptions;
+using GtdCommon.ModelsDto;
+using GtdTimer.Attributes;
+using GtdServiceTier.Services;
 
-namespace gtdtimer.Controllers
+namespace GtdTimer.Controllers
 {
+    /// <summary>
+    /// class for user controller
+    /// </summary>
     [Route("api/[controller]")]
     [Authorize]
-    public class UserController: ControllerBase
+    public class UserController : ControllerBase
     {
+        /// <summary>
+        /// instance of user identity service
+        /// </summary>
         private readonly IUserIdentityService userIdentityService;
+
+        /// <summary>
+        /// instance of user service
+        /// </summary>
         private readonly IUsersService usersService;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UserController" /> class.
+        /// </summary>
+        /// <param name="userIdentityService">instance of user identity service</param>
+        /// <param name="usersService">instance of user service</param>
         public UserController(IUserIdentityService userIdentityService, IUsersService usersService)
         {
             this.userIdentityService = userIdentityService;
@@ -26,102 +47,102 @@ namespace gtdtimer.Controllers
         /// <summary>
         /// Retrieve current user.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>result of retrieving current user.</returns>
         [HttpGet]
         public IActionResult Get()
         {
-            var userId = userIdentityService.GetUserId();
-            var user = usersService.Get(userId);
+            var userId = this.userIdentityService.GetUserId();
+            var user = this.usersService.Get(userId);
             if (user == null)
             {
                 throw new UserNotFoundException();
             }
 
-            return Ok(user);
+            return this.Ok(user);
         }
 
         /// <summary>
         /// Create user.
         /// </summary>
-        /// <param name="model">The DTO model of User entity</param>
-        /// <returns></returns>
+        /// <param name="model">The Dto model of User entity</param>
+        /// <returns>result of creating user.</returns>
         [AllowAnonymous]
         [ValidateModel]
         [HttpPost]
-        public ActionResult Post([FromBody]UserDTO model)
+        public ActionResult Post([FromBody]UserDto model)
         {
-            usersService.Create(model);
+            this.usersService.Create(model);
 
-            return Ok();
+            return this.Ok();
         }
 
         /// <summary>
         /// Update current user password.
         /// </summary>
-        /// <param name="model">The DTO model of Password entity</param>
-        /// <returns></returns>
+        /// <param name="model">The Dto model of Password entity</param>
+        /// <returns>result of updating current user password.</returns>
         [ValidateModel]
         [HttpPut]
-        public ActionResult Put([FromBody]UpdatePasswordDTO model)
+        public ActionResult Put([FromBody]UpdatePasswordDto model)
         {
-            var userId = userIdentityService.GetUserId();
-            usersService.UpdatePassword(userId, model);
+            var userId = this.userIdentityService.GetUserId();
+            this.usersService.UpdatePassword(userId, model);
 
-            return Ok();
+            return this.Ok();
         }
 
         /// <summary>
         /// Delete current user.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>result of deleting current user.</returns>
         [HttpDelete]
         public ActionResult Delete()
         {
-            var userId = userIdentityService.GetUserId();
-            usersService.Delete(userId);
+            var userId = this.userIdentityService.GetUserId();
+            this.usersService.Delete(userId);
 
-            return Ok();
+            return this.Ok();
         }
 
         /// <summary>
         /// Add role
         /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
+        /// <param name="model">role model</param>
+        /// <returns>result of adding role</returns>
         [Authorize(Roles = Constants.AdminRole)]
         [HttpPost("AddRole")]
-        public IActionResult AddToRole([FromBody]RoleDTO model)
+        public IActionResult AdDtoRole([FromBody]RoleDto model)
         {
-            usersService.AddToRoleAsync(model);
+            this.usersService.AdDtoRoleAsync(model);
 
-            return Ok();
+            return this.Ok();
         }
 
         /// <summary>
-        /// RemoveRole
+        /// Remove Role
         /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
+        /// <param name="model">role model</param>
+        /// <returns>result of removing Role</returns>
         [Authorize(Roles = Constants.SuperAdminRole)]
         [HttpDelete("RemoveRole")]
-        public IActionResult RemoveFromRoles([FromBody]RoleDTO model)
+        public IActionResult RemoveFromRoles([FromBody]RoleDto model)
         {
-            usersService.RemoveFromRolesAsync(model);
+            this.usersService.RemoveFromRolesAsync(model);
 
-            return Ok();
+            return this.Ok();
         }
 
         /// <summary>
         /// Get users emails
         /// </summary>
-        /// <returns></returns>
+        /// <returns>result of getting users emails</returns>
         [Authorize(Roles = Constants.AdminRole)]
         [HttpGet("GetUsersEmails")]
         public async Task<IActionResult> GetUsersEmailsAsync()
         {
-            var emailsList = await usersService.GetUsersEmailsAsync();
+            var emailsList = await this.usersService.GetUsersEmailsAsync();
 
-            return Ok(emailsList);
+            return this.Ok(emailsList);
         }
     }
 }

@@ -1,25 +1,35 @@
-﻿using Common.Exceptions;
-using Common.ModelsDTO;
-using Moq;
-using NUnit.Framework;
-using ServiceTier.Services;
+﻿//-----------------------------------------------------------------------
+// <copyright file="TaskServiceTests.cs" company="SoftServe">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Timer.DAL.Timer.DAL.Entities;
-using Timer.DAL.Timer.DAL.Repositories;
-using Timer.DAL.Timer.DAL.UnitOfWork;
+using Moq;
+using NUnit.Framework;
 
-namespace ServiceTierTests
+using GtdCommon.Exceptions;
+using GtdCommon.ModelsDto;
+using GtdServiceTier.Services;
+using GtdTimerDAL.Entities;
+using GtdTimerDAL.Repositories;
+using GtdTimerDAL.UnitOfWork;
+
+namespace GtdServiceTierTests
 {
     public class TaskServiceTests
     {
-        Tasks task = new Tasks {Id = 1, Name="Test", UserId = 1};
-        List<Tasks> tasks = new List<Tasks>();
-        int userId = 1;
+        private readonly int userId = 1;
+        private Tasks task = new Tasks { Id = 1, Name = "Test", UserId = 1 };
+        private List<Tasks> tasks = new List<Tasks>();
         private Mock<IUnitOfWork> unitOfWork;
         private TaskService subject;
 
+        /// <summary>
+        /// Method which is called immediately in each test run
+        /// </summary>
         [SetUp]
         public void Setup()
         {
@@ -28,10 +38,13 @@ namespace ServiceTierTests
             tasks.Add(task);
         }
 
+        /// <summary>
+        /// Create Task test
+        /// </summary>
         [Test]
         public void CreateTask()
         {
-            TaskDTO task = new TaskDTO();
+            TaskDto task = new TaskDto();
             var taskRepository = new Mock<IRepository<Tasks>>();
 
             unitOfWork.Setup(_ => _.Tasks).Returns(taskRepository.Object);
@@ -40,10 +53,13 @@ namespace ServiceTierTests
             unitOfWork.Verify(_ => _.Save(), Times.Once);
         }
 
+        /// <summary>
+        /// Update Task test
+        /// </summary>
         [Test]
         public void UpdateTask()
         {
-            TaskDTO task = new TaskDTO();
+            TaskDto task = new TaskDto();
             var taskRepository = new Mock<IRepository<Tasks>>();
 
             unitOfWork.Setup(_ => _.Tasks).Returns(taskRepository.Object);
@@ -52,6 +68,9 @@ namespace ServiceTierTests
             unitOfWork.Verify(_ => _.Save(), Times.Once);
         }
 
+        /// <summary>
+        /// Delete Task test
+        /// </summary>
         [Test]
         public void DeleteTask()
         {
@@ -67,6 +86,9 @@ namespace ServiceTierTests
             unitOfWork.Verify(_ => _.Save(), Times.Once);
         }
 
+        /// <summary>
+        /// Get Task By Id test
+        /// </summary>
         [Test]
         public void GetTaskById()
         {
@@ -80,10 +102,13 @@ namespace ServiceTierTests
             Assert.AreEqual(subject.GetTaskById(taskId).Name, task.Name);
         }
 
+        /// <summary>
+        /// Switch Task Status test
+        /// </summary>
         [Test]
         public void UpdateTaskStatus()
         {
-            TaskDTO task = new TaskDTO();
+            TaskDto task = new TaskDto();
             var taskRepository = new Mock<IRepository<Tasks>>();
 
             unitOfWork.Setup(_ => _.Tasks).Returns(taskRepository.Object);
@@ -92,10 +117,13 @@ namespace ServiceTierTests
             unitOfWork.Verify(_ => _.Save(), Times.Once);
         }
 
+        /// <summary>
+        /// Reset Task test
+        /// </summary>
         [Test]
         public void ResetTask()
         {
-            TaskDTO task = new TaskDTO();
+            TaskDto task = new TaskDto();
             var taskRepository = new Mock<IRepository<Tasks>>();
 
             unitOfWork.Setup(_ => _.Tasks).Returns(taskRepository.Object);
@@ -104,10 +132,13 @@ namespace ServiceTierTests
             unitOfWork.Verify(_ => _.Save(), Times.Once);
         }
 
+        /// <summary>
+        /// Start Task test
+        /// </summary>
         [Test]
         public void StartTask()
         {
-            TaskDTO task = new TaskDTO();
+            TaskDto task = new TaskDto();
             var taskRepository = new Mock<IRepository<Tasks>>();
 
             unitOfWork.Setup(_ => _.Tasks).Returns(taskRepository.Object);
@@ -116,10 +147,13 @@ namespace ServiceTierTests
             unitOfWork.Verify(_ => _.Save(), Times.Once);
         }
 
+        /// <summary>
+        /// Pause Task test
+        /// </summary>
         [Test]
         public void PauseTask()
         {
-            TaskDTO task = new TaskDTO();
+            TaskDto task = new TaskDto();
             var taskRepository = new Mock<IRepository<Tasks>>();
 
             unitOfWork.Setup(_ => _.Tasks).Returns(taskRepository.Object);
@@ -128,8 +162,11 @@ namespace ServiceTierTests
             unitOfWork.Verify(_ => _.Save(), Times.Once);
         }
 
+        /// <summary>
+        /// Get Throws Task Not Found Exception test
+        /// </summary>
         [Test]
-        public void Get_ThrowsTaskNotFoundExceoption()
+        public void Get_ThrowsTaskNotFoundException()
         {
             int taskId = 500;
             var taskRepository = new Mock<IRepository<Tasks>>();
@@ -140,7 +177,10 @@ namespace ServiceTierTests
 
             Assert.That(ex.Message, Is.EqualTo("Task does not exist!"));
         }
-        
+
+        /// <summary>
+        /// Get All Tasks test
+        /// </summary>
         [Test]
         public void GetAllTasks()
         {
@@ -152,6 +192,9 @@ namespace ServiceTierTests
             Assert.AreEqual(subject.GetAllTasks().ToList()[0].Name, task.Name);
         }
 
+        /// <summary>
+        /// Get All Tasks By User Id test
+        /// </summary>
         [Test]
         public void GetAllTasksByUserId()
         {
@@ -163,6 +206,9 @@ namespace ServiceTierTests
             Assert.AreEqual(subject.GetAllTasksByUserId(userId).ToList()[0].Name, task.Name);
         }
 
+        /// <summary>
+        /// Get All Active Tasks test
+        /// </summary>
         [Test]
         public void GetAllActiveTasks()
         {
@@ -174,6 +220,9 @@ namespace ServiceTierTests
             Assert.AreEqual(subject.GetAllActiveTasks().ToList()[0].Name, task.Name);
         }
 
+        /// <summary>
+        /// Get All Active Tasks By User Id test
+        /// </summary>
         [Test]
         public void GetAllActiveTasksByUserId()
         {
@@ -185,6 +234,9 @@ namespace ServiceTierTests
             Assert.AreEqual(subject.GetAllActiveTasksByUserId(userId).ToList()[0].Name, task.Name);
         }
 
+        /// <summary>
+        /// Get All Archived Tasks test
+        /// </summary>
         [Test]
         public void GetAllArchivedTasks()
         {
@@ -196,6 +248,9 @@ namespace ServiceTierTests
             Assert.AreEqual(subject.GetAllArchivedTasks().ToList()[0].Name, task.Name);
         }
 
+        /// <summary>
+        /// Get All Archived Tasks By User Id test
+        /// </summary>
         [Test]
         public void GetAllArchivedTasksByUserId()
         {
