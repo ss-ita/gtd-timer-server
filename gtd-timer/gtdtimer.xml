@@ -137,13 +137,13 @@
             <param name="role"></param>
             <returns></returns>
         </member>
-        <member name="M:gtdtimer.Controllers.UserController.GetUsersEmails">
+        <member name="M:gtdtimer.Controllers.UserController.DeleteUserByEmail(System.String)">
             <summary>
             Get users emails
             </summary>
             <returns></returns>
         </member>
-        <member name="M:gtdtimer.Controllers.UserController.DeleteUserByEmail(System.String)">
+        <member name="M:gtdtimer.Controllers.UserController.GetUsersEmails(System.String)">
             <summary>
             Delete user by email
             </summary>

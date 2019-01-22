@@ -30,7 +30,7 @@ namespace ServiceTier.Services
         /// Get ysers emails
         /// </summary>
         /// <returns></returns>
-        IList<string> GetUsersEmails();
+        IList<string> GetUsersEmails(string roleName);
 
         /// <summary>
         /// Delete user by email

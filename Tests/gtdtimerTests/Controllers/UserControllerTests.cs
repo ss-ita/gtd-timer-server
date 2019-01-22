@@ -132,7 +132,7 @@ namespace gtdtimerTests.Controllers
         [Test]
         public void GetAllEmailTest_ReturnsOkRequest()
         {
-            var actual = (OkObjectResult) subject.GetUsersEmails();
+            var actual = (OkObjectResult) subject.GetUsersEmails(Constants.AdminRole);
 
             Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
         }

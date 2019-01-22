@@ -187,9 +187,9 @@ namespace ServiceTierTests
             var timerContext = new Mock<TimerContext>();
 
             unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
-            unitOfWork.Setup(_ => _.UserManager.GetAllEmails()).ReturnsAsync(emails);
+            unitOfWork.Setup(_ => _.UserManager.GetAllEmails(Common.Constant.Constants.AdminRole)).ReturnsAsync(emails);
 
-            var actual = subject.GetUsersEmails();
+            var actual = subject.GetUsersEmails(Common.Constant.Constants.AdminRole);
 
             Assert.AreSame(actual, emails); ;
         }
@@ -291,26 +291,6 @@ namespace ServiceTierTests
             var ex = Assert.Throws<UserNotFoundException>(() => subject.DeleteUserByEmail(model.Email));
 
             Assert.That(ex.Message, Is.EqualTo("User does not Exist!"));
-        }
-
-        [Test]
-        public void AdRole_Throws_RoleAlreadyExist()
-        {
-            RoleDTO model = new RoleDTO() { Email = Common.Constant.Constants.CorectEmail, Role = Common.Constant.Constants.AdminRole };
-            User user = new User();
-            var roles = new List<string>();
-            roles[0] = model.Role;
-            var identity = new IdentityResult();
-
-            var timerContext = new Mock<TimerContext>();
-            var userRepository = new Mock<IUserStore<User, int>>();
-            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
-            unitOfWork.Setup(_ => _.UserManager.FindByEmailAsync(model.Email)).ReturnsAsync(user);
-            unitOfWork.Setup(_ => _.UserManager.GetRolesAsync(user.Id)).ReturnsAsync(roles);
-
-            var ex = Assert.Throws<UserNotFoundException>(() => subject.AddToRole(model));
-
-            Assert.That(ex.Message, Is.EqualTo("Role already exist"));
         }
     }
 }

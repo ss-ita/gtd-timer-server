@@ -18,7 +18,7 @@ namespace Timer.DAL.Timer.DAL.Repositories
         Task<IdentityResult> AddToRoleAsync(TKey key, string roleName);
         Task<IdentityResult> RemoveFromRoleAsync(TKey key, string roleName);
         Task<bool> IsInRoleAsync(TKey key, string roleName);
-        Task<IList<string>> GetAllEmails();
+        Task<IList<string>> GetAllEmails(string roleName);
         Task<bool> CheckPasswordAsync(TUser user, string password);
         Task<IdentityResult> ChangePasswordAsync(TKey userId, string currentPassword, string newPassword);
     }

@@ -110,9 +110,9 @@ namespace ServiceTier.Services
         /// Get ysers emails
         /// </summary>
         /// <returns></returns>
-        public IList<string> GetUsersEmails()
+        public IList<string> GetUsersEmails(string roleName)
         {
-            var emailsList = unitOfWork.UserManager.GetAllEmails().Result;
+            var emailsList = unitOfWork.UserManager.GetAllEmails(roleName).Result;
 
             return emailsList;
         }

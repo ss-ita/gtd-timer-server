@@ -117,12 +117,12 @@ namespace gtdtimer.Controllers
         /// </summary>
         /// <returns></returns>
         [Authorize(Roles = Constants.AdminRole)]
-        [HttpGet("GetUsersEmails")]
-        public IActionResult GetUsersEmails()
+        [HttpDelete("DeleteUserByEmail/{email}")]
+        public ActionResult DeleteUserByEmail(string email)
         {
-            var emailsList = usersService.GetUsersEmails();
+            usersService.DeleteUserByEmail(email);
 
-            return Ok(emailsList);
+            return Ok();
         }
 
         /// <summary>
@@ -131,12 +131,12 @@ namespace gtdtimer.Controllers
         /// <param name="email"></param>
         /// <returns></returns>
         [Authorize(Roles = Constants.AdminRole)]
-        [HttpDelete("DeleteUserByEmail/{email}")]
-        public ActionResult DeleteUserByEmail(string email)
+        [HttpGet("GetUsersEmails/{roleName}")]
+        public IActionResult GetUsersEmails(string roleName)
         {
-            usersService.DeleteUserByEmail(email);
+            var emailsList = usersService.GetUsersEmails(roleName);
 
-            return Ok();
+            return Ok(emailsList);
         }
 
         /// <summary>
