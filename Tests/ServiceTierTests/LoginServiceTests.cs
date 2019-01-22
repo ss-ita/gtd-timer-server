@@ -39,17 +39,14 @@ namespace ServiceTierTests
         [Test]
         public void CreateToken()
         {
-            User user1 = new User { PasswordHash = "12345", Email = "sashatymoshchuk07@gmail.com" };
-
             LoginDTO model = new LoginDTO { Email = "sashatymoshchuk07@gmail.com", Password = "12345" };
             IList<string> Roles = new List<string>() { "Admin", "User" };
 
-
-            userManager.Setup(_ => _.FindByEmailAsync(model.Email)).ReturnsAsync(user1);
-            userManager.Setup(_ => _.CheckPasswordAsync(user1, model.Password)).ReturnsAsync(model.Password == user.PasswordHash);
             unitOfWork.Setup(_ => _.UserManager).Returns(userManager.Object);
-            unitOfWork.Setup(_ => _.UserManager.GetRolesAsync(user1.Id)).ReturnsAsync(Roles);
-            jwtManager.Setup(_ => _.GenerateToken(user1, Roles)).Returns(JwtTokenTest);
+            unitOfWork.Setup(_ => _.UserManager.FindByEmailAsync(model.Email)).ReturnsAsync(user);
+            unitOfWork.Setup(_ => _.UserManager.CheckPasswordAsync(user, model.Password)).ReturnsAsync(model.Password == user.PasswordHash);
+            unitOfWork.Setup(_ => _.UserManager.GetRolesAsync(user.Id)).ReturnsAsync(Roles);
+            jwtManager.Setup(_ => _.GenerateToken(user, Roles)).Returns(JwtTokenTest);
 
             var actual = subject.CreateToken(model);
 
