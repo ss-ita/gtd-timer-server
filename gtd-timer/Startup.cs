@@ -7,6 +7,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IO;
@@ -54,7 +55,6 @@ namespace gtd_timer
                 options.AddPolicy("AllowSpecificOrigin",
                     builder => builder.WithOrigins(IoCContainer.Configuration["Origins"]).AllowAnyHeader().AllowAnyMethod());
             });
-          
             services.AddDbContext<TimerContext>(opts => opts.UseSqlServer(IoCContainer.Configuration["AzureConnection"]));
             services.AddIdentity<User, Role>().AddEntityFrameworkStores<TimerContext>().AddDefaultTokenProviders();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -113,7 +113,7 @@ namespace gtd_timer
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IConfiguration configuration)
         {
             app.UseCors("AllowSpecificOrigin");
             if (env.IsDevelopment())
@@ -135,6 +135,7 @@ namespace gtd_timer
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
+            loggerFactory.AddLog4Net(configuration.GetValue<string>("Log4NetConfigFile:Name"));
             app.UseMvc();
         }
     }

@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using Moq;
 using System;
 using System.Net;
 using System.Threading.Tasks;
@@ -14,12 +16,13 @@ namespace ErrorHandlingMiddlewareTests
         [Test]
         public async Task Invoke_GetStatusCode_HtttpStatusCodeNoContent()
         {
+            var log = new Mock<ILogger<ErrorHandlingMiddleware>>();
             var middleware = new ErrorHandlingMiddleware(next: async (innerhttpcontext) =>
             {
                 await Task.Run(() => {
                     throw new UserNotFoundException();
                 });
-            });
+            }, logger: log.Object);
             var context = new DefaultHttpContext();
             await middleware.Invoke(context);
             int actualStatusCode = context.Response.StatusCode;
@@ -29,12 +32,13 @@ namespace ErrorHandlingMiddlewareTests
         [Test]
         public async Task Invoke_GetStatusCode_HtttpStatusCodeInternalServerError()
         {
+            var log = new Mock<ILogger<ErrorHandlingMiddleware>>();
             var middleware = new ErrorHandlingMiddleware(next: async (innerhttpcontext) =>
             {
                 await Task.Run(() => {
                     throw new Exception();
                 });
-            });
+            }, logger: log.Object);
             var context = new DefaultHttpContext();
             await middleware.Invoke(context);
             int actualStatusCode = context.Response.StatusCode;

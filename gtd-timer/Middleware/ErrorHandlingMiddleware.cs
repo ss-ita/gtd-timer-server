@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Net;
 using System.Threading.Tasks;
@@ -12,10 +13,12 @@ namespace gtdtimer.Middleware
     public class ErrorHandlingMiddleware
     {
         private readonly RequestDelegate next;
+        private readonly ILogger<ErrorHandlingMiddleware> logger;
 
-        public ErrorHandlingMiddleware(RequestDelegate next)
+        public ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandlingMiddleware> logger)
         {
             this.next = next;
+            this.logger = logger;
         }
 
         public async Task Invoke(HttpContext context)
@@ -47,6 +50,7 @@ namespace gtdtimer.Middleware
         private HttpStatusCode GetExceptionCode(Exception exception)
         {
             HttpStatusCode exceptionCode;
+            this.logger.LogError($"Error occured in {exception.Source} {exception.TargetSite}, with message: {exception.Message}");
             switch (exception)
             {
                 case UserNotFoundException _:
