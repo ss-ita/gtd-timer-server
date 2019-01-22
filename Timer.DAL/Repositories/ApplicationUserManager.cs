@@ -33,10 +33,50 @@ namespace GtdTimerDAL.Repositories
         /// </summary>
         public TimerContext TimerContext { get; set; }
 
-        public async Task<IList<string>> GetAllEmails()
+        public async Task<IList<string>> GetAllEmails(string roleName)
         {
-            List<string> emails = (from user in TimerContext.Users
-                                   select user.Email).ToList<string>();
+            Role role = (from rol in TimerContext.Roles
+                         where rol.Name == roleName
+                         select rol).FirstOrDefault();
+            IList<string> emails = new List<string>();
+
+            if (role.Name == GtdCommon.Constant.Constants.UserRole)
+            {
+                emails = (from user in TimerContext.Users
+                          join userRole in TimerContext.UserRoles
+                          on user.Id equals userRole.UserId
+                          where userRole.RoleId == role.Id
+                          select user.Email).ToList<string>().Except(
+                         (from user in TimerContext.Users
+                          join userRole in TimerContext.UserRoles
+                         on user.Id equals userRole.UserId
+                          where userRole.RoleId == 2 || userRole.RoleId == 3
+                          select user.Email).ToList<string>()).ToList();
+            }
+
+            if (role.Name == GtdCommon.Constant.Constants.AdminRole)
+            {
+                emails = (from user in TimerContext.Users
+                          join userRole in TimerContext.UserRoles
+                          on user.Id equals userRole.UserId
+                          where userRole.RoleId == role.Id
+                          select user.Email).ToList<string>().Except(
+                         (from user in TimerContext.Users
+                          join userRole in TimerContext.UserRoles
+                         on user.Id equals userRole.UserId
+                          where userRole.RoleId == 3
+                          select user.Email).ToList<string>()).ToList();
+            }
+
+            if (role.Name == GtdCommon.Constant.Constants.SuperAdminRole)
+            {
+                emails = (from user in TimerContext.Users
+                          join userRole in TimerContext.UserRoles
+                          on user.Id equals userRole.UserId
+                          where userRole.RoleId == role.Id
+                          select user.Email).ToList<string>();
+            }
+
             return await Task.FromResult((IList<string>)emails);
         }
     }

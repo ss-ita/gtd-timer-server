@@ -39,6 +39,7 @@ namespace GtdServiceTier.Services
             Preset preset = presetDto.ToPreset();
             UnitOfWork.Presets.Create(preset);
             UnitOfWork.Save();
+            presetDto.Id = preset.Id;
 
             foreach (var timer in presetDto.Timers)
             {
@@ -50,6 +51,10 @@ namespace GtdServiceTier.Services
         public void UpdatePreset(PresetDto presetDto)
         {
             Preset preset = presetDto.ToPreset();
+            foreach (var timer in presetDto.Timers)
+            {
+                timerService.UpdateTimer(timer);
+            }
             UnitOfWork.Presets.Update(preset);
             UnitOfWork.Save();
         }
@@ -84,7 +89,7 @@ namespace GtdServiceTier.Services
 
             foreach (var preset in presets)
             {
-                    List<TimerDto> timerDtos = this.timerService.GetAllTimersByPresetId(preset.Id);
+                    List<TimerDto> timerDtos = timerService.GetAllTimersByPresetId(preset.Id);
                     listOfPresetsDto.Add(preset.ToPresetDto(timerDtos));
             }
 
@@ -99,7 +104,7 @@ namespace GtdServiceTier.Services
 
             foreach (var preset in presets)
             {
-                var timerDtos = this.timerService.GetAllTimersByPresetId(preset.Id);
+                var timerDtos = timerService.GetAllTimersByPresetId(preset.Id);
                     listOfPresetsDto.Add(preset.ToPresetDto(timerDtos));
             }
 

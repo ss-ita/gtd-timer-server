@@ -35,8 +35,10 @@ namespace GtdServiceTier.Services
                 throw new PresetNotFoundException();
             }
 
-            UnitOfWork.Timers.Create(timerDto.ToTimer());
+            var timer = timerDto.ToTimer();
+            UnitOfWork.Timers.Create(timer);
             UnitOfWork.Save();
+            timerDto.Id = timer.Id;
         }
 
         public void UpdateTimer(TimerDto timerDto)

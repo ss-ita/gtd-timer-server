@@ -113,23 +113,24 @@ namespace GtdTimer.Controllers
         [HttpPost("AddRole")]
         public IActionResult AdDtoRole([FromBody]RoleDto model)
         {
-            this.usersService.AdDtoRoleAsync(model);
+            usersService.AddToRole(model);
 
             return this.Ok();
         }
 
         /// <summary>
-        /// Remove Role
+        /// Remove role
         /// </summary>
-        /// <param name="model">role model</param>
-        /// <returns>result of removing Role</returns>
+        /// <param name="email">user email</param>
+        /// <param name="role">uer role</param>
+        /// <returns>result of deleting role from user </returns>
         [Authorize(Roles = Constants.SuperAdminRole)]
-        [HttpDelete("RemoveRole")]
-        public IActionResult RemoveFromRoles([FromBody]RoleDto model)
+        [HttpDelete("RemoveRole/{email}/{role}")]
+        public IActionResult RemoveFromRoles(string email, string role)
         {
-            this.usersService.RemoveFromRolesAsync(model);
+            usersService.RemoveFromRoles(email, role);
 
-            return this.Ok();
+            return Ok();
         }
 
         /// <summary>
@@ -137,12 +138,39 @@ namespace GtdTimer.Controllers
         /// </summary>
         /// <returns>result of getting users emails</returns>
         [Authorize(Roles = Constants.AdminRole)]
-        [HttpGet("GetUsersEmails")]
-        public async Task<IActionResult> GetUsersEmailsAsync()
+        [HttpDelete("DeleteUserByEmail/{email}")]
+        public ActionResult DeleteUserByEmail(string email)
         {
-            var emailsList = await this.usersService.GetUsersEmailsAsync();
+            usersService.DeleteUserByEmail(email);
+
+            return Ok();
+        }
+
+        /// <summary>
+        /// Delete user by email
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        [Authorize(Roles = Constants.AdminRole)]
+        [HttpGet("GetUsersEmails/{roleName}")]
+        public IActionResult GetUsersEmails(string roleName)
+        {
+            var emailsList = usersService.GetUsersEmails(roleName);
 
             return this.Ok(emailsList);
+        }
+
+        /// <summary>
+        /// Get roles of user
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("GetRolesOfUser")]
+        public ActionResult GetRolesOfUser()
+        {
+            var userId = userIdentityService.GetUserId();
+            var roles = usersService.GetRolesOfUser(userId);
+
+            return Ok(roles);
         }
     }
 }

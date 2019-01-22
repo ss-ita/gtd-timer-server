@@ -157,7 +157,7 @@ namespace GtdTimerTests.Controllers
         {
             RoleDto model = new RoleDto() { Email = Constants.CorectEmail, Role = Constants.AdminRole };
 
-            var actual = (OkResult)subject.RemoveFromRoles(model);
+            var actual = (OkResult)subject.RemoveFromRoles(model.Email, model.Role);
 
             Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
         }
@@ -167,9 +167,9 @@ namespace GtdTimerTests.Controllers
         /// </summary>
         /// <returns>list of emails</returns>
         [Test]
-        public async System.Threading.Tasks.Task GetAllEmailTest_ReturnsOkRequestAsync()
+        public void GetAllEmailTest_ReturnsOkRequest()
         {
-            var actual = (OkObjectResult)await subject.GetUsersEmailsAsync();
+            var actual = (OkObjectResult)subject.GetUsersEmails(Constants.AdminRole);
 
             Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
         }
@@ -178,45 +178,24 @@ namespace GtdTimerTests.Controllers
         /// Add Role Throws User Not Found Exception test
         /// </summary>
         [Test]
-        public void AddRoleTest_Throws_UserNotFoundException()
+        public void GetRolesOfUserTest_ReturnsOkRequest()
         {
-            RoleDto model = new RoleDto();
+            var actual = (OkObjectResult)subject.GetRolesOfUser();
 
-            usersService.Setup(_ => _.AdDtoRoleAsync(model)).Throws(new UserNotFoundException());
-
-            var ex = Assert.Throws<UserNotFoundException>(() => subject.AdDtoRole(model));
-
-            Assert.That(ex.Message, Is.EqualTo("User does not Exist!"));
+            Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
         }
 
         /// <summary>
-        /// Remove Role Throws Role Already Exist Exception test
+        /// Test checks if user is deleted corectly
         /// </summary>
         [Test]
-        public void RemoveRoleTest_Throws_RoleAlreadyExistException()
+        public void DeleteUserByEmailTest_ReturnsOkRequest_WhenEmailCorect()
         {
-            RoleDto model = new RoleDto();
+            string email = Constants.CorectEmail;
 
-            usersService.Setup(_ => _.RemoveFromRolesAsync(model)).Throws(new UserNotFoundException());
+            var actual = (OkResult)subject.DeleteUserByEmail(email);
 
-            var ex = Assert.Throws<UserNotFoundException>(() => subject.RemoveFromRoles(model));
-
-            Assert.That(ex.Message, Is.EqualTo("User does not Exist!"));
-        }
-
-        /// <summary>
-        /// Add Role Throws Role Already Exist Exception test
-        /// </summary>
-        [Test]
-        public void AddRoleTest_Throws_RoleAlreadyExistException()
-        {
-            RoleDto model = new RoleDto();
-
-            usersService.Setup(_ => _.AdDtoRoleAsync(model)).Throws(new Exception("Role already exist"));
-
-            var ex = Assert.Throws<Exception>(() => subject.AdDtoRole(model));
-
-            Assert.That(ex.Message, Is.EqualTo("Role already exist"));
+            Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
         }
     }
 }

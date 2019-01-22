@@ -5,7 +5,6 @@
 //-----------------------------------------------------------------------
 
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 using GtdCommon.ModelsDto;
 using GtdTimerDAL.Entities;
@@ -44,23 +43,35 @@ namespace GtdServiceTier.Services
         void Delete(int id);
 
         /// <summary>
-        /// Method for assigning a role for user
+        /// Add to roles of user
         /// </summary>
         /// <param name="model">role model</param>
-        /// <returns>result of adding into a role</returns>
-        Task AdDtoRoleAsync(RoleDto model);
+        void AddToRole(RoleDto model);
 
         /// <summary>
-        /// Method for deleting a role from user
+        /// Remove from roles of user
         /// </summary>
-        /// <param name="model">role model</param>
-        /// <returns>result of removing role from user </returns>
-        Task RemoveFromRolesAsync(RoleDto model);
+        /// <param name="email"></param>
+        /// <param name="role"></param>
+        void RemoveFromRoles(string email, string role);
 
         /// <summary>
-        /// Method for getting all user emails
+        /// Get ysers emails
         /// </summary>
-        /// <returns>list of emails of all users</returns>
-        Task<IList<string>> GetUsersEmailsAsync();
+        /// <returns></returns>
+        IList<string> GetUsersEmails(string roleName);
+
+        /// <summary>
+        /// Delete user by email
+        /// </summary>
+        /// <param name="emeil"></param>
+        void DeleteUserByEmail(string emeil);
+
+        /// <summary>
+        /// Get roles of user
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        IList<string> GetRolesOfUser(int id);
     }
 }

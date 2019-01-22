@@ -109,8 +109,9 @@ namespace GtdTimerDAL.Repositories
         /// <summary>
         /// Method for getting all emails
         /// </summary>
+        /// <param name="roleName">role of user</param>
         /// <returns> list of all emails </returns>
-        Task<IList<string>> GetAllEmails();
+        Task<IList<string>> GetAllEmails(string roleName);
 
         /// <summary>
         /// Method for checking password

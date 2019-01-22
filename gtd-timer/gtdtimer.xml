@@ -106,6 +106,13 @@
             <param name="presetDto"> preset model</param>
             <returns> result of creating a preset</returns>
         </member>
+        <member name="M:GtdTimer.Controllers.PresetController.CreateTimer(GtdCommon.ModelsDto.TimerDto)">
+            <summary>
+            Method for creating a timer
+            </summary>
+            <param name="timerDto">timer model</param>
+            <returns>result of creating a timer and timer itself</returns>
+        </member>
         <member name="M:GtdTimer.Controllers.PresetController.UpdatePreset(GtdCommon.ModelsDto.PresetDto)">
             <summary>
             Method for updating a preset
@@ -303,18 +310,32 @@
             <param name="model">role model</param>
             <returns>result of adding role</returns>
         </member>
-        <member name="M:GtdTimer.Controllers.UserController.RemoveFromRoles(GtdCommon.ModelsDto.RoleDto)">
+        <member name="M:GtdTimer.Controllers.UserController.RemoveFromRoles(System.String,System.String)">
             <summary>
-            Remove Role
+            Remove role
             </summary>
-            <param name="model">role model</param>
-            <returns>result of removing Role</returns>
+            <param name="email">user email</param>
+            <param name="role">uer role</param>
+            <returns>result of deleting role from user </returns>
         </member>
-        <member name="M:GtdTimer.Controllers.UserController.GetUsersEmailsAsync">
+        <member name="M:GtdTimer.Controllers.UserController.DeleteUserByEmail(System.String)">
             <summary>
             Get users emails
             </summary>
             <returns>result of getting users emails</returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.UserController.GetUsersEmails(System.String)">
+            <summary>
+            Delete user by email
+            </summary>
+            <param name="email"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.UserController.GetRolesOfUser">
+            <summary>
+            Get roles of user
+            </summary>
+            <returns></returns>
         </member>
         <member name="T:GtdTimer.Middleware.ErrorHandlingMiddleware">
             <summary>
@@ -326,11 +347,12 @@
             instance of request delegate
             </summary>
         </member>
-        <member name="M:GtdTimer.Middleware.ErrorHandlingMiddleware.#ctor(Microsoft.AspNetCore.Http.RequestDelegate)">
+        <member name="M:GtdTimer.Middleware.ErrorHandlingMiddleware.#ctor(Microsoft.AspNetCore.Http.RequestDelegate,Microsoft.Extensions.Logging.ILogger{GtdTimer.Middleware.ErrorHandlingMiddleware})">
             <summary>
             Initializes a new instance of the <see cref="T:GtdTimer.Middleware.ErrorHandlingMiddleware" /> class.
             </summary>
             <param name="next">instance of request delegate</param>
+            <param name="logger">class which gives right for logging</param>
         </member>
         <member name="M:GtdTimer.Middleware.ErrorHandlingMiddleware.Invoke(Microsoft.AspNetCore.Http.HttpContext)">
             <summary>
@@ -389,12 +411,14 @@
             </summary>
             <param name="services">list of services</param>
         </member>
-        <member name="M:GtdTimer.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IHostingEnvironment)">
+        <member name="M:GtdTimer.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IHostingEnvironment,Microsoft.Extensions.Logging.ILoggerFactory,Microsoft.Extensions.Configuration.IConfiguration)">
             <summary>
             Method for configuring application
             </summary>
             <param name="app">application builder</param>
             <param name="env">hosting environment</param>
+            <param name="loggerFactory">class which registers logger</param>
+            <param name="configuration">class which helps configure project</param>
         </member>
     </members>
 </doc>

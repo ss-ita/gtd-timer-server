@@ -1,9 +1,10 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="LogInController.cs" company="SoftServe">
 //     Company copyright tag.
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System.Data.SqlClient;
 using Microsoft.AspNetCore.Mvc;
 
 using GtdCommon.ModelsDto;
@@ -41,9 +42,9 @@ namespace GtdTimer.Controllers
         [HttpPost]
         public IActionResult Login([FromBody] LoginDto model)
         {
-            var token = this.logInService.CreateToken(model);
+            var token = logInService.CreateToken(model);
 
-            return this.Ok(token);
+            return Ok(token);
         }
 
         /// <summary>
@@ -54,9 +55,9 @@ namespace GtdTimer.Controllers
         [HttpPost("[action]")]
         public IActionResult GoogleLogin([FromBody] SocialAuthDto accessToken)
         {
-            var token = this.logInService.CreateTokenWithGoogle(accessToken);
+            var token = logInService.CreateTokenWithGoogle(accessToken);
 
-            return this.Ok(token);
+            return Ok(token);
         }
 
         /// <summary>
@@ -67,9 +68,9 @@ namespace GtdTimer.Controllers
         [HttpPost("[action]")]
         public IActionResult FacebookLogin([FromBody] SocialAuthDto accessToken)
         {
-            var token = this.logInService.CreateTokenWithFacebook(accessToken);
+            var token = logInService.CreateTokenWithFacebook(accessToken);
 
-            return this.Ok(token);
+            return Ok(token);
         }
     }
 }

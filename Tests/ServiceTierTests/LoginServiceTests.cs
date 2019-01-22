@@ -119,21 +119,5 @@ namespace GtdServiceTierTests
 
             Assert.That(ex.Message, Is.EqualTo(errorMessageLoginFailed));
         }
-
-        /// <summary>
-        /// Test for logging in wrong password
-        /// </summary>
-        [Test]
-        public void LoginTest_IncorrectPassword_Throws_LoginFailedException()
-        {
-            LoginDto model = new LoginDto { Email = string.Empty, Password = "1234" };
-
-            userManager.Setup(_ => _.FindByEmailAsync(model.Email)).ReturnsAsync(user);
-            unitOfWork.Setup(_ => _.UserManager).Returns(userManager.Object);
-
-            var ex = Assert.Throws<LoginFailedException>(() => subject.CreateToken(model));
-
-            Assert.That(ex.Message, Is.EqualTo(errorMessageLoginFailed));
-        }
     }
 }

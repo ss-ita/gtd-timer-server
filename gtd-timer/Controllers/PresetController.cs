@@ -56,9 +56,9 @@ namespace GtdTimer.Controllers
         [HttpGet("GetPreset/{presetid}")]
         public IActionResult GetPreset(int presetid)
         {
-            var preset = this.presetService.GetPresetById(presetid);
+            var preset = presetService.GetPresetById(presetid);
 
-            return this.Ok(preset);
+            return Ok(preset);
         }
 
         /// <summary>
@@ -68,10 +68,10 @@ namespace GtdTimer.Controllers
         [HttpGet("[action]")]
         public IActionResult GetAllCustomPresets()
         {
-            var userid = this.userIdentityService.GetUserId();
-            var query = this.presetService.GetAllCustomPresetsByUserId(userid);
+            var userid = userIdentityService.GetUserId();
+            var query = presetService.GetAllCustomPresetsByUserId(userid);
 
-            return this.Ok(query);
+            return Ok(query);
         }
 
         /// <summary>
@@ -82,9 +82,9 @@ namespace GtdTimer.Controllers
         [HttpGet("[action]")]
         public IActionResult GetAllStandardPresets()
         {
-            var query = this.presetService.GetAllStandardPresets();
+            var listOfPresets = presetService.GetAllStandardPresets();
 
-            return this.Ok(query);
+            return Ok(listOfPresets);
         }
 
         /// <summary>
@@ -95,10 +95,22 @@ namespace GtdTimer.Controllers
         [HttpPost("[action]")]
         public IActionResult CreatePreset([FromBody]PresetDto presetDto)
         {
-            presetDto.UserId = this.userIdentityService.GetUserId();
-            this.presetService.CreatePreset(presetDto);
+            presetDto.UserId = userIdentityService.GetUserId();
+            presetService.CreatePreset(presetDto);
 
-            return this.Ok();
+            return Ok(presetDto);
+        }
+
+        /// <summary>
+        /// Method for creating a timer
+        /// </summary>
+        /// <param name="timerDto">timer model</param>
+        /// <returns>result of creating a timer and timer itself</returns>
+        [HttpPost("[action]")]
+        public IActionResult CreateTimer([FromBody]TimerDto timerDto)
+        {
+            timerService.CreateTimer(timerDto);
+            return Ok(timerDto);
         }
 
         /// <summary>
@@ -109,10 +121,10 @@ namespace GtdTimer.Controllers
         [HttpPut("[action]")]
         public IActionResult UpdatePreset([FromBody]PresetDto presetDto)
         {
-            presetDto.UserId = this.userIdentityService.GetUserId();
-            this.presetService.UpdatePreset(presetDto);
+            presetDto.UserId = userIdentityService.GetUserId();
+            presetService.UpdatePreset(presetDto);
 
-            return this.Ok();
+            return Ok();
         }
 
         /// <summary>
@@ -123,9 +135,9 @@ namespace GtdTimer.Controllers
         [HttpPut("[action]")]
         public IActionResult UpdateTimer([FromBody]TimerDto timerDto)
         {
-            this.timerService.UpdateTimer(timerDto);
+            timerService.UpdateTimer(timerDto);
 
-            return this.Ok();
+            return Ok();
         }
 
         /// <summary>
@@ -136,14 +148,14 @@ namespace GtdTimer.Controllers
         [HttpDelete("DeletePreset/{presetid}")]
         public IActionResult DeletePreset(int presetid)
         {
-            if ((this.presetService.GetPresetById(presetid).UserId == null) || (this.presetService.GetPresetById(presetid).UserId != this.userIdentityService.GetUserId()))
+            if ((presetService.GetPresetById(presetid).UserId == null) || (presetService.GetPresetById(presetid).UserId != this.userIdentityService.GetUserId()))
             {
                 throw new AccessDeniedException();
             }
 
-            this.presetService.DeletePresetById(presetid);
+            presetService.DeletePresetById(presetid);
 
-            return this.Ok();
+            return Ok();
         }
 
         /// <summary>
@@ -154,9 +166,9 @@ namespace GtdTimer.Controllers
         [HttpDelete("DeleteTimer/{timerid}")]
         public IActionResult DeleteTimer(int timerid)
         {
-            this.timerService.DeleteTimer(timerid);
+            timerService.DeleteTimer(timerid);
 
-            return this.Ok();
+            return Ok();
         }
     }
 }

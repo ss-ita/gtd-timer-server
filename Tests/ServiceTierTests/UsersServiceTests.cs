@@ -59,9 +59,9 @@ namespace GtdServiceTierTests
         /// </summary>
         /// <returns>response of creating user</returns>
         [Test]
-        public async System.Threading.Tasks.Task CreateAsync()
+        public void Create()
         {
-            UserDto model = new UserDto { Email = string.Empty };
+            UserDto model = new UserDto { Email = "" };
             var userManager = new Mock<IApplicationUserManager<User, int>>();
             var timerContext = new Mock<TimerContext>();
             var identity = new IdentityResult();
@@ -101,7 +101,7 @@ namespace GtdServiceTierTests
         /// update password test
         /// </summary>
         [Test]
-        public void Update()
+        public void UpdatePassword()
         {
             int userId = 1;
             string password = "password";
@@ -123,7 +123,7 @@ namespace GtdServiceTierTests
         /// Update Throws Password Mismatch Exception test
         /// </summary>
         [Test]
-        public void Update_Throws_PasswordMismatchException()
+        public void UpdatePassword_Throws_PasswordMismatchException()
         {
             int userId = 1;
             UpdatePasswordDto model = new UpdatePasswordDto();
@@ -175,20 +175,21 @@ namespace GtdServiceTierTests
         /// Add role test
         /// </summary>
         [Test]
-        public void AddRole()
+        public void AddRoleTest_ReturnsOkRequest_WhenModelCorect()
         {
             RoleDto model = new RoleDto() { Email = GtdCommon.Constant.Constants.CorectEmail, Role = GtdCommon.Constant.Constants.AdminRole };
             User user = new User();
             var roles = new List<string>();
+            var identity = new IdentityResult();
 
             var timerContext = new Mock<TimerContext>();
             var userRepository = new Mock<IUserStore<User, int>>();
             unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
             unitOfWork.Setup(_ => _.UserManager.FindByEmailAsync(model.Email)).ReturnsAsync(user);
             unitOfWork.Setup(_ => _.UserManager.GetRolesAsync(user.Id)).ReturnsAsync(roles);
-            unitOfWork.Setup(_ => _.UserManager.AddToRoleAsync(user.Id, model.Role));
+            unitOfWork.Setup(_ => _.UserManager.AddToRoleAsync(user.Id, model.Role)).ReturnsAsync(identity);
 
-            subject.AdDtoRoleAsync(model);
+            subject.AddToRole(model);
 
             unitOfWork.Verify(_ => _.UserManager.AddToRoleAsync(user.Id, model.Role), Times.Once);
         }
@@ -198,18 +199,19 @@ namespace GtdServiceTierTests
         /// </summary>
         /// <returns>result of removing role</returns>
         [Test]
-        public async System.Threading.Tasks.Task RemoveRole()
+        public void RemoveRoleTest_ReturnsOkRequest_WhenModelCorect()
         {
             RoleDto model = new RoleDto() { Email = GtdCommon.Constant.Constants.CorectEmail, Role = GtdCommon.Constant.Constants.AdminRole };
             User user = new User();
+            var identity = new IdentityResult();
 
             var timerContext = new Mock<TimerContext>();
             var userRepository = new Mock<IUserStore<User, int>>();
             unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
             unitOfWork.Setup(_ => _.UserManager.FindByEmailAsync(model.Email)).ReturnsAsync(user);
-            unitOfWork.Setup(_ => _.UserManager.RemoveFromRoleAsync(user.Id, model.Role));
+            unitOfWork.Setup(_ => _.UserManager.RemoveFromRoleAsync(user.Id, model.Role)).ReturnsAsync(identity);
 
-            await subject.RemoveFromRolesAsync(model);
+            subject.RemoveFromRoles(model.Email, model.Role);
 
             unitOfWork.Verify(_ => _.UserManager.RemoveFromRoleAsync(user.Id, model.Role), Times.Once);
         }
@@ -219,7 +221,7 @@ namespace GtdServiceTierTests
         /// </summary>
         /// <returns>list of all emails </returns>
         [Test]
-        public async System.Threading.Tasks.Task GetAllEmailTest_ReturnsOkRequestAsync()
+        public void GetAllEmailTest_ReturnsOkRequest()
         {
             var emails = new List<string>();
 
@@ -227,11 +229,109 @@ namespace GtdServiceTierTests
             var timerContext = new Mock<TimerContext>();
 
             unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
-            unitOfWork.Setup(_ => _.UserManager.GetAllEmails()).ReturnsAsync(emails);
+            unitOfWork.Setup(_ => _.UserManager.GetAllEmails(GtdCommon.Constant.Constants.AdminRole)).ReturnsAsync(emails);
 
-            var actual = await subject.GetUsersEmailsAsync();
+            var actual = subject.GetUsersEmails(GtdCommon.Constant.Constants.AdminRole);
 
             Assert.AreSame(actual, emails);
+        }
+
+        /// <summary>
+        /// test to check user role
+        /// </summary>
+        [Test]
+        public void GetRolesOfUserTest_ReturnsOkRequest()
+        {
+            var roles = new List<string>();
+            int id = 1;
+
+            var userRepository = new Mock<IUserEmailStore<User, int>>();
+            var timerContext = new Mock<TimerContext>();
+
+            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
+            unitOfWork.Setup(_ => _.UserManager.GetRolesAsync(id)).ReturnsAsync(roles);
+
+            var actual = subject.GetRolesOfUser(id);
+
+            Assert.AreSame(actual, roles); ;
+        }
+
+        /// <summary>
+        /// test to check deleting of user
+        /// </summary>
+        [Test]
+        public void DeleteUserByEmailTest_ReturnsOkRequest_WhenEmailCorect()
+        {
+            string email = "";
+            User user = new User();
+            var identity = new IdentityResult();
+
+            var timerContext = new Mock<TimerContext>();
+            var userRepository = new Mock<IUserStore<User, int>>();
+            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
+            unitOfWork.Setup(_ => _.UserManager.FindByEmailAsync(email)).ReturnsAsync(user);
+            unitOfWork.Setup(_ => _.UserManager.DeleteAsync(user)).ReturnsAsync(identity);
+
+            subject.DeleteUserByEmail(email);
+
+            unitOfWork.Verify(_ => _.UserManager.DeleteAsync(user), Times.Once);
+        }
+
+        /// <summary>
+        /// test to che if exception is thrown
+        /// </summary>
+        [Test]
+        public void RemoveRole_Throws_UserNotFoundException()
+        {
+            RoleDto model = new RoleDto() { Email = GtdCommon.Constant.Constants.CorectEmail, Role = GtdCommon.Constant.Constants.AdminRole };
+            User user = null;
+
+            var timerContext = new Mock<TimerContext>();
+            var userRepository = new Mock<IUserStore<User, int>>();
+            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
+            unitOfWork.Setup(_ => _.UserManager.FindByEmailAsync(model.Email)).ReturnsAsync(user);
+
+            var ex = Assert.Throws<UserNotFoundException>(() => subject.RemoveFromRoles(model.Email, model.Role));
+
+            Assert.That(ex.Message, Is.EqualTo("User does not Exist!"));
+        }
+
+        /// <summary>
+        /// test to check if adding role throws exception
+        /// </summary>
+        [Test]
+        public void AddRole_Throws_UserNotFoundException()
+        {
+            RoleDto model = new RoleDto() { Email = GtdCommon.Constant.Constants.CorectEmail, Role = GtdCommon.Constant.Constants.AdminRole };
+            User user = null;
+
+            var timerContext = new Mock<TimerContext>();
+            var userRepository = new Mock<IUserStore<User, int>>();
+            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
+            unitOfWork.Setup(_ => _.UserManager.FindByEmailAsync(model.Email)).ReturnsAsync(user);
+
+            var ex = Assert.Throws<UserNotFoundException>(() => subject.AddToRole(model));
+
+            Assert.That(ex.Message, Is.EqualTo("User does not Exist!"));
+        }
+
+        /// <summary>
+        /// Test to check if deleting 
+        /// </summary>
+        [Test]
+        public void DeleteUserByEmail_Throws_UserNotFoundException()
+        {
+            RoleDto model = new RoleDto() { Email = GtdCommon.Constant.Constants.CorectEmail, Role = GtdCommon.Constant.Constants.AdminRole };
+            User user = null;
+
+            var timerContext = new Mock<TimerContext>();
+            var userRepository = new Mock<IUserStore<User, int>>();
+            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
+            unitOfWork.Setup(_ => _.UserManager.FindByEmailAsync(model.Email)).ReturnsAsync(user);
+
+            var ex = Assert.Throws<UserNotFoundException>(() => subject.DeleteUserByEmail(model.Email));
+
+            Assert.That(ex.Message, Is.EqualTo("User does not Exist!"));
         }
     }
 }

@@ -69,7 +69,7 @@ namespace GtdServiceTier.Services
             UnitOfWork.Save();
         }
 
-        public async Task AdDtoRoleAsync(RoleDto model)
+        public void AddToRole(RoleDto model)
         {
             var user = UnitOfWork.UserManager.FindByEmailAsync(model.Email).Result;
 
@@ -78,7 +78,7 @@ namespace GtdServiceTier.Services
                 throw new UserNotFoundException();
             }
 
-            var roles = await UnitOfWork.UserManager.GetRolesAsync(user.Id);
+            var roles = UnitOfWork.UserManager.GetRolesAsync(user.Id).Result;
 
             foreach (string role in roles)
             {
@@ -88,26 +88,47 @@ namespace GtdServiceTier.Services
                 }
             }
 
-            await UnitOfWork.UserManager.AddToRoleAsync(user.Id, model.Role);
+            UnitOfWork.UserManager.AddToRoleAsync(user.Id, model.Role).GetAwaiter();
         }
 
-        public async Task RemoveFromRolesAsync(RoleDto model)
+        public void RemoveFromRoles(string email, string role)
         {
-            var user = UnitOfWork.UserManager.FindByEmailAsync(model.Email).Result;
+            var user = UnitOfWork.UserManager.FindByEmailAsync(email).Result;
 
             if (user == null)
             {
                 throw new UserNotFoundException();
             }
 
-            await UnitOfWork.UserManager.RemoveFromRoleAsync(user.Id, model.Role);
+            UnitOfWork.UserManager.RemoveFromRoleAsync(user.Id, role).GetAwaiter();
         }
 
-        public async Task<IList<string>> GetUsersEmailsAsync()
+        public IList<string> GetUsersEmails(string roleName)
         {
-            var emailsList = await UnitOfWork.UserManager.GetAllEmails();
+            var emailsList = UnitOfWork.UserManager.GetAllEmails(roleName).Result;
 
             return emailsList;
+        }
+
+        public void DeleteUserByEmail(string emeil)
+        {
+            User user = UnitOfWork.UserManager.FindByEmailAsync(emeil).Result;
+
+            if (user == null)
+            {
+                throw new UserNotFoundException();
+            }
+
+            UnitOfWork.UserManager.DeleteAsync(user).GetAwaiter().GetResult();
+
+            UnitOfWork.Save();
+        }
+
+        public IList<string> GetRolesOfUser(int id)
+        {
+            var roles = UnitOfWork.UserManager.GetRolesAsync(id).Result;
+
+            return roles;
         }
 
         private bool UserExists(UserDto model)

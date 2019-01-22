@@ -1,25 +1,48 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
-  </PropertyGroup>
+ 
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+ <PropertyGroup>
+    
+<TargetFramework>netcoreapp2.1</TargetFramework>
+ 
+ </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore" Version="2.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.1.1" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
-    <PackageReference Include="StyleCop" Version="5.0.0" />
-  </ItemGroup>
+  
+<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+ 
+   <WarningLevel>4</WarningLevel>
+ 
+ </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Update="Constants\Constants.cs">
-      <ExcludeFromSourceAnalysis>True</ExcludeFromSourceAnalysis>
-      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
-    </Compile>
-  </ItemGroup>
+ 
+ <ItemGroup>
+  
+    <PackageReference Include="log4net" Version="2.0.8" />
+    <PackageReference Include="MicroKnights.Log4NetAdoNetAppender" Version="1.0.2" />
+  <PackageReference Include="Microsoft.AspNetCore" Version="2.1.1" />
+ 
+   <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.1.1" />
+  
+  <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
+
+    <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="2.2.10" />
+ <PackageReference Include="StyleCop" Version="5.0.0" />
+ 
+ </ItemGroup>
+
+ 
+ <ItemGroup>
+   
+ <Compile Update="Constants\Constants.cs">
+   
+   <ExcludeFromSourceAnalysis>True</ExcludeFromSourceAnalysis>
+  
+    <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
+ 
+   </Compile>
+ 
+ </ItemGroup>
+
 
 </Project>

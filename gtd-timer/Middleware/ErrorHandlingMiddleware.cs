@@ -8,6 +8,7 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 using GtdCommon.Exceptions;
@@ -23,14 +24,17 @@ namespace GtdTimer.Middleware
         /// instance of request delegate
         /// </summary>
         private readonly RequestDelegate next;
+        private readonly ILogger<ErrorHandlingMiddleware> logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ErrorHandlingMiddleware" /> class.
         /// </summary>
         /// <param name="next">instance of request delegate</param>
-        public ErrorHandlingMiddleware(RequestDelegate next)
+        /// <param name="logger">class which gives right for logging</param>
+        public ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandlingMiddleware> logger)
         {
             this.next = next;
+            this.logger = logger;
         }
 
         /// <summary>
@@ -77,6 +81,7 @@ namespace GtdTimer.Middleware
         private HttpStatusCode GetExceptionCode(Exception exception)
         {
             HttpStatusCode exceptionCode;
+            this.logger.LogError($"Error occured in {exception.Source} {exception.TargetSite}, with message: {exception.Message}");
             switch (exception)
             {
                 case UserNotFoundException _:

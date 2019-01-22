@@ -17,12 +17,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Swashbuckle.AspNetCore.Swagger;
 
 using GtdCommon.IoC;
 using GtdTimer.Middleware;
 using GtdServiceTier.Services;
-using Swashbuckle.AspNetCore.Swagger;
 using GtdTimerDAL.Entities;
 using GtdTimerDAL.Repositories;
 using GtdTimerDAL.UnitOfWork;
@@ -68,7 +69,6 @@ namespace GtdTimer
                     "AllowSpecificOrigin",
                     builder => builder.WithOrigins(IoCContainer.Configuration["Origins"]).AllowAnyHeader().AllowAnyMethod());
             });
-          
             services.AddDbContext<TimerContext>(opts => opts.UseSqlServer(IoCContainer.Configuration["AzureConnection"]));
             services.AddIdentity<User, Role>().AddEntityFrameworkStores<TimerContext>().AddDefaultTokenProviders();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -130,7 +130,10 @@ namespace GtdTimer
         /// </summary>
         /// <param name="app">application builder</param>
         /// <param name="env">hosting environment</param>
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        /// <param name="loggerFactory">class which registers logger</param>
+        /// <param name="configuration">class which helps configure project</param>
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IConfiguration configuration)
+
         {
             app.UseCors("AllowSpecificOrigin");
             if (env.IsDevelopment())
@@ -153,6 +156,7 @@ namespace GtdTimer
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
+            loggerFactory.AddLog4Net(configuration.GetValue<string>("Log4NetConfigFile:Name"));
             app.UseMvc();
         }
     }
