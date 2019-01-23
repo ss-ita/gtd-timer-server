@@ -5,6 +5,7 @@
 //-----------------------------------------------------------------------
 
 using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Http;
 
 using GtdCommon.ModelsDto;
 
@@ -102,5 +103,29 @@ namespace GtdServiceTier.Services
         /// </summary>
         /// <param name="taskDto">task model</param>
         void PauseTask(TaskDto taskDto);
+
+        /// <summary>
+        /// Method for importing user's tasks from .csv file.
+        /// </summary>
+        /// <param name="uploadFile">File being imported.</param>
+        /// <param name="userId">Id of current user.</param>
+        /// <returns></returns>
+        IEnumerable<TaskDto> ImportTasksFromCsv(IFormFile uploadFile, int userId);
+
+        /// <summary>
+        /// Method for importing user's tasks from .xml file.
+        /// </summary>
+        /// <param name="uploadFile">File being imported.</param>
+        /// <param name="userId">Id of current user.</param>
+        /// <returns></returns>
+        IEnumerable<TaskDto> ImportTasksFromXml(IFormFile uploadFile, int userId);
+
+        /// <summary>
+        /// Method for adding newly imported tasks to database.
+        /// </summary>
+        /// <param name="listOfTasksDto">List of tasks to be added.</param>
+        /// <param name="userId">Id of current user.</param>
+        /// <returns></returns>
+        IEnumerable<TaskDto> AddTaskToDatabase(IEnumerable<TaskDto> listOfTasksDto, int userId);
     }
 }

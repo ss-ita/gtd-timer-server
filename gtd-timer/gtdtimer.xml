@@ -4,6 +4,40 @@
         <name>GtdTimer</name>
     </assembly>
     <members>
+        <member name="M:GtdTimer.ActionResults.CsvResult.#ctor(System.Object)">
+            <summary>
+            Initializes a new instance of the <see cref="T:GtdTimer.ActionResults.CsvResult"/> class.
+            </summary>
+            <param name="objectToSerialize">The object to serialize to Csv.</param>
+        </member>
+        <member name="P:GtdTimer.ActionResults.CsvResult.ObjectToSerialize">
+            <summary>
+            Gets the object to be serialized to Csv.
+            </summary>
+        </member>
+        <member name="M:GtdTimer.ActionResults.CsvResult.ExecuteResult(Microsoft.AspNetCore.Mvc.ActionContext)">
+            <summary>
+            Serializes the object that was passed into the constructor to Csv and writes the corresponding Csv to the result stream.
+            </summary>
+            <param name="context">The controller context for the current request.</param>       
+        </member>
+        <member name="M:GtdTimer.ActionResults.XmlResult.#ctor(System.Object)">
+            <summary>
+            Initializes a new instance of the <see cref="T:GtdTimer.ActionResults.XmlResult"/> class.
+            </summary>
+            <param name="objectToSerialize">The object to serialize to XML.</param>
+        </member>
+        <member name="P:GtdTimer.ActionResults.XmlResult.ObjectToSerialize">
+            <summary>
+            Gets the object to be serialized to XML.
+            </summary>
+        </member>
+        <member name="M:GtdTimer.ActionResults.XmlResult.ExecuteResult(Microsoft.AspNetCore.Mvc.ActionContext)">
+            <summary>
+            Serializes the object that was passed into the constructor to XML and writes the corresponding XML to the result stream.
+            </summary>
+            <param name="context">The controller context for the current request.</param>       
+        </member>
         <member name="T:GtdTimer.Attributes.ValidateModelAttribute">
             <summary>
             class for validation model attributes
@@ -255,6 +289,70 @@
             <param name="model">task model</param>
             <returns>result of resetting task's properties.</returns>
         </member>
+        <member name="M:GtdTimer.Controllers.TasksController.ExportAllTasksAsXmlByUserId">
+            <summary>
+            Converts all user's tasks to xml format. 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.TasksController.ExportAllActiveTasksAsXmlByUserId">
+            <summary>
+            Converts all user's active tasks to xml format.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.TasksController.ExportAllArchivedTasksAsXmlByUserId">
+            <summary>
+            Converts all user's archived tasks to xml format.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.TasksController.ExportTaskAsXmlById(System.Int32)">
+            <summary>
+            Converts  user's task by id to xml format.
+            </summary>
+            <param name="taskId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.TasksController.ExportAllTasksAsCsvByUserId">
+            <summary>
+            Converts all user's tasks to csv format.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.TasksController.ExportAllActiveTasksAsCsvByUserId">
+            <summary>
+            Converts all user's active tasks to csv format.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.TasksController.ExportAllArchivedTasksAsCsvByUserId">
+            <summary>
+            Converts all user's archived tasks to csv format.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.TasksController.ExportTaskAsCsvById(System.Int32)">
+            <summary>
+            Converts  user's task by id to csv format.
+            </summary>
+            <param name="taskId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.TasksController.ImportTasksAsCsv(Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            Imports file of user's tasks in .csv format.
+            </summary>
+            <param name="uploadFile"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.TasksController.ImportTasksAsXml(Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            Imports file of user's tasks in .xml format.
+            </summary>
+            <param name="uploadFile"></param>
+            <returns></returns>
+        </member>
         <member name="T:GtdTimer.Controllers.UserController">
             <summary>
             class for user controller
@@ -314,28 +412,29 @@
             <summary>
             Remove role
             </summary>
-            <param name="email">user email</param>
-            <param name="role">uer role</param>
-            <returns>result of deleting role from user </returns>
+            <param name="email"></param>
+            <param name="role"></param>
+            <returns></returns>
         </member>
         <member name="M:GtdTimer.Controllers.UserController.DeleteUserByEmail(System.String)">
             <summary>
             Get users emails
             </summary>
+            <param name="email">user email</param>
             <returns>result of getting users emails</returns>
         </member>
         <member name="M:GtdTimer.Controllers.UserController.GetUsersEmails(System.String)">
             <summary>
             Delete user by email
             </summary>
-            <param name="email"></param>
-            <returns></returns>
+            <param name="roleName">user role</param>
+            <returns>result of getting users emails</returns>
         </member>
         <member name="M:GtdTimer.Controllers.UserController.GetRolesOfUser">
             <summary>
             Get roles of user
             </summary>
-            <returns></returns>
+            <returns>roles of chosen user</returns>
         </member>
         <member name="T:GtdTimer.Middleware.ErrorHandlingMiddleware">
             <summary>
@@ -345,6 +444,11 @@
         <member name="F:GtdTimer.Middleware.ErrorHandlingMiddleware.next">
             <summary>
             instance of request delegate
+            </summary>
+        </member>
+        <member name="F:GtdTimer.Middleware.ErrorHandlingMiddleware.logger">
+            <summary>
+            interface for logger
             </summary>
         </member>
         <member name="M:GtdTimer.Middleware.ErrorHandlingMiddleware.#ctor(Microsoft.AspNetCore.Http.RequestDelegate,Microsoft.Extensions.Logging.ILogger{GtdTimer.Middleware.ErrorHandlingMiddleware})">

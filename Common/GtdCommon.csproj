@@ -29,6 +29,7 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="2.2.10" />
  <PackageReference Include="StyleCop" Version="5.0.0" />
  
+    <PackageReference Include="ServiceStack.Text.Core" Version="5.4.0" />
  </ItemGroup>
 
  

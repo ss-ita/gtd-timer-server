@@ -5,13 +5,17 @@
 //-----------------------------------------------------------------------
 
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
 
+using DefaultXmlSerializer = System.Xml.Serialization.XmlSerializer;
 using GtdCommon.Exceptions;
 using GtdCommon.ModelsDto;
 using GtdTimerDAL.Extensions;
 using GtdTimerDAL.Entities;
 using GtdTimerDAL.UnitOfWork;
+using ServiceStack.Text;
 
 namespace GtdServiceTier.Services
 {
@@ -33,6 +37,23 @@ namespace GtdServiceTier.Services
             var task = taskDto.ToTask();
             UnitOfWork.Tasks.Create(task);
             UnitOfWork.Save();
+        }
+
+        public IEnumerable<TaskDto> AddTaskToDatabase(IEnumerable<TaskDto> listOfTasksDto, int userId)
+        {
+            var newTasks = new List<Tasks>();
+
+            foreach(var taskDto in listOfTasksDto)
+            {
+                taskDto.UserId = userId;
+                var task = taskDto.ToTask();
+                UnitOfWork.Tasks.Create(task);
+                newTasks.Add(task);
+            }
+
+            UnitOfWork.Save();
+
+            return newTasks.Select(task => task.ToTaskDto());
         }
 
         public void DeleteTaskById(int taskId)
@@ -161,6 +182,43 @@ namespace GtdServiceTier.Services
                 .ToList();
 
             return listOfTasksDto;
+        }
+
+        public IEnumerable<TaskDto> ImportTasksFromCsv(IFormFile uploadFile, int userId)
+        {
+            IEnumerable<TaskDto> listOfTasksDTO = new List<TaskDto>();
+            if (uploadFile.Length > 0)
+            {
+                using (var stream = uploadFile.OpenReadStream())
+                {
+                    listOfTasksDTO = CsvSerializer.DeserializeFromStream<IEnumerable<TaskDto>>(stream);
+                }
+            }
+            else
+            {
+                throw new FileNotFoundException();
+            }
+
+            return AddTaskToDatabase(listOfTasksDTO, userId);
+        }
+
+        public IEnumerable<TaskDto> ImportTasksFromXml(IFormFile uploadFile, int userId)
+        {
+            IEnumerable<TaskDto> listOfTasksDTO = new List<TaskDto>();
+            DefaultXmlSerializer xmlSerializer = new DefaultXmlSerializer(listOfTasksDTO.GetType());
+            if (uploadFile.Length > 0)
+            {
+                using (var stream = uploadFile.OpenReadStream())
+                {
+                    listOfTasksDTO = (IEnumerable<TaskDto>)xmlSerializer.Deserialize(stream);
+                }
+            }
+            else
+            {
+                throw new FileNotFoundException();
+            }
+
+            return AddTaskToDatabase(listOfTasksDTO, userId);
         }
     }
 }

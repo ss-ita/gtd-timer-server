@@ -101,7 +101,7 @@ namespace GtdTimerTests.Controllers
         {
             userIdentityService.Setup(_ => _.GetUserId()).Returns(userid);
 
-            var actual = (OkResult)subject.CreatePreset(presetDto);
+            var actual = (OkObjectResult)subject.CreatePreset(presetDto);
 
             Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
             presetService.Verify(_ => _.CreatePreset(presetDto), Times.Once);

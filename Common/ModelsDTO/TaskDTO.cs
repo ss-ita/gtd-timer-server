@@ -3,19 +3,18 @@
 //     Company copyright tag.
 // </copyright>
 //-----------------------------------------------------------------------
-
-using System;
+﻿using System;
+using System.Xml.Serialization;
 
 namespace GtdCommon.ModelsDto
 {
     /// <summary>
     /// class for Task model
     /// </summary>
+    [Serializable, XmlRoot("TaskDto")]
     public class TaskDto
     {
-        /// <summary>
-        /// Gets or sets a value of Id property
-        /// </summary>
+        [XmlIgnore]
         public int Id { get; set; }
 
         /// <summary>
@@ -56,6 +55,7 @@ namespace GtdCommon.ModelsDto
         /// <summary>
         /// Gets or sets a value of user id foreign key property
         /// </summary>
+        [XmlIgnore]
         public int UserId { get; set; }
     }
 }

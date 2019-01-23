@@ -153,7 +153,7 @@ namespace GtdTimerTests.Controllers
             var userId = 315;
             userIdentityService.Setup(_ => _.GetUserId()).Returns(userId);
             TaskDto model = new TaskDto();
-            var actual = (OkResult)subject.CreateTask(model);
+            var actual = (OkObjectResult)subject.CreateTask(model);
 
             Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
             taskService.Verify(_ => _.CreateTask(model), Times.Once);

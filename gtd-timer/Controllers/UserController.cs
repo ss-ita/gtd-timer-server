@@ -121,10 +121,10 @@ namespace GtdTimer.Controllers
         /// <summary>
         /// Remove role
         /// </summary>
-        /// <param name="email">user email</param>
-        /// <param name="role">uer role</param>
-        /// <returns>result of deleting role from user </returns>
-        [Authorize(Roles = Constants.SuperAdminRole)]
+        /// <param name="email">email of chosen user</param>
+        /// <param name="role">role of chosen user</param>
+        /// <returns>result of deleting role from user</returns>
+        [Authorize(Roles = Constants.AdminRole)]
         [HttpDelete("RemoveRole/{email}/{role}")]
         public IActionResult RemoveFromRoles(string email, string role)
         {

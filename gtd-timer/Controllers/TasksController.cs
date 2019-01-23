@@ -5,11 +5,13 @@
 //-----------------------------------------------------------------------
 
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using GtdCommon.Constant;
 using GtdCommon.ModelsDto;
 using GtdTimer.Attributes;
+using GtdTimer.ActionResults;
 using GtdServiceTier.Services;
 
 namespace GtdTimer.Controllers
@@ -50,9 +52,9 @@ namespace GtdTimer.Controllers
         [HttpGet("[action]")]
         public IActionResult GetAllTasks()
         {
-            var allTasks = this.taskService.GetAllTasks();
+            var allTasks = taskService.GetAllTasks();
 
-            return this.Ok(allTasks);
+            return Ok(allTasks);
         }
 
         /// <summary>
@@ -89,9 +91,9 @@ namespace GtdTimer.Controllers
         [HttpGet("GetTaskById/{taskID}")]
         public IActionResult GetTaskById(int taskId)
         {
-            TaskDto task = this.taskService.GetTaskById(taskId);
+            TaskDto task = taskService.GetTaskById(taskId);
 
-            return this.Ok(task);
+            return Ok(task);
         }
 
         /// <summary>
@@ -142,10 +144,10 @@ namespace GtdTimer.Controllers
         [HttpPost("[action]")]
         public IActionResult CreateTask([FromBody]TaskDto model)
         {
-            model.UserId = this.userIdentityService.GetUserId();
-            this.taskService.CreateTask(model);
+            model.UserId = userIdentityService.GetUserId();
+            taskService.CreateTask(model);
 
-            return this.Ok();
+            return Ok(model);
         }
 
         /// <summary>
@@ -234,6 +236,138 @@ namespace GtdTimer.Controllers
             this.taskService.ResetTask(model);
 
             return this.Ok();
+        }
+
+        /// <summary>
+        /// Converts all user's tasks to xml format. 
+        /// </summary>
+        /// <returns>returns a text file</returns>
+        [HttpGet("[action]")]
+        public IActionResult ExportAllTasksAsXmlByUserId()
+        {
+            var userId = userIdentityService.GetUserId();
+            var listOfTasks = taskService.GetAllTasksByUserId(userId);
+
+            return new XmlResult(listOfTasks);
+        }
+
+        /// <summary>
+        /// Converts all user's active tasks to xml format.
+        /// </summary>
+        /// <returns>returns a text file</returns>
+        [HttpGet("[action]")]
+        public IActionResult ExportAllActiveTasksAsXmlByUserId()
+        {
+            var userId = userIdentityService.GetUserId();
+            var listOfTasks = taskService.GetAllActiveTasksByUserId(userId);
+
+            return new XmlResult(listOfTasks);
+        }
+
+        /// <summary>
+        /// Converts all user's archived tasks to xml format.
+        /// </summary>
+        /// <returns>returns text file</returns>
+        [HttpGet("[action]")]
+        public IActionResult ExportAllArchivedTasksAsXmlByUserId()
+        {
+            var userId = userIdentityService.GetUserId();
+            var listOfTasks = taskService.GetAllArchivedTasksByUserId(userId);
+
+            return new XmlResult(listOfTasks);
+        }
+
+        /// <summary>
+        /// Converts  user's task by id to xml format.
+        /// </summary>
+        /// <param name="taskId">id of chosen task</param>
+        /// <returns>returns text file</returns>
+        [HttpGet("[action]/{taskId}")]
+        public IActionResult ExportTaskAsXmlById(int taskId)
+        {
+            var task = taskService.GetTaskById(taskId);
+
+            return new XmlResult(task);
+        }
+
+        /// <summary>
+        /// Converts all user's tasks to csv format.
+        /// </summary>
+        /// <returns>return text file</returns>
+        [HttpGet("[action]")]
+        public IActionResult ExportAllTasksAsCsvByUserId()
+        {
+            var userId = userIdentityService.GetUserId();
+            var listOfTasks = taskService.GetAllTasksByUserId(userId);
+
+            return new CsvResult(listOfTasks);
+        }
+
+        /// <summary>
+        /// Converts all user's active tasks to csv format.
+        /// </summary>
+        /// <returns>returns text file</returns>
+        [HttpGet("[action]")]
+        public IActionResult ExportAllActiveTasksAsCsvByUserId()
+        {
+            var userId = userIdentityService.GetUserId();
+            var listOfTasks = taskService.GetAllActiveTasksByUserId(userId);
+
+            return new CsvResult(listOfTasks);
+        }
+
+        /// <summary>
+        /// Converts all user's archived tasks to csv format.
+        /// </summary>
+        /// <returns>returns text file</returns>
+        [HttpGet("[action]")]
+        public IActionResult ExportAllArchivedTasksAsCsvByUserId()
+        {
+            var userId = userIdentityService.GetUserId();
+            var listOfTasks = taskService.GetAllArchivedTasksByUserId(userId);
+
+            return new CsvResult(listOfTasks);
+        }
+
+        /// <summary>
+        /// Converts  user's task by id to csv format.
+        /// </summary>
+        /// <param name="taskId">id of chosen task</param>
+        /// <returns>returns text file</returns>
+        [HttpGet("[action]/{taskId}")]
+        public IActionResult ExportTaskAsCsvById(int taskId)
+        {
+            var task = taskService.GetTaskById(taskId);
+
+            return new CsvResult(task);
+        }
+
+        /// <summary>
+        /// Imports file of user's tasks in .csv format.
+        /// </summary>
+        /// <param name="uploadFile">file which user choses to import</param>
+        /// <returns>result of importing file to database</returns>
+        [HttpPost("[action]")]
+        public IActionResult ImportTasksAsCsv(IFormFile uploadFile)
+        {
+            var userId = userIdentityService.GetUserId();
+            var listOfTasks = taskService.ImportTasksFromCsv(uploadFile, userId);
+            
+            return Ok(listOfTasks);
+        }
+
+        /// <summary>
+        /// Imports file of user's tasks in .xml format.
+        /// </summary>
+        /// <param name="uploadFile">file which user choses to import</param>
+        /// <returns>result of importing file to database</returns>
+        [HttpPost("[action]")]
+        public IActionResult ImportTasksAsXml(IFormFile uploadFile)
+        {
+            var userId = userIdentityService.GetUserId();
+            var listOfTasks = taskService.ImportTasksFromXml(uploadFile, userId);
+
+            return Ok(listOfTasks);
         }
     }
 }

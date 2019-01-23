@@ -19,7 +19,6 @@ namespace GtdCommon.Constant
         public const string GoogleResponsePath = "https://www.googleapis.com/oauth2/v1/userinfo?access_token=";
         public const string FacebookResponsePath = "https://graph.facebook.com/v3.2/me?fields=email,first_name,last_name&access_token=";
         public const string AdminRole = "Admin";
-        public const string SuperAdminRole = "SuperAdmin";
         public const string UserRole = "User";
     }
 }

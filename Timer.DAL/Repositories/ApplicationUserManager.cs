@@ -60,20 +60,6 @@ namespace GtdTimerDAL.Repositories
                           join userRole in TimerContext.UserRoles
                           on user.Id equals userRole.UserId
                           where userRole.RoleId == role.Id
-                          select user.Email).ToList<string>().Except(
-                         (from user in TimerContext.Users
-                          join userRole in TimerContext.UserRoles
-                         on user.Id equals userRole.UserId
-                          where userRole.RoleId == 3
-                          select user.Email).ToList<string>()).ToList();
-            }
-
-            if (role.Name == GtdCommon.Constant.Constants.SuperAdminRole)
-            {
-                emails = (from user in TimerContext.Users
-                          join userRole in TimerContext.UserRoles
-                          on user.Id equals userRole.UserId
-                          where userRole.RoleId == role.Id
                           select user.Email).ToList<string>();
             }
 
