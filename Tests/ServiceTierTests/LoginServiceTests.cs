@@ -49,16 +49,14 @@ namespace GtdServiceTierTests
         [Test]
         public void CreateToken()
         {
-            User user1 = new User { PasswordHash = "12345", Email = "sashatymoshchuk07@gmail.com" };
-
             LoginDto model = new LoginDto { Email = "sashatymoshchuk07@gmail.com", Password = "12345" };
             IList<string> roles = new List<string>() { "Admin", "User" };
 
-            userManager.Setup(_ => _.FindByEmailAsync(model.Email)).ReturnsAsync(user1);
-            userManager.Setup(_ => _.CheckPasswordAsync(user1, model.Password)).ReturnsAsync(model.Password == user.PasswordHash);
             unitOfWork.Setup(_ => _.UserManager).Returns(userManager.Object);
-            unitOfWork.Setup(_ => _.UserManager.GetRolesAsync(user1.Id)).ReturnsAsync(roles);
-            jwtManager.Setup(_ => _.GenerateToken(user1, roles)).Returns(jwtTokenTest);
+            unitOfWork.Setup(_ => _.UserManager.FindByEmailAsync(model.Email)).ReturnsAsync(user);
+            unitOfWork.Setup(_ => _.UserManager.CheckPasswordAsync(user, model.Password)).ReturnsAsync(model.Password == user.PasswordHash);
+            unitOfWork.Setup(_ => _.UserManager.GetRolesAsync(user.Id)).ReturnsAsync(roles);
+            jwtManager.Setup(_ => _.GenerateToken(user, roles)).Returns(jwtTokenTest);
 
             var actual = subject.CreateToken(model);
 

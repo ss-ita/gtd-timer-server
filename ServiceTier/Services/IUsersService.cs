@@ -51,27 +51,28 @@ namespace GtdServiceTier.Services
         /// <summary>
         /// Remove from roles of user
         /// </summary>
-        /// <param name="email"></param>
-        /// <param name="role"></param>
+        /// <param name="email">user email</param>
+        /// <param name="role">user role</param>
         void RemoveFromRoles(string email, string role);
 
         /// <summary>
-        /// Get ysers emails
+        /// Get users emails
         /// </summary>
-        /// <returns></returns>
+        /// <param name="roleName">user role name</param>
+        /// <returns>emails of all users</returns>
         IList<string> GetUsersEmails(string roleName);
 
         /// <summary>
         /// Delete user by email
         /// </summary>
-        /// <param name="emeil"></param>
-        void DeleteUserByEmail(string emeil);
+        /// <param name="email">user email</param>
+        void DeleteUserByEmail(string email);
 
         /// <summary>
         /// Get roles of user
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">user id</param>
+        /// <returns>list of roles of chosen user</returns>
         IList<string> GetRolesOfUser(int id);
     }
 }

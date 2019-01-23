@@ -165,7 +165,6 @@ namespace GtdTimerTests.Controllers
         /// <summary>
         /// Get All Emails Test
         /// </summary>
-        /// <returns>list of emails</returns>
         [Test]
         public void GetAllEmailTest_ReturnsOkRequest()
         {

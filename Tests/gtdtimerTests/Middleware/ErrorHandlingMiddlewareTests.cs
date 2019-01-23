@@ -28,13 +28,15 @@ namespace GtdTimerTests.Middleware
         public async Task Invoke_GetStatusCode_HtttpStatusCodeNoContent()
         {
             var log = new Mock<ILogger<ErrorHandlingMiddleware>>();
-            var middleware = new ErrorHandlingMiddleware(next: async (innerhttpcontext) =>
-            {
-                await Task.Run(() => 
+            var middleware = new ErrorHandlingMiddleware(
+                next: async (innerhttpcontext) =>
+            { 
+                await Task.Run(() =>
                 {
                     throw new UserNotFoundException();
                 });
-            }, logger: log.Object);
+            }, 
+                logger: log.Object);
             var context = new DefaultHttpContext();
             await middleware.Invoke(context);
             int actualStatusCode = context.Response.StatusCode;
@@ -50,13 +52,15 @@ namespace GtdTimerTests.Middleware
         public async Task Invoke_GetStatusCode_HtttpStatusCodeInternalServerError()
         {
             var log = new Mock<ILogger<ErrorHandlingMiddleware>>();
-            var middleware = new ErrorHandlingMiddleware(next: async (innerhttpcontext) =>
+            var middleware = new ErrorHandlingMiddleware(
+                next: async (innerhttpcontext) =>
             {
-                await Task.Run(() => 
+                await Task.Run(() =>
                 {
                     throw new Exception();
                 });
-            }, logger: log.Object);
+            },
+                logger: log.Object);
             var context = new DefaultHttpContext();
             await middleware.Invoke(context);
             int actualStatusCode = context.Response.StatusCode;

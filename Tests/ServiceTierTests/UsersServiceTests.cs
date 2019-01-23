@@ -57,11 +57,10 @@ namespace GtdServiceTierTests
         /// <summary>
         /// Create async user test
         /// </summary>
-        /// <returns>response of creating user</returns>
         [Test]
         public void Create()
         {
-            UserDto model = new UserDto { Email = "" };
+            UserDto model = new UserDto { Email = string.Empty };
             var userManager = new Mock<IApplicationUserManager<User, int>>();
             var timerContext = new Mock<TimerContext>();
             var identity = new IdentityResult();
@@ -197,7 +196,6 @@ namespace GtdServiceTierTests
         /// <summary>
         /// Remove role test
         /// </summary>
-        /// <returns>result of removing role</returns>
         [Test]
         public void RemoveRoleTest_ReturnsOkRequest_WhenModelCorect()
         {
@@ -219,7 +217,6 @@ namespace GtdServiceTierTests
         /// <summary>
         /// get all emails test
         /// </summary>
-        /// <returns>list of all emails </returns>
         [Test]
         public void GetAllEmailTest_ReturnsOkRequest()
         {
@@ -253,7 +250,7 @@ namespace GtdServiceTierTests
 
             var actual = subject.GetRolesOfUser(id);
 
-            Assert.AreSame(actual, roles); ;
+            Assert.AreSame(actual, roles);
         }
 
         /// <summary>
@@ -262,7 +259,7 @@ namespace GtdServiceTierTests
         [Test]
         public void DeleteUserByEmailTest_ReturnsOkRequest_WhenEmailCorect()
         {
-            string email = "";
+            string email = string.Empty;
             User user = new User();
             var identity = new IdentityResult();
 

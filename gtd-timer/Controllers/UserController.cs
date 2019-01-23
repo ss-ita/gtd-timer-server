@@ -136,6 +136,7 @@ namespace GtdTimer.Controllers
         /// <summary>
         /// Get users emails
         /// </summary>
+        /// <param name="email">user email</param>
         /// <returns>result of getting users emails</returns>
         [Authorize(Roles = Constants.AdminRole)]
         [HttpDelete("DeleteUserByEmail/{email}")]
@@ -149,8 +150,8 @@ namespace GtdTimer.Controllers
         /// <summary>
         /// Delete user by email
         /// </summary>
-        /// <param name="email"></param>
-        /// <returns></returns>
+        /// <param name="roleName">user role</param>
+        /// <returns>result of getting users emails</returns>
         [Authorize(Roles = Constants.AdminRole)]
         [HttpGet("GetUsersEmails/{roleName}")]
         public IActionResult GetUsersEmails(string roleName)
@@ -163,7 +164,7 @@ namespace GtdTimer.Controllers
         /// <summary>
         /// Get roles of user
         /// </summary>
-        /// <returns></returns>
+        /// <returns>roles of chosen user</returns>
         [HttpGet("GetRolesOfUser")]
         public ActionResult GetRolesOfUser()
         {

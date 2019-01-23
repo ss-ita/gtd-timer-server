@@ -24,6 +24,10 @@ namespace GtdTimer.Middleware
         /// instance of request delegate
         /// </summary>
         private readonly RequestDelegate next;
+
+        /// <summary>
+        /// interface for logger
+        /// </summary>
         private readonly ILogger<ErrorHandlingMiddleware> logger;
 
         /// <summary>

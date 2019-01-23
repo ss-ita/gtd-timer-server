@@ -133,7 +133,6 @@ namespace GtdTimer
         /// <param name="loggerFactory">class which registers logger</param>
         /// <param name="configuration">class which helps configure project</param>
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IConfiguration configuration)
-
         {
             app.UseCors("AllowSpecificOrigin");
             if (env.IsDevelopment())

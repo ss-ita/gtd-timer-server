@@ -25,6 +25,13 @@ namespace GtdTimerDAL.Entities
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="TimerContext" /> class.
+        /// </summary>
+        public TimerContext()
+        {
+        }
+
+        /// <summary>
         /// Gets or sets set of users
         /// </summary>
         public virtual DbSet<User> Users { get; set; }
