@@ -103,7 +103,7 @@ namespace gtdtimer.Controllers
         /// <param name="email"></param>
         /// <param name="role"></param>
         /// <returns></returns>
-        [Authorize(Roles = Constants.SuperAdminRole)]
+        [Authorize(Roles = Constants.AdminRole)]
         [HttpDelete("RemoveRole/{email}/{role}")]
         public IActionResult RemoveFromRoles(string email, string role)
         {

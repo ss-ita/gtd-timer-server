@@ -43,20 +43,6 @@ namespace Timer.DAL.Timer.DAL.Repositories
                           join userRole in timerContext.UserRoles
                           on user.Id equals userRole.UserId
                           where userRole.RoleId == role.Id
-                          select user.Email).ToList<string>().Except(
-                         (from user in timerContext.Users
-                          join userRole in timerContext.UserRoles
-                         on user.Id equals userRole.UserId
-                          where userRole.RoleId == 3
-                          select user.Email).ToList<string>()).ToList();
-            }
-
-            if (role.Name == Common.Constant.Constants.SuperAdminRole)
-            {
-                emails = (from user in timerContext.Users
-                          join userRole in timerContext.UserRoles
-                          on user.Id equals userRole.UserId
-                          where userRole.RoleId == role.Id
                           select user.Email).ToList<string>();
             }
 
