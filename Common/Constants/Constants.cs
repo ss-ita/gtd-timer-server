@@ -1,4 +1,10 @@
-﻿namespace Common.Constant
+﻿//-----------------------------------------------------------------------
+// <copyright file="Constants.cs" company="SoftServe">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+
+namespace GtdCommon.Constant
 {
     public class Constants
     {

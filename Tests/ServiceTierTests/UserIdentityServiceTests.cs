@@ -1,11 +1,18 @@
-﻿using Common.Constant;
+﻿//-----------------------------------------------------------------------
+// <copyright file="UserIdentityServiceTests.cs" company="SoftServe">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+
+using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Moq;
 using NUnit.Framework;
-using ServiceTier.Services;
-using System.Security.Claims;
 
-namespace ServiceTierTests
+using GtdCommon.Constant;
+using GtdServiceTier.Services;
+
+namespace GtdServiceTierTests
 {
     [TestFixture]
     public class UserIdentityServiceTests
@@ -14,6 +21,9 @@ namespace ServiceTierTests
 
         private UserIdentityService subject;
 
+        /// <summary>
+        /// Method which is called immediately in each test run
+        /// </summary>
         [SetUp]
         public void Setup()
         {
@@ -21,6 +31,9 @@ namespace ServiceTierTests
             subject = new UserIdentityService(httpContextAccessor.Object);
         }
 
+        /// <summary>
+        /// Get User Id test
+        /// </summary>
         [Test]
         public void GetUserId()
         {

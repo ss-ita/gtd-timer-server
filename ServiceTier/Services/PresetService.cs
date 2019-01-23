@@ -1,94 +1,114 @@
-﻿using System.Collections.Generic;
-using Common.Exceptions;
-using Common.ModelsDTO;
-using Timer.DAL.Extensions;
-using Timer.DAL.Timer.DAL.Entities;
-using Timer.DAL.Timer.DAL.UnitOfWork;
+﻿//-----------------------------------------------------------------------
+// <copyright file="PresetService.cs" company="SoftServe">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
 
-namespace ServiceTier.Services
+using System.Collections.Generic;
+
+using GtdCommon.Exceptions;
+using GtdCommon.ModelsDto;
+using GtdTimerDAL.Extensions;
+using GtdTimerDAL.Entities;
+using GtdTimerDAL.UnitOfWork;
+
+namespace GtdServiceTier.Services
 {
+    /// <summary>
+    /// class which implements i preset service interface
+    /// </summary>
     public class PresetService : BaseService, IPresetService
     {
+        /// <summary>
+        /// instance of timer service
+        /// </summary>
         private readonly ITimerService timerService;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PresetService" /> class.
+        /// </summary>
+        /// <param name="unitOfWork">instance of unit of work</param>
+        /// <param name="timerService">instance of timer service</param>
         public PresetService(IUnitOfWork unitOfWork, ITimerService timerService) : base(unitOfWork)
         {
             this.timerService = timerService;
         }
-        public void CreatePreset(PresetDTO presetDTO)
-        {
-            Preset preset = presetDTO.ToPreset();
-            unitOfWork.Presets.Create(preset);
-            unitOfWork.Save();
-            presetDTO.Id = preset.Id;
 
-            foreach (var timer in presetDTO.Timers)
+        public void CreatePreset(PresetDto presetDto)
+        {
+            Preset preset = presetDto.ToPreset();
+            UnitOfWork.Presets.Create(preset);
+            UnitOfWork.Save();
+            presetDto.Id = preset.Id;
+
+            foreach (var timer in presetDto.Timers)
             {
                 timer.PresetId = preset.Id;
-                timerService.CreateTimer(timer);
+                this.timerService.CreateTimer(timer);
             }
         }
 
-        public void UpdatePreset(PresetDTO presetDTO)
+        public void UpdatePreset(PresetDto presetDto)
         {
-            Preset preset = presetDTO.ToPreset();
-            foreach (var timer in presetDTO.Timers)
+            Preset preset = presetDto.ToPreset();
+            foreach (var timer in presetDto.Timers)
             {
                 timerService.UpdateTimer(timer);
             }
-            unitOfWork.Presets.Update(preset);
-            unitOfWork.Save();
+            UnitOfWork.Presets.Update(preset);
+            UnitOfWork.Save();
         }
 
         public void DeletePresetById(int presetid)
         {
-            if (unitOfWork.Presets.GetByID(presetid) == null)
+            if (UnitOfWork.Presets.GetByID(presetid) == null)
             {
                 throw new PresetNotFoundException();
             }
-            unitOfWork.Presets.Delete(presetid);
-            unitOfWork.Save();
+
+            UnitOfWork.Presets.Delete(presetid);
+            UnitOfWork.Save();
         }
 
-        public PresetDTO GetPresetById(int presetid)
+        public PresetDto GetPresetById(int presetid)
         {
-            if (unitOfWork.Presets.GetByID(presetid) == null)
+            if (UnitOfWork.Presets.GetByID(presetid) == null)
             {
                 throw new PresetNotFoundException();
             }
-            var preset = unitOfWork.Presets.GetByID(presetid);
-            return preset.ToPresetDTO(timerService.GetAllTimersByPresetId(presetid));
+
+            var preset = UnitOfWork.Presets.GetByID(presetid);
+            return preset.ToPresetDto(this.timerService.GetAllTimersByPresetId(presetid));
         }
 
-        public IList<PresetDTO> GetAllCustomPresetsByUserId(int userid)
+        public IList<PresetDto> GetAllCustomPresetsByUserId(int userid)
         {
-            var listOfPresetsDTO = new List<PresetDTO>();
-            var presets = unitOfWork.Presets.GetAllEntitiesByFilter(preset => preset.UserId == userid);
-            var timers = unitOfWork.Timers.GetAllEntities();
+            var listOfPresetsDto = new List<PresetDto>();
+            var presets = UnitOfWork.Presets.GetAllEntitiesByFilter(preset => preset.UserId == userid);
+            var timers = UnitOfWork.Timers.GetAllEntities();
 
             foreach (var preset in presets)
             {
-                List<TimerDTO> timerDTOs = timerService.GetAllTimersByPresetId(preset.Id);
-                listOfPresetsDTO.Add(preset.ToPresetDTO(timerDTOs));
+                    List<TimerDto> timerDtos = timerService.GetAllTimersByPresetId(preset.Id);
+                    listOfPresetsDto.Add(preset.ToPresetDto(timerDtos));
             }
 
-            return listOfPresetsDTO;
+            return listOfPresetsDto;
         }
 
-        public IList<PresetDTO> GetAllStandardPresets()
+        public IList<PresetDto> GetAllStandardPresets()
         {
-            var listOfPresetsDTO = new List<PresetDTO>();
-            var presets = unitOfWork.Presets.GetAllEntitiesByFilter(preset => preset.UserId == null);
-            var timers = unitOfWork.Timers.GetAllEntities();
+            var listOfPresetsDto = new List<PresetDto>();
+            var presets = UnitOfWork.Presets.GetAllEntitiesByFilter(preset => preset.UserId == null);
+            var timers = UnitOfWork.Timers.GetAllEntities();
 
             foreach (var preset in presets)
             {
-                var timerDTOs = timerService.GetAllTimersByPresetId(preset.Id);
-                listOfPresetsDTO.Add(preset.ToPresetDTO(timerDTOs));
+                var timerDtos = timerService.GetAllTimersByPresetId(preset.Id);
+                    listOfPresetsDto.Add(preset.ToPresetDto(timerDtos));
             }
 
-            return listOfPresetsDTO;
+            return listOfPresetsDto;
         }
-
     }
 }

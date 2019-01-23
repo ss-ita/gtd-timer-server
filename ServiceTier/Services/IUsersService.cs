@@ -1,48 +1,78 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿//-----------------------------------------------------------------------
+// <copyright file="IUsersService.cs" company="SoftServe">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
 
-using Common.ModelsDTO;
-using Timer.DAL.Timer.DAL.Entities;
+using System.Collections.Generic;
 
-namespace ServiceTier.Services
+using GtdCommon.ModelsDto;
+using GtdTimerDAL.Entities;
+
+namespace GtdServiceTier.Services
 {
+    /// <summary>
+    /// Interface for users service
+    /// </summary>
     public interface IUsersService : IBaseService
     {
+        /// <summary>
+        /// Method for getting user by id
+        /// </summary>
+        /// <param name="id">id of chosen user</param>
+        /// <returns>return user with chosen id</returns>
         User Get(int id);
-        void Create(UserDTO model);
-        void UpdatePassword(int id, UpdatePasswordDTO model);
+
+        /// <summary>
+        /// Method for creating user
+        /// </summary>
+        /// <param name="model">user model</param>
+        void Create(UserDto model);
+
+        /// <summary>
+        /// Method for updating user password
+        /// </summary>
+        /// <param name="id">id of chosen user</param>
+        /// <param name="model">password confirmation model</param>
+        void UpdatePassword(int id, UpdatePasswordDto model);
+
+        /// <summary>
+        /// Method for deleting user
+        /// </summary>
+        /// <param name="id">id of chosen user</param>
         void Delete(int id);
 
         /// <summary>
         /// Add to roles of user
         /// </summary>
-        /// <param name="model"></param>
-        void AddToRole(RoleDTO model);
+        /// <param name="model">role model</param>
+        void AddToRole(RoleDto model);
 
         /// <summary>
         /// Remove from roles of user
         /// </summary>
-        /// <param name="email"></param>
-        /// <param name="role"></param>
+        /// <param name="email">user email</param>
+        /// <param name="role">user role</param>
         void RemoveFromRoles(string email, string role);
 
         /// <summary>
-        /// Get ysers emails
+        /// Get users emails
         /// </summary>
-        /// <returns></returns>
+        /// <param name="roleName">user role name</param>
+        /// <returns>emails of all users</returns>
         IList<string> GetUsersEmails(string roleName);
 
         /// <summary>
         /// Delete user by email
         /// </summary>
-        /// <param name="emeil"></param>
-        void DeleteUserByEmail(string emeil);
+        /// <param name="email">user email</param>
+        void DeleteUserByEmail(string email);
 
         /// <summary>
         /// Get roles of user
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">user id</param>
+        /// <returns>list of roles of chosen user</returns>
         IList<string> GetRolesOfUser(int id);
     }
 }

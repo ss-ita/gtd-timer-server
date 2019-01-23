@@ -1,21 +1,24 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿//-----------------------------------------------------------------------
+// <copyright file="LoginControllerTests.cs" company="SoftServe">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+
+using System.Net;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
-using Task = System.Threading.Tasks.Task;
 
-using Common.Constant;
-using gtdtimer.Controllers;
-using Common.ModelsDTO;
-using Timer.DAL.Timer.DAL.Entities;
-using Timer.DAL.Timer.DAL.Repositories;
-using System.Net;
-using ServiceTier.Services;
-using Common.Exceptions;
+using GtdCommon.Constant;
+using GtdCommon.Exceptions;
+using GtdCommon.ModelsDto;
+using GtdTimer.Controllers;
+using GtdServiceTier.Services;
 
-namespace LoginControllerTests
+namespace GtdTimerTests.Controllers
 {
     [TestFixture]
-    public class LoginControllerTest
+    public class LoginControllerTests
     {
         [TestFixture]
         public class SignUpControllerTests
@@ -24,6 +27,9 @@ namespace LoginControllerTests
 
             private LogInController subject;
 
+            /// <summary>
+            /// Method which is called immediately in each test run
+            /// </summary>
             [SetUp]
             public void Setup()
             {
@@ -31,20 +37,26 @@ namespace LoginControllerTests
                 subject = new LogInController(logInService.Object);
             }
 
+            /// <summary>
+            /// Ok response test
+            /// </summary>
             [Test]
             public void LoginTest_ReturnsOkRequest_WhenModelCorect()
             {
-                LoginDTO model = new LoginDTO() { Email = Constants.CorectEmail, Password = Constants.CorectPassword };
+                LoginDto model = new LoginDto() { Email = Constants.CorectEmail, Password = Constants.CorectPassword };
 
                 var actual = (OkObjectResult)subject.Login(model);
 
                 Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
             }
 
+            /// <summary>
+            /// User not found exception test
+            /// </summary>
             [Test]
             public void LoginTest_Throws_UserNotFoundException()
             {
-                LoginDTO model = new LoginDTO();
+                LoginDto model = new LoginDto();
 
                 logInService.Setup(_ => _.CreateToken(model)).Throws(new UserNotFoundException());
 
@@ -53,20 +65,26 @@ namespace LoginControllerTests
                 Assert.That(ex.Message, Is.EqualTo("User does not Exist!"));
             }
 
+            /// <summary>
+            /// Ok response with google test
+            /// </summary>
             [Test]
             public void GoogleLoginTest_ReturnsOkRequest_WhenTokenCorect()
             {
-                SocialAuthDTO model = new SocialAuthDTO() { AccessToken = Constants.CorectEmail };
+                SocialAuthDto model = new SocialAuthDto() { AccessToken = Constants.CorectEmail };
 
                 var actual = (OkObjectResult)subject.GoogleLogin(model);
 
                 Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
             }
 
+            /// <summary>
+            /// Ok response facebook test
+            /// </summary>
             [Test]
             public void FacebookLoginTest_ReturnsOkRequest_WhenTokenCorect()
             {
-                SocialAuthDTO model = new SocialAuthDTO() { AccessToken = Constants.CorectEmail };
+                SocialAuthDto model = new SocialAuthDto() { AccessToken = Constants.CorectEmail };
 
                 var actual = (OkObjectResult)subject.FacebookLogin(model);
 
@@ -75,4 +93,3 @@ namespace LoginControllerTests
         }
     }
 }
-

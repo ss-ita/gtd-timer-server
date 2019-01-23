@@ -1,24 +1,32 @@
-﻿using Common.ModelsDTO;
-using Moq;
-using NUnit.Framework;
-using ServiceTier.Services;
+﻿//-----------------------------------------------------------------------
+// <copyright file="TimerServiceTests.cs" company="SoftServe">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Timer.DAL.Extensions;
-using Timer.DAL.Timer.DAL.Entities;
-using Timer.DAL.Timer.DAL.Repositories;
-using Timer.DAL.Timer.DAL.UnitOfWork;
+using Moq;
+using NUnit.Framework;
 
-namespace ServiceTierTests
+using GtdCommon.ModelsDto;
+using GtdServiceTier.Services;
+using GtdTimerDAL.Extensions;
+using GtdTimerDAL.Entities;
+using GtdTimerDAL.Repositories;
+using GtdTimerDAL.UnitOfWork;
+
+namespace GtdServiceTierTests
 {
-    class TimerServiceTests
+    public class TimerServiceTests
     {
         private Mock<IUnitOfWork> unitOfWork;
 
         private TimerService subject;
 
+        /// <summary>
+        /// Method which is called immediately in each test run
+        /// </summary>
         [SetUp]
         public void Setup()
         {
@@ -26,12 +34,15 @@ namespace ServiceTierTests
             subject = new TimerService(unitOfWork.Object);
         }
 
+        /// <summary>
+        /// Create timer test
+        /// </summary>
         [Test]
         public void CreateTimer()
         {
-            TimerDTO timer = new TimerDTO { Name = "timer", PresetId = 2, Interval = "0:5:0", Id = 1 };
+            TimerDto timer = new TimerDto { Name = "timer", PresetId = 2, Interval = "0:5:0", Id = 1 };
             Preset preset = new Preset { Name = "preset", Id = 1, UserId = 315 };
-            var timerRepository = new Mock<IRepository<Timer.DAL.Timer.DAL.Entities.Timer>>();
+            var timerRepository = new Mock<IRepository<Timer>>();
 
             unitOfWork.Setup(_ => _.Timers).Returns(timerRepository.Object);
             unitOfWork.Setup(_ => _.Presets.GetByID(timer.PresetId)).Returns(preset);
@@ -41,12 +52,15 @@ namespace ServiceTierTests
             unitOfWork.Verify(_ => _.Save(), Times.Once);
         }
 
+        /// <summary>
+        /// Update Timer test
+        /// </summary>
         [Test]
         public void UpdateTimer()
         {
-            TimerDTO timer = new TimerDTO { Name = "timer", PresetId = 2, Interval = "0:5:0", Id = 1 };
+            TimerDto timer = new TimerDto { Name = "timer", PresetId = 2, Interval = "0:5:0", Id = 1 };
             Preset preset = new Preset { Name = "preset", Id = 1, UserId = 315 };
-            var timerRepository = new Mock<IRepository<Timer.DAL.Timer.DAL.Entities.Timer>>();
+            var timerRepository = new Mock<IRepository<Timer>>();
 
             unitOfWork.Setup(_ => _.Timers).Returns(timerRepository.Object);
             unitOfWork.Setup(_ => _.Presets.GetByID(timer.PresetId)).Returns(preset);
@@ -56,12 +70,15 @@ namespace ServiceTierTests
             unitOfWork.Verify(_ => _.Save(), Times.Once);
         }
 
+        /// <summary>
+        /// Delete Timer test
+        /// </summary>
         [Test]
         public void TimerDelete()
         {
             int timerid = 1;
-            Timer.DAL.Timer.DAL.Entities.Timer timer = new Timer.DAL.Timer.DAL.Entities.Timer { Name = "timer", PresetId = 2, Interval = TimeSpan.Parse("0:5:0"), Id = 1 };
-            var timerRepository = new Mock<IRepository<Timer.DAL.Timer.DAL.Entities.Timer>>();
+            Timer timer = new Timer { Name = "timer", PresetId = 2, Interval = TimeSpan.Parse("0:5:0"), Id = 1 };
+            var timerRepository = new Mock<IRepository<Timer>>();
 
             unitOfWork.Setup(_ => _.Timers).Returns(timerRepository.Object);
             unitOfWork.Setup(_ => _.Timers.GetByID(timerid)).Returns(timer);
@@ -71,21 +88,24 @@ namespace ServiceTierTests
             unitOfWork.Verify(_ => _.Save(), Times.Once);
         }
 
+        /// <summary>
+        /// Get All Timers By Preset Id test
+        /// </summary>
         [Test]
         public void GetAllTimersByPresetId()
         {
             int presetid = 12;
-            List<Timer.DAL.Timer.DAL.Entities.Timer> timers = new List<Timer.DAL.Timer.DAL.Entities.Timer>();
-            List<TimerDTO> timerDTOs = new List<TimerDTO>();
-            Timer.DAL.Timer.DAL.Entities.Timer timer = new Timer.DAL.Timer.DAL.Entities.Timer { Name = "timer", PresetId = 12, Interval = TimeSpan.Parse("0:5:0"), Id = 1 };
+            List<Timer> timers = new List<Timer>();
+            List<TimerDto> timerDtos = new List<TimerDto>();
+            Timer timer = new Timer { Name = "timer", PresetId = 12, Interval = TimeSpan.Parse("0:5:0"), Id = 1 };
             timers.Add(timer);
-            timerDTOs.Add(timer.ToTimerDTO());
-            var timerRepository = new Mock<IRepository<Timer.DAL.Timer.DAL.Entities.Timer>>();
+            timerDtos.Add(timer.ToTimerDto());
+            var timerRepository = new Mock<IRepository<Timer>>();
 
             unitOfWork.Setup(_ => _.Timers).Returns(timerRepository.Object);
-            unitOfWork.Setup(_ => _.Timers.GetAllEntitiesByFilter(It.IsAny<Func<Timer.DAL.Timer.DAL.Entities.Timer, bool>>())).Returns(timers);
+            unitOfWork.Setup(_ => _.Timers.GetAllEntitiesByFilter(It.IsAny<Func<Timer, bool>>())).Returns(timers);
 
-            Assert.AreEqual(subject.GetAllTimersByPresetId(presetid)[0].Interval,timerDTOs[0].Interval);
+            Assert.AreEqual(subject.GetAllTimersByPresetId(presetid)[0].Interval, timerDtos[0].Interval);
         }
     }
 }

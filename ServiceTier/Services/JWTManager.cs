@@ -1,17 +1,27 @@
-﻿using Common.Constant;
-using Common.IoC;
-using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
+﻿//-----------------------------------------------------------------------
+// <copyright file="JWTManager.cs" company="SoftServe">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Timer.DAL.Timer.DAL.Entities;
+using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 
-namespace ServiceTier.Services
+using GtdCommon.Constant;
+using GtdCommon.IoC;
+using GtdTimerDAL.Entities;
+
+namespace GtdServiceTier.Services
 {
-    public class JWTManager
+    /// <summary>
+    /// class for assigning token
+    /// </summary>
+    public class JWTManager : IJWTManager
     {
         public virtual string GenerateToken(User user, IList<string> userRoles)
         {
@@ -34,8 +44,7 @@ namespace ServiceTier.Services
                 claims: claims,
                 signingCredentials: new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256),
                 issuer: "Tokens:Issuer",
-                audience: "Tokens:Audience"
-                );
+                audience: "Tokens:Audience");
 
             var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 

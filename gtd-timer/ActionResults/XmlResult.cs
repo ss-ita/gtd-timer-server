@@ -1,19 +1,28 @@
-﻿using Common.IoC;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿//-----------------------------------------------------------------------
+// <copyright file="XmlResult.cs" company="SoftServe">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+
 using System.IO;
 using System.Text;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
-namespace gtdtimer.ActionResults
+using GtdCommon.IoC;
+
+namespace GtdTimer.ActionResults
 {
+    /// <summary>
+    /// class for Extensible Markup Language text import and export
+    /// </summary>
     public class XmlResult : FileResult
     {
-
         /// <summary>
         /// Initializes a new instance of the <see cref="XmlResult"/> class.
         /// </summary>
         /// <param name="objectToSerialize">The object to serialize to XML.</param>
-        public XmlResult(object objectToSerialize):base("text/xml")
+        public XmlResult(object objectToSerialize) : base("text/xml")
         {
             this.ObjectToSerialize = objectToSerialize;
         }

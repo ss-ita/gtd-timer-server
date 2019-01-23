@@ -1,16 +1,25 @@
-﻿using Common.IoC;
-using Common.ModelsDTO;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using ServiceStack.Text;
+﻿//-----------------------------------------------------------------------
+// <copyright file="CsvResult.cs" company="SoftServe">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+
 using System.IO;
 using System.Text;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
-namespace gtdtimer.ActionResults
+using GtdCommon.IoC;
+using GtdCommon.ModelsDto;
+using ServiceStack.Text;
+
+namespace GtdTimer.ActionResults
 {
+    /// <summary>
+    /// Class for coma separated value import and export
+    /// </summary>
     public class CsvResult : FileResult
     {
-
         /// <summary>
         /// Initializes a new instance of the <see cref="CsvResult"/> class.
         /// </summary>
@@ -35,7 +44,7 @@ namespace gtdtimer.ActionResults
             {
                 context.HttpContext.Response.Clear();               
                 context.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", IoCContainer.Configuration["Origins"]);
-                JsConfig<TaskDTO>.ExcludePropertyNames = new[] { "Id", "UserId" };
+                JsConfig<TaskDto>.ExcludePropertyNames = new[] { "Id", "UserId" };
                 using (var writer = new StreamWriter(context.HttpContext.Response.Body, Encoding.UTF8))
                 {
                     CsvSerializer.SerializeToWriter(ObjectToSerialize, writer);                   

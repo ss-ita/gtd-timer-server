@@ -1,27 +1,45 @@
-﻿using Common.ModelsDTO;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Timer.DAL.Timer.DAL.Entities;
-using Timer.DAL.Timer.DAL.UnitOfWork;
+﻿//-----------------------------------------------------------------------
+// <copyright file="PresetDtoExtension.cs" company="SoftServe">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
 
-namespace Timer.DAL.Extensions
+using System.Collections.Generic;
+
+using GtdCommon.ModelsDto;
+using GtdTimerDAL.Entities;
+
+namespace GtdTimerDAL.Extensions
 {
-    public static class PresetDTOExtension
+    /// <summary>
+    /// PresetDtoExtension class for converting to preset and vice versa
+    /// </summary>
+    public static class PresetDtoExtension
     {
-        public static Preset ToPreset(this PresetDTO presetDTO)
+        /// <summary>
+        /// Convert to preset method
+        /// </summary>
+        /// <param name="presetDto"> presetDto model </param>
+        /// <returns>returns preset</returns>
+        public static Preset ToPreset(this PresetDto presetDto)
         {
             return new Preset
             {
-                Name = presetDTO.PresetName,
-                Id = presetDTO.Id,
-                UserId = presetDTO.UserId
+                Name = presetDto.PresetName,
+                Id = presetDto.Id,
+                UserId = presetDto.UserId
             };
         }
 
-        public static PresetDTO ToPresetDTO(this Preset preset,List<TimerDTO> timers)
+        /// <summary>
+        /// Convert to presetDto method
+        /// </summary>
+        /// <param name="preset">preset model</param>
+        /// <param name="timers">list of timers</param>
+        /// <returns>returns presetDto</returns>
+        public static PresetDto ToPresetDto(this Preset preset, List<TimerDto> timers)
         {
-            return new PresetDTO
+            return new PresetDto
             {
                 PresetName = preset.Name,
                 Id = preset.Id,
