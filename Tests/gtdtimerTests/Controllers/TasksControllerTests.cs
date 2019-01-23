@@ -120,7 +120,7 @@ namespace gtdtimerTests.Controllers
             var userId = 315;
             userIdentityService.Setup(_ => _.GetUserId()).Returns(userId);
             TaskDTO model = new TaskDTO();
-            var actual = (OkResult)subject.CreateTask(model);
+            var actual = (OkObjectResult)subject.CreateTask(model);
 
             Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
             taskService.Verify(_ => _.CreateTask(model), Times.Once);

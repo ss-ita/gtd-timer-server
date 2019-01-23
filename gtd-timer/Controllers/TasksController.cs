@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using Common.Constant;
 using Common.ModelsDTO;
 using gtdtimer.Attributes;
 using ServiceTier.Services;
+using gtdtimer.ActionResults;
 
 namespace gtdtimer.Controllers
 {
@@ -32,7 +34,6 @@ namespace gtdtimer.Controllers
         [HttpGet("[action]")]
         public IActionResult GetAllTasks()
         {
-
             var allTasks = taskService.GetAllTasks();
 
             return Ok(allTasks);
@@ -72,7 +73,6 @@ namespace gtdtimer.Controllers
         [HttpGet("GetTaskById/{taskID}")]
         public IActionResult GetTaskById(int taskId)
         {
-
             TaskDTO task = taskService.GetTaskById(taskId);
 
             return Ok(task);
@@ -129,7 +129,7 @@ namespace gtdtimer.Controllers
             model.UserId = userIdentityService.GetUserId();
             taskService.CreateTask(model);
 
-            return Ok();
+            return Ok(model);
         }
 
         /// <summary>
@@ -218,6 +218,138 @@ namespace gtdtimer.Controllers
             taskService.ResetTask(model);
 
             return Ok();
+        }
+
+        /// <summary>
+        /// Converts all user's tasks to xml format. 
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("[action]")]
+        public IActionResult ExportAllTasksAsXmlByUserId()
+        {
+            var userId = userIdentityService.GetUserId();
+            var listOfTasks = taskService.GetAllTasksByUserId(userId);
+
+            return new XmlResult(listOfTasks);
+        }
+
+        /// <summary>
+        /// Converts all user's active tasks to xml format.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("[action]")]
+        public IActionResult ExportAllActiveTasksAsXmlByUserId()
+        {
+            var userId = userIdentityService.GetUserId();
+            var listOfTasks = taskService.GetAllActiveTasksByUserId(userId);
+
+            return new XmlResult(listOfTasks);
+        }
+
+        /// <summary>
+        /// Converts all user's archived tasks to xml format.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("[action]")]
+        public IActionResult ExportAllArchivedTasksAsXmlByUserId()
+        {
+            var userId = userIdentityService.GetUserId();
+            var listOfTasks = taskService.GetAllArchivedTasksByUserId(userId);
+
+            return new XmlResult(listOfTasks);
+        }
+
+        /// <summary>
+        /// Converts  user's task by id to xml format.
+        /// </summary>
+        /// <param name="taskId"></param>
+        /// <returns></returns>
+        [HttpGet("[action]/{taskId}")]
+        public IActionResult ExportTaskAsXmlById(int taskId)
+        {
+            var task = taskService.GetTaskById(taskId);
+
+            return new XmlResult(task);
+        }
+
+        /// <summary>
+        /// Converts all user's tasks to csv format.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("[action]")]
+        public IActionResult ExportAllTasksAsCsvByUserId()
+        {
+            var userId = userIdentityService.GetUserId();
+            var listOfTasks = taskService.GetAllTasksByUserId(userId);
+
+            return new CsvResult(listOfTasks);
+        }
+
+        /// <summary>
+        /// Converts all user's active tasks to csv format.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("[action]")]
+        public IActionResult ExportAllActiveTasksAsCsvByUserId()
+        {
+            var userId = userIdentityService.GetUserId();
+            var listOfTasks = taskService.GetAllActiveTasksByUserId(userId);
+
+            return new CsvResult(listOfTasks);
+        }
+
+        /// <summary>
+        /// Converts all user's archived tasks to csv format.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("[action]")]
+        public IActionResult ExportAllArchivedTasksAsCsvByUserId()
+        {
+            var userId = userIdentityService.GetUserId();
+            var listOfTasks = taskService.GetAllArchivedTasksByUserId(userId);
+
+            return new CsvResult(listOfTasks);
+        }
+
+        /// <summary>
+        /// Converts  user's task by id to csv format.
+        /// </summary>
+        /// <param name="taskId"></param>
+        /// <returns></returns>
+        [HttpGet("[action]/{taskId}")]
+        public IActionResult ExportTaskAsCsvById(int taskId)
+        {
+            var task = taskService.GetTaskById(taskId);
+
+            return new CsvResult(task);
+        }
+
+        /// <summary>
+        /// Imports file of user's tasks in .csv format.
+        /// </summary>
+        /// <param name="uploadFile"></param>
+        /// <returns></returns>
+        [HttpPost("[action]")]
+        public IActionResult ImportTasksAsCsv(IFormFile uploadFile)
+        {
+            var userId = userIdentityService.GetUserId();
+            var listOfTasks = taskService.ImportTasksFromCsv(uploadFile, userId);
+            
+            return Ok(listOfTasks);
+        }
+
+        /// <summary>
+        /// Imports file of user's tasks in .xml format.
+        /// </summary>
+        /// <param name="uploadFile"></param>
+        /// <returns></returns>
+        [HttpPost("[action]")]
+        public IActionResult ImportTasksAsXml(IFormFile uploadFile)
+        {
+            var userId = userIdentityService.GetUserId();
+            var listOfTasks = taskService.ImportTasksFromXml(uploadFile, userId);
+
+            return Ok(listOfTasks);
         }
     }
 }

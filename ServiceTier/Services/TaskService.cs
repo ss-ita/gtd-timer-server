@@ -1,8 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 using Common.Exceptions;
 using Common.ModelsDTO;
+using DefaultXmlSerializer = System.Xml.Serialization.XmlSerializer;
+using ServiceStack.Text;
 using Timer.DAL.Extensions;
 using Timer.DAL.Timer.DAL.Entities;
 using Timer.DAL.Timer.DAL.UnitOfWork;
@@ -21,6 +25,23 @@ namespace ServiceTier.Services
             var task = taskDTO.ToTask();
             unitOfWork.Tasks.Create(task);
             unitOfWork.Save();
+        }
+
+        public IEnumerable<TaskDTO> AddTaskToDatabase(IEnumerable<TaskDTO> listOfTasksDto, int userId)
+        {
+            var newTasks = new List<Tasks>();
+
+            foreach(var taskDto in listOfTasksDto)
+            {
+                taskDto.UserId = userId;
+                var task = taskDto.ToTask();
+                unitOfWork.Tasks.Create(task);
+                newTasks.Add(task);
+            }
+
+            unitOfWork.Save();
+
+            return newTasks.Select(task => task.ToTaskDTO());
         }
 
         public void DeleteTaskById(int taskId)
@@ -66,9 +87,9 @@ namespace ServiceTier.Services
             return task.ToTaskDTO();
         }
 
-        public void UpdateTask(TaskDTO taskDTO)
+        public void UpdateTask(TaskDTO model)
         {
-            var task = taskDTO.ToTask();
+            var task = model.ToTask();
 
             unitOfWork.Tasks.Update(task);
             unitOfWork.Save();
@@ -149,6 +170,43 @@ namespace ServiceTier.Services
                 .ToList();
 
             return listOfTasksDTO;
+        }
+
+        public IEnumerable<TaskDTO> ImportTasksFromCsv(IFormFile uploadFile, int userId)
+        {
+            IEnumerable<TaskDTO> listOfTasksDTO = new List<TaskDTO>();
+            if (uploadFile.Length > 0)
+            {
+                using (var stream = uploadFile.OpenReadStream())
+                {
+                    listOfTasksDTO = CsvSerializer.DeserializeFromStream<IEnumerable<TaskDTO>>(stream);
+                }
+            }
+            else
+            {
+                throw new FileNotFoundException();
+            }
+
+            return AddTaskToDatabase(listOfTasksDTO, userId);
+        }
+
+        public IEnumerable<TaskDTO> ImportTasksFromXml(IFormFile uploadFile, int userId)
+        {
+            IEnumerable<TaskDTO> listOfTasksDTO = new List<TaskDTO>();
+            DefaultXmlSerializer xmlSerializer = new DefaultXmlSerializer(listOfTasksDTO.GetType());
+            if (uploadFile.Length > 0)
+            {
+                using (var stream = uploadFile.OpenReadStream())
+                {
+                    listOfTasksDTO = (IEnumerable<TaskDTO>)xmlSerializer.Deserialize(stream);
+                }
+            }
+            else
+            {
+                throw new FileNotFoundException();
+            }
+
+            return AddTaskToDatabase(listOfTasksDTO, userId);
         }
     }
 }

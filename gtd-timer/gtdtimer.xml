@@ -4,6 +4,40 @@
         <name>gtdtimer</name>
     </assembly>
     <members>
+        <member name="M:gtdtimer.ActionResults.CsvResult.#ctor(System.Object)">
+            <summary>
+            Initializes a new instance of the <see cref="T:gtdtimer.ActionResults.CsvResult"/> class.
+            </summary>
+            <param name="objectToSerialize">The object to serialize to Csv.</param>
+        </member>
+        <member name="P:gtdtimer.ActionResults.CsvResult.ObjectToSerialize">
+            <summary>
+            Gets the object to be serialized to Csv.
+            </summary>
+        </member>
+        <member name="M:gtdtimer.ActionResults.CsvResult.ExecuteResult(Microsoft.AspNetCore.Mvc.ActionContext)">
+            <summary>
+            Serializes the object that was passed into the constructor to Csv and writes the corresponding Csv to the result stream.
+            </summary>
+            <param name="context">The controller context for the current request.</param>       
+        </member>
+        <member name="M:gtdtimer.ActionResults.XmlResult.#ctor(System.Object)">
+            <summary>
+            Initializes a new instance of the <see cref="T:gtdtimer.ActionResults.XmlResult"/> class.
+            </summary>
+            <param name="objectToSerialize">The object to serialize to XML.</param>
+        </member>
+        <member name="P:gtdtimer.ActionResults.XmlResult.ObjectToSerialize">
+            <summary>
+            Gets the object to be serialized to XML.
+            </summary>
+        </member>
+        <member name="M:gtdtimer.ActionResults.XmlResult.ExecuteResult(Microsoft.AspNetCore.Mvc.ActionContext)">
+            <summary>
+            Serializes the object that was passed into the constructor to XML and writes the corresponding XML to the result stream.
+            </summary>
+            <param name="context">The controller context for the current request.</param>       
+        </member>
         <member name="M:gtdtimer.Controllers.TasksController.GetAllTasks">
             <summary>
             Returns all users' tasks.
@@ -94,6 +128,70 @@
             Resets task's properties.
             </summary>
             <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:gtdtimer.Controllers.TasksController.ExportAllTasksAsXmlByUserId">
+            <summary>
+            Converts all user's tasks to xml format. 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:gtdtimer.Controllers.TasksController.ExportAllActiveTasksAsXmlByUserId">
+            <summary>
+            Converts all user's active tasks to xml format.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:gtdtimer.Controllers.TasksController.ExportAllArchivedTasksAsXmlByUserId">
+            <summary>
+            Converts all user's archived tasks to xml format.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:gtdtimer.Controllers.TasksController.ExportTaskAsXmlById(System.Int32)">
+            <summary>
+            Converts  user's task by id to xml format.
+            </summary>
+            <param name="taskId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:gtdtimer.Controllers.TasksController.ExportAllTasksAsCsvByUserId">
+            <summary>
+            Converts all user's tasks to csv format.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:gtdtimer.Controllers.TasksController.ExportAllActiveTasksAsCsvByUserId">
+            <summary>
+            Converts all user's active tasks to csv format.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:gtdtimer.Controllers.TasksController.ExportAllArchivedTasksAsCsvByUserId">
+            <summary>
+            Converts all user's archived tasks to csv format.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:gtdtimer.Controllers.TasksController.ExportTaskAsCsvById(System.Int32)">
+            <summary>
+            Converts  user's task by id to csv format.
+            </summary>
+            <param name="taskId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:gtdtimer.Controllers.TasksController.ImportTasksAsCsv(Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            Imports file of user's tasks in .csv format.
+            </summary>
+            <param name="uploadFile"></param>
+            <returns></returns>
+        </member>
+        <member name="M:gtdtimer.Controllers.TasksController.ImportTasksAsXml(Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            Imports file of user's tasks in .xml format.
+            </summary>
+            <param name="uploadFile"></param>
             <returns></returns>
         </member>
         <member name="M:gtdtimer.Controllers.UserController.Get">
