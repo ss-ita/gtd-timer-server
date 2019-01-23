@@ -12,7 +12,7 @@ namespace GtdTimerDAL.Repositories
     /// <summary>
     /// interface for User repository class
     /// </summary>
-    public interface IUserStoreRepository : IUserEmailStore<User, int>, IQueryableUserStore<User, int>, IUserPasswordStore<User, int>, IUserRoleStore<User, int>
+    public interface IUserStoreRepository : IUserEmailStore<User, int>, IUserPasswordStore<User, int>, IUserRoleStore<User, int>
     {
     }
 }
