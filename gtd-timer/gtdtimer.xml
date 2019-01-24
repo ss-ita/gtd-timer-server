@@ -4,6 +4,11 @@
         <name>GtdTimer</name>
     </assembly>
     <members>
+        <member name="T:GtdTimer.ActionResults.CsvResult">
+            <summary>
+            Class for coma separated value import and export
+            </summary>
+        </member>
         <member name="M:GtdTimer.ActionResults.CsvResult.#ctor(System.Object)">
             <summary>
             Initializes a new instance of the <see cref="T:GtdTimer.ActionResults.CsvResult"/> class.
@@ -20,6 +25,11 @@
             Serializes the object that was passed into the constructor to Csv and writes the corresponding Csv to the result stream.
             </summary>
             <param name="context">The controller context for the current request.</param>       
+        </member>
+        <member name="T:GtdTimer.ActionResults.XmlResult">
+            <summary>
+            class for Extensible Markup Language text import and export
+            </summary>
         </member>
         <member name="M:GtdTimer.ActionResults.XmlResult.#ctor(System.Object)">
             <summary>
@@ -293,65 +303,65 @@
             <summary>
             Converts all user's tasks to xml format. 
             </summary>
-            <returns></returns>
+            <returns>returns a text file</returns>
         </member>
         <member name="M:GtdTimer.Controllers.TasksController.ExportAllActiveTasksAsXmlByUserId">
             <summary>
             Converts all user's active tasks to xml format.
             </summary>
-            <returns></returns>
+            <returns>returns a text file</returns>
         </member>
         <member name="M:GtdTimer.Controllers.TasksController.ExportAllArchivedTasksAsXmlByUserId">
             <summary>
             Converts all user's archived tasks to xml format.
             </summary>
-            <returns></returns>
+            <returns>returns text file</returns>
         </member>
         <member name="M:GtdTimer.Controllers.TasksController.ExportTaskAsXmlById(System.Int32)">
             <summary>
             Converts  user's task by id to xml format.
             </summary>
-            <param name="taskId"></param>
-            <returns></returns>
+            <param name="taskId">id of chosen task</param>
+            <returns>returns text file</returns>
         </member>
         <member name="M:GtdTimer.Controllers.TasksController.ExportAllTasksAsCsvByUserId">
             <summary>
             Converts all user's tasks to csv format.
             </summary>
-            <returns></returns>
+            <returns>return text file</returns>
         </member>
         <member name="M:GtdTimer.Controllers.TasksController.ExportAllActiveTasksAsCsvByUserId">
             <summary>
             Converts all user's active tasks to csv format.
             </summary>
-            <returns></returns>
+            <returns>returns text file</returns>
         </member>
         <member name="M:GtdTimer.Controllers.TasksController.ExportAllArchivedTasksAsCsvByUserId">
             <summary>
             Converts all user's archived tasks to csv format.
             </summary>
-            <returns></returns>
+            <returns>returns text file</returns>
         </member>
         <member name="M:GtdTimer.Controllers.TasksController.ExportTaskAsCsvById(System.Int32)">
             <summary>
             Converts  user's task by id to csv format.
             </summary>
-            <param name="taskId"></param>
-            <returns></returns>
+            <param name="taskId">id of chosen task</param>
+            <returns>returns text file</returns>
         </member>
         <member name="M:GtdTimer.Controllers.TasksController.ImportTasksAsCsv(Microsoft.AspNetCore.Http.IFormFile)">
             <summary>
             Imports file of user's tasks in .csv format.
             </summary>
-            <param name="uploadFile"></param>
-            <returns></returns>
+            <param name="uploadFile">file which user choses to import</param>
+            <returns>result of importing file to database</returns>
         </member>
         <member name="M:GtdTimer.Controllers.TasksController.ImportTasksAsXml(Microsoft.AspNetCore.Http.IFormFile)">
             <summary>
             Imports file of user's tasks in .xml format.
             </summary>
-            <param name="uploadFile"></param>
-            <returns></returns>
+            <param name="uploadFile">file which user choses to import</param>
+            <returns>result of importing file to database</returns>
         </member>
         <member name="T:GtdTimer.Controllers.UserController">
             <summary>
@@ -412,9 +422,9 @@
             <summary>
             Remove role
             </summary>
-            <param name="email"></param>
-            <param name="role"></param>
-            <returns></returns>
+            <param name="email">email of chosen user</param>
+            <param name="role">role of chosen user</param>
+            <returns>result of deleting role from user</returns>
         </member>
         <member name="M:GtdTimer.Controllers.UserController.DeleteUserByEmail(System.String)">
             <summary>
