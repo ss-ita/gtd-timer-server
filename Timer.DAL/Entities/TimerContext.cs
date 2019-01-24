@@ -22,6 +22,8 @@ namespace GtdTimerDAL.Entities
         /// <param name="options"> Database context options </param>
         public TimerContext(DbContextOptions<TimerContext> options) : base(options)
         {
+            Database.Migrate();
+            Database.EnsureCreated();
         }
 
         /// <summary>
@@ -62,9 +64,9 @@ namespace GtdTimerDAL.Entities
         public virtual DbSet<Tasks> Tasks { get; set; }
 
         /// <summary>
-        /// Gets or sets set of timers
+        /// Gets or sets set of preset tasks
         /// </summary>
-        public virtual DbSet<Timer> Timers { get; set; }
+        public virtual DbSet<PresetTasks> PresetTasks { get; set; }
 
         /// <summary>
         /// method used when creating database models

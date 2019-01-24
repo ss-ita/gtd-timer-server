@@ -38,19 +38,19 @@ namespace GtdServiceTier.Services
         /// </summary>
         /// <param name="presetid"> id of preset</param>
         /// <returns> returns a preset with chosen id </returns>
-        PresetDto GetPresetById(int presetid);
+        //PresetDto GetPresetById(int presetid);
 
         /// <summary>
         /// Method for getting all standard presets
         /// </summary>
         /// <returns> list of all standard presets</returns>
-        IList<PresetDto> GetAllStandardPresets();
+        //IList<PresetDto> GetAllStandardPresets();
 
         /// <summary>
         /// Method for getting all custom presets of chosen user
         /// </summary>
         /// <param name="userid"> user id </param>
         /// <returns> list of all custom presets of chosen user </returns>
-        IList<PresetDto> GetAllCustomPresetsByUserId(int userid);
+        //IList<PresetDto> GetAllCustomPresetsByUserId(int userid);
     }
 }
