@@ -44,7 +44,7 @@ namespace GtdServiceTier.Services
             foreach (var timer in presetDto.Timers)
             {
                 timer.PresetId = preset.Id;
-                this.timerService.CreateTimer(timer);
+               // this.timerService.CreateTimer(timer);
             }
         }
 
@@ -53,7 +53,7 @@ namespace GtdServiceTier.Services
             Preset preset = presetDto.ToPreset();
             foreach (var timer in presetDto.Timers)
             {
-                timerService.UpdateTimer(timer);
+                //timerService.UpdateTimer(timer);
             }
             UnitOfWork.Presets.Update(preset);
             UnitOfWork.Save();
@@ -70,45 +70,45 @@ namespace GtdServiceTier.Services
             UnitOfWork.Save();
         }
 
-        public PresetDto GetPresetById(int presetid)
-        {
-            if (UnitOfWork.Presets.GetByID(presetid) == null)
-            {
-                throw new PresetNotFoundException();
-            }
+        //public PresetDto GetPresetById(int presetid)
+        //{
+        //    if (UnitOfWork.Presets.GetByID(presetid) == null)
+        //    {
+        //        throw new PresetNotFoundException();
+        //    }
 
-            var preset = UnitOfWork.Presets.GetByID(presetid);
-            return preset.ToPresetDto(this.timerService.GetAllTimersByPresetId(presetid));
-        }
+        //    var preset = UnitOfWork.Presets.GetByID(presetid);
+        //    return preset.ToPresetDto(this.timerService.GetAllTimersByPresetId(presetid));
+        //}
 
-        public IList<PresetDto> GetAllCustomPresetsByUserId(int userid)
-        {
-            var listOfPresetsDto = new List<PresetDto>();
-            var presets = UnitOfWork.Presets.GetAllEntitiesByFilter(preset => preset.UserId == userid);
-            var timers = UnitOfWork.Timers.GetAllEntities();
+        //public IList<PresetDto> GetAllCustomPresetsByUserId(int userid)
+        //{
+        //    var listOfPresetsDto = new List<PresetDto>();
+        //    var presets = UnitOfWork.Presets.GetAllEntitiesByFilter(preset => preset.UserId == userid);
+        //    var timers = UnitOfWork.Timers.GetAllEntities();
 
-            foreach (var preset in presets)
-            {
-                    List<TimerDto> timerDtos = timerService.GetAllTimersByPresetId(preset.Id);
-                    listOfPresetsDto.Add(preset.ToPresetDto(timerDtos));
-            }
+        //    foreach (var preset in presets)
+        //    {
+        //            List<TimerDto> timerDtos = timerService.GetAllTimersByPresetId(preset.Id);
+        //            listOfPresetsDto.Add(preset.ToPresetDto(timerDtos));
+        //    }
 
-            return listOfPresetsDto;
-        }
+        //    return listOfPresetsDto;
+        //}
 
-        public IList<PresetDto> GetAllStandardPresets()
-        {
-            var listOfPresetsDto = new List<PresetDto>();
-            var presets = UnitOfWork.Presets.GetAllEntitiesByFilter(preset => preset.UserId == null);
-            var timers = UnitOfWork.Timers.GetAllEntities();
+        //public IList<PresetDto> GetAllStandardPresets()
+        //{
+        //    var listOfPresetsDto = new List<PresetDto>();
+        //    var presets = UnitOfWork.Presets.GetAllEntitiesByFilter(preset => preset.UserId == null);
+        //    var timers = UnitOfWork.Timers.GetAllEntities();
 
-            foreach (var preset in presets)
-            {
-                var timerDtos = timerService.GetAllTimersByPresetId(preset.Id);
-                    listOfPresetsDto.Add(preset.ToPresetDto(timerDtos));
-            }
+        //    foreach (var preset in presets)
+        //    {
+        //        var timerDtos = timerService.GetAllTimersByPresetId(preset.Id);
+        //            listOfPresetsDto.Add(preset.ToPresetDto(timerDtos));
+        //    }
 
-            return listOfPresetsDto;
-        }
+        //    return listOfPresetsDto;
+        //}
     }
 }
