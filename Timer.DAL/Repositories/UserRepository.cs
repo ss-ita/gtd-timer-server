@@ -28,16 +28,11 @@ namespace GtdTimerDAL.Repositories
             this.Timercontext = context;
         }
 
-        /// <summary>
-        /// Gets a list of users
-        /// </summary>
-        public IQueryable<User> Users { get; }
-
         public async Task CreateAsync(User user)
         {
             if (user == null)
             {
-                throw new ArgumentNullException("user");
+                throw new ArgumentNullException(nameof(user));
             }
 
             Timercontext.Users.Add(user);
@@ -48,7 +43,7 @@ namespace GtdTimerDAL.Repositories
         {
             if (user == null)
             {
-                throw new ArgumentNullException("user");
+                throw new ArgumentNullException(nameof(user));
             }
 
             Timercontext.Users.Attach(user);
@@ -93,7 +88,7 @@ namespace GtdTimerDAL.Repositories
         {
             if (user == null)
             {
-                throw new ArgumentNullException("user");
+                throw new ArgumentNullException(nameof(user));
             }
 
             User userToUpdate = await Timercontext.Users.FindAsync(user);
@@ -104,7 +99,7 @@ namespace GtdTimerDAL.Repositories
         {
             if (user == null)
             {
-                throw new ArgumentNullException("user");
+                throw new ArgumentNullException(nameof(user));
             }
 
             User userToReturnEmail = await Timercontext.Users.FindAsync(user.Id);
@@ -115,7 +110,7 @@ namespace GtdTimerDAL.Repositories
         {
             if (user == null)
             {
-                throw new ArgumentNullException("user");
+                throw new ArgumentNullException(nameof(user));
             }
 
             User userToReturnEmailConfirmed = await Timercontext.Users.FindAsync(user.Id);
@@ -126,7 +121,7 @@ namespace GtdTimerDAL.Repositories
         {
             if (user == null)
             {
-                throw new ArgumentNullException("user");
+                throw new ArgumentNullException(nameof(user));
             }
 
             User userToConfrim = await Timercontext.Users.FindAsync(user.Id);
@@ -152,55 +147,6 @@ namespace GtdTimerDAL.Repositories
             }
 
             GC.SuppressFinalize(this);
-        }
-
-        public IEnumerable<User> GetAllEntities()
-        {
-            return Timercontext.Users;
-        }
-
-        public IEnumerable<User> GetAllEntitiesByFilter(Func<User, bool> filter)
-        {
-            return Timercontext.Users.Where(filter);
-        }
-
-        public User GetByID(object id)
-        {
-            return Timercontext.Users.Find(id);
-        }
-
-        public void Create(User entity)
-        {
-            Timercontext.Users.Add(entity);
-        }
-
-        public void Delete(object id)
-        {
-            User entity = Timercontext.Users.Find(id);
-            if (entity != null)
-            {
-                Timercontext.Users.Remove(entity);
-            }
-        }
-
-        public void Delete(User entityToDelete)
-        {
-            if (Timercontext.Entry(entityToDelete).State == EntityState.Detached)
-            {
-                Timercontext.Users.Attach(entityToDelete);
-            }
-
-            Timercontext.Users.Remove(entityToDelete);
-        }
-
-        public void Update(User entityToUpdate)
-        {
-            Timercontext.Entry(entityToUpdate).State = EntityState.Modified;
-        }
-
-        public void Save()
-        {
-            Timercontext.SaveChanges();
         }
 
         public async Task<IList<string>> GetRolesAsync(User user)
@@ -263,7 +209,7 @@ namespace GtdTimerDAL.Repositories
         {
             if (user == null)
             {
-                throw new ArgumentNullException("user");
+                throw new ArgumentNullException(nameof(user));
             }
 
             user.PasswordHash = passwordHash;
@@ -275,7 +221,7 @@ namespace GtdTimerDAL.Repositories
         {
             if (user == null)
             {
-                throw new ArgumentNullException("user");
+                throw new ArgumentNullException(nameof(user));
             }
 
             return Task.FromResult<string>(user.PasswordHash);

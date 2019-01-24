@@ -69,6 +69,11 @@ namespace GtdTimerDAL.Entities
         public virtual DbSet<PresetTasks> PresetTasks { get; set; }
 
         /// <summary>
+        /// Gets or sets set of records
+        /// </summary>
+        public virtual DbSet<Record> Records { get; set; }
+
+        /// <summary>
         /// method used when creating database models
         /// </summary>
         /// <param name="builder"> model builder instance </param>
