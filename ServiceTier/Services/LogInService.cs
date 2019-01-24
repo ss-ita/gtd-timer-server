@@ -115,7 +115,7 @@ namespace GtdServiceTier.Services
 
             var userInfo = JsonConvert.DeserializeObject<T>(userInfoResponse);
 
-            User user = this.userManager.UserManager.FindByEmailAsync(userInfo.Email).Result;
+            User user = userManager.UserManager.FindByEmailAsync(userInfo.Email).Result;
 
             if (user == null)
             {
