@@ -48,7 +48,7 @@ namespace GtdTimerDAL.UnitOfWork
         /// <summary>
         /// Timers table
         /// </summary>
-        private Lazy<IRepository<Timer>> timers;
+        private Lazy<IRepository<PresetTasks>> presetTasks;
 
         /// <summary>
         /// Value indicating whether it is disposed 
@@ -65,7 +65,13 @@ namespace GtdTimerDAL.UnitOfWork
         /// <param name="timer">timer repository</param>
         /// <param name="tasks">tasks repository</param>
         /// <param name="userRole">user role repository</param>
-        public UnitOfWork(TimerContext context, IApplicationUserManager<User, int> applicationUserManager, IRepository<Role> role, IRepository<Preset> preset, IRepository<Timer> timer, IRepository<Tasks> tasks, IRepository<UserRole> userRole)
+        public UnitOfWork(TimerContext context,
+            IApplicationUserManager<User, int> applicationUserManager,
+            IRepository<Role> role,
+            IRepository<Preset> preset,
+            IRepository<PresetTasks> presetTasks,
+            IRepository<Tasks> tasks,
+            IRepository<UserRole> userRole)
         {
             this.context = context;
             disposed = false;
@@ -73,7 +79,7 @@ namespace GtdTimerDAL.UnitOfWork
             Roles = role;
             Tasks = tasks;
             Presets = preset;
-            Timers = timer;
+            PresetTasks = presetTasks;
             UserRoles = userRole;
         }
 
@@ -128,12 +134,12 @@ namespace GtdTimerDAL.UnitOfWork
         /// <summary>
         /// Gets or sets timers table
         /// </summary>
-        public IRepository<Timer> Timers
+        public IRepository<PresetTasks> PresetTasks
         {
-            get => timers.Value;
+            get => presetTasks.Value;
             set
             {
-                timers = new Lazy<IRepository<Timer>>(() => value);
+                presetTasks = new Lazy<IRepository<PresetTasks>>(() => value);
             }
         }
 

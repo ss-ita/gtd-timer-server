@@ -28,37 +28,37 @@ namespace GtdServiceTier.Services
         {
         }
 
-        public void CreateTimer(TimerDto timerDto)
-        {
-            if (UnitOfWork.Presets.GetByID(timerDto.PresetId) == null)
-            {
-                throw new PresetNotFoundException();
-            }
+        //public void CreateTimer(TimerDto timerDto)
+        //{
+        //    if (UnitOfWork.Presets.GetByID(timerDto.PresetId) == null)
+        //    {
+        //        throw new PresetNotFoundException();
+        //    }
 
-            var timer = timerDto.ToTimer();
-            UnitOfWork.Timers.Create(timer);
-            UnitOfWork.Save();
-            timerDto.Id = timer.Id;
-        }
+        //    var timer = timerDto.ToTimer();
+        //    UnitOfWork.Timers.Create(timer);
+        //    UnitOfWork.Save();
+        //    timerDto.Id = timer.Id;
+        //}
 
-        public void UpdateTimer(TimerDto timerDto)
-        {
-            Timer timer = timerDto.ToTimer();
-            UnitOfWork.Timers.Update(timer);
-            UnitOfWork.Save();
-        }
+        //public void UpdateTimer(TimerDto timerDto)
+        //{
+        //    Timer timer = timerDto.ToTimer();
+        //    UnitOfWork.Timers.Update(timer);
+        //    UnitOfWork.Save();
+        //}
 
-        public void DeleteTimer(int timerid)
-        {
-            UnitOfWork.Timers.Delete(timerid);
-            UnitOfWork.Save();
-        }
+        //public void DeleteTimer(int timerid)
+        //{
+        //    UnitOfWork.Timers.Delete(timerid);
+        //    UnitOfWork.Save();
+        //}
 
-        public List<TimerDto> GetAllTimersByPresetId(int presetid)
-        {
-            var timerDtos = UnitOfWork.Timers.GetAllEntitiesByFilter(timer => timer.PresetId == presetid).Select(timer => timer.ToTimerDto()).ToList();        
+        //public List<TimerDto> GetAllTimersByPresetId(int presetid)
+        //{
+        //    var timerDtos = UnitOfWork.Timers.GetAllEntitiesByFilter(timer => timer.PresetId == presetid).Select(timer => timer.ToTimerDto()).ToList();        
 
-            return timerDtos;
-        }
+        //    return timerDtos;
+        //}
     }
 }

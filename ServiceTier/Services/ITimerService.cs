@@ -19,25 +19,25 @@ namespace GtdServiceTier.Services
         /// Method for creating a timer
         /// </summary>
         /// <param name="timerDto">timer model</param>
-        void CreateTimer(TimerDto timerDto);
+        //void CreateTimer(TimerDto timerDto);
 
         /// <summary>
         /// Method for updating a timer
         /// </summary>
         /// <param name="timerDto">timer model</param>
-        void UpdateTimer(TimerDto timerDto);
+        //void UpdateTimer(TimerDto timerDto);
 
         /// <summary>
         /// Method for deleting a timer
         /// </summary>
         /// <param name="timerid">id of chosen timer</param>
-        void DeleteTimer(int timerid);
+        //void DeleteTimer(int timerid);
 
         /// <summary>
         /// Method for getting all timers by preset id
         /// </summary>
         /// <param name="presetid">id of chosen preset</param>
         /// <returns>list of timers of chosen preset</returns>
-        List<TimerDto> GetAllTimersByPresetId(int presetid);
+        //List<TimerDto> GetAllTimersByPresetId(int presetid);
     }
 }

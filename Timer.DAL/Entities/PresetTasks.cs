@@ -1,41 +1,39 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="Timer.cs" company="SoftServe">
+// <copyright file="PresetTasks.cs" company="SoftServe">
 //     Company copyright tag.
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-
 namespace GtdTimerDAL.Entities
 {
     /// <summary>
-    /// Fields of timer table
+    /// Fields of preset tasks table
     /// </summary>
-    public class Timer
+    public class PresetTasks
     {
         /// <summary>
-        /// Gets or sets Id column
+        /// Gets or sets id column
         /// </summary>
         public int Id { get; set; }
 
         /// <summary>
-        /// Gets or sets Name column
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets Interval column
-        /// </summary>
-        public TimeSpan Interval { get; set; }
-
-        /// <summary>
-        /// Gets or sets PresetId column
+        /// Gets or sets preset id column
         /// </summary>
         public int PresetId { get; set; }
 
         /// <summary>
-        /// Gets or sets Foreign key to preset table
+        /// Gets or sets preset foreign key
         /// </summary>
         public Preset Preset { get; set; }
+
+        /// <summary>
+        /// Gets or sets task id column
+        /// </summary>
+        public int TaskId { get; set; }
+
+        /// <summary>
+        /// Gets or sets roles foreign key
+        /// </summary>
+        public Tasks Task { get; set; }
     }
 }
