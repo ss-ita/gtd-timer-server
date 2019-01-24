@@ -120,7 +120,8 @@ namespace GtdServiceTier.Services
             if (user == null)
             {
                 user = userInfo.ToUser();
-                var result = this.userManager.UserManager.CreateAsync(user, Convert.ToBase64String(Guid.NewGuid().ToByteArray()).Substring(0, 8)).Result;
+                var result = userManager.UserManager.CreateAsync(user, Convert.ToBase64String(Guid.NewGuid().ToByteArray()).Substring(0, 8)).Result;
+                userManager.UserManager.AddToRoleAsync(user.Id, Constants.UserRole).GetAwaiter().GetResult();
 
                 if (!result.Succeeded)
                 {

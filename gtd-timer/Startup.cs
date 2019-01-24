@@ -79,7 +79,7 @@ namespace GtdTimer
             services.AddScoped<ITaskService, TaskService>();
             services.AddScoped<IUserIdentityService, UserIdentityService>();
 
-            services.AddScoped<IRepository<Timer>, Repository<Timer>>();
+            services.AddScoped<IRepository<PresetTasks>, Repository<PresetTasks>>();
             services.AddScoped<IRepository<Preset>, Repository<Preset>>();
             services.AddScoped<IRepository<Role>, Repository<Role>>();
             services.AddScoped<IRepository<Tasks>, Repository<Tasks>>();

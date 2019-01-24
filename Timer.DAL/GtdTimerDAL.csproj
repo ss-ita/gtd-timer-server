@@ -9,17 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20181228103809_preset-update-migration.cs" />
-    <Compile Remove="Migrations\20181228134312_timercontextchange.Designer.cs" />
-    <Compile Remove="Migrations\TimerContextModelSnapshot.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Migrations\20181228134312_timercontextchange.Designer.cs" />
-    <None Include="Migrations\TimerContextModelSnapshot.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="log4net" Version="2.0.8" />
     <PackageReference Include="MicroKnights.Log4NetAdoNetAppender" Version="1.0.2" />
     <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.2" />

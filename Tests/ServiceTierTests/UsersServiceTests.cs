@@ -58,7 +58,7 @@ namespace GtdServiceTierTests
         /// Create async user test
         /// </summary>
         [Test]
-        public async System.Threading.Tasks.Task CreateAsync()
+        public void Create()
         {
             UserDto model = new UserDto { Email = string.Empty };
             var userManager = new Mock<IApplicationUserManager<User, int>>();

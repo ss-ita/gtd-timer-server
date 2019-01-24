@@ -9,6 +9,15 @@ using System;
 namespace GtdTimerDAL.Entities
 {
     /// <summary>
+    /// Enum, which contains types of supported watches.
+    /// </summary>
+    public enum WatchType
+    {
+        Stopwatch,
+        Timer
+    }
+
+    /// <summary>
     /// Fields of task table
     /// </summary>
     public class Tasks
@@ -62,5 +71,10 @@ namespace GtdTimerDAL.Entities
         /// Gets or sets Foreign key to user table
         /// </summary>
         public User User { get; set; }
+
+        /// <summary>
+        /// Gets or sets watch type column
+        /// </summary>
+        public WatchType WatchType { get; set; }
     }
 }
