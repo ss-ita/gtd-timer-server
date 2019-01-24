@@ -1,146 +1,528 @@
 <?xml version="1.0"?>
 <doc>
     <assembly>
-        <name>gtdtimer</name>
+        <name>GtdTimer</name>
     </assembly>
     <members>
-        <member name="M:gtdtimer.Controllers.TasksController.GetAllTasks">
+        <member name="M:GtdTimer.ActionResults.CsvResult.#ctor(System.Object)">
+            <summary>
+            Initializes a new instance of the <see cref="T:GtdTimer.ActionResults.CsvResult"/> class.
+            </summary>
+            <param name="objectToSerialize">The object to serialize to Csv.</param>
+        </member>
+        <member name="P:GtdTimer.ActionResults.CsvResult.ObjectToSerialize">
+            <summary>
+            Gets the object to be serialized to Csv.
+            </summary>
+        </member>
+        <member name="M:GtdTimer.ActionResults.CsvResult.ExecuteResult(Microsoft.AspNetCore.Mvc.ActionContext)">
+            <summary>
+            Serializes the object that was passed into the constructor to Csv and writes the corresponding Csv to the result stream.
+            </summary>
+            <param name="context">The controller context for the current request.</param>       
+        </member>
+        <member name="M:GtdTimer.ActionResults.XmlResult.#ctor(System.Object)">
+            <summary>
+            Initializes a new instance of the <see cref="T:GtdTimer.ActionResults.XmlResult"/> class.
+            </summary>
+            <param name="objectToSerialize">The object to serialize to XML.</param>
+        </member>
+        <member name="P:GtdTimer.ActionResults.XmlResult.ObjectToSerialize">
+            <summary>
+            Gets the object to be serialized to XML.
+            </summary>
+        </member>
+        <member name="M:GtdTimer.ActionResults.XmlResult.ExecuteResult(Microsoft.AspNetCore.Mvc.ActionContext)">
+            <summary>
+            Serializes the object that was passed into the constructor to XML and writes the corresponding XML to the result stream.
+            </summary>
+            <param name="context">The controller context for the current request.</param>       
+        </member>
+        <member name="T:GtdTimer.Attributes.ValidateModelAttribute">
+            <summary>
+            class for validation model attributes
+            </summary>
+        </member>
+        <member name="M:GtdTimer.Attributes.ValidateModelAttribute.OnActionExecuting(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext)">
+            <summary>
+            overriding on action executing method from action filter attribute class
+            </summary>
+            <param name="context">instance of context</param>
+        </member>
+        <member name="T:GtdTimer.Controllers.LogInController">
+            <summary>
+            class for log in controller
+            </summary>
+        </member>
+        <member name="F:GtdTimer.Controllers.LogInController.logInService">
+            <summary>
+            instance of log in service
+            </summary>
+        </member>
+        <member name="M:GtdTimer.Controllers.LogInController.#ctor(GtdServiceTier.Services.ILogInService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:GtdTimer.Controllers.LogInController" /> class.
+            </summary>
+            <param name="logInService">instance of log in service</param>
+        </member>
+        <member name="M:GtdTimer.Controllers.LogInController.Login(GtdCommon.ModelsDto.LoginDto)">
+            <summary>
+            Method for logging in
+            </summary>
+            <param name="model">log in model</param>
+            <returns>result of logging in</returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.LogInController.GoogleLogin(GtdCommon.ModelsDto.SocialAuthDto)">
+            <summary>
+            Method for logging in with google
+            </summary>
+            <param name="accessToken">model of google token</param>
+            <returns>result of logging in</returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.LogInController.FacebookLogin(GtdCommon.ModelsDto.SocialAuthDto)">
+            <summary>
+            Method for logging in with facebook
+            </summary>
+            <param name="accessToken">model of facebook token</param>
+            <returns>result of logging in</returns>
+        </member>
+        <member name="T:GtdTimer.Controllers.PresetController">
+            <summary>
+            class for preset controller
+            </summary>
+        </member>
+        <member name="F:GtdTimer.Controllers.PresetController.userIdentityService">
+            <summary>
+            instance of user identity service
+            </summary>
+        </member>
+        <member name="F:GtdTimer.Controllers.PresetController.presetService">
+            <summary>
+            instance of preset service
+            </summary>
+        </member>
+        <member name="F:GtdTimer.Controllers.PresetController.timerService">
+            <summary>
+            instance of timer service
+            </summary>
+        </member>
+        <member name="M:GtdTimer.Controllers.PresetController.#ctor(GtdServiceTier.Services.IUserIdentityService,GtdServiceTier.Services.IPresetService,GtdServiceTier.Services.ITimerService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:GtdTimer.Controllers.PresetController" /> class.
+            </summary>
+            <param name="userIdentityService">instance of user identity service</param>
+            <param name="presetService">instance of preset service</param>
+            <param name="timerService">instance of timer service</param>
+        </member>
+        <member name="M:GtdTimer.Controllers.PresetController.GetPreset(System.Int32)">
+            <summary>
+            Method for obtaining a preset by id
+            </summary>
+            <param name="presetid"> id of preset</param>
+            <returns> result of getting preset with chosen id </returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.PresetController.GetAllCustomPresets">
+            <summary>
+            Method for getting all custom presets of chosen user
+            </summary>
+            <returns> result of getting a list of all custom presets of chosen user </returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.PresetController.GetAllStandardPresets">
+            <summary>
+            Method for getting all standard presets
+            </summary>
+            <returns> result of getting a list of all standard presets</returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.PresetController.CreatePreset(GtdCommon.ModelsDto.PresetDto)">
+            <summary>
+            Method for creating a preset
+            </summary>
+            <param name="presetDto"> preset model</param>
+            <returns> result of creating a preset</returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.PresetController.CreateTimer(GtdCommon.ModelsDto.TimerDto)">
+            <summary>
+            Method for creating a timer
+            </summary>
+            <param name="timerDto">timer model</param>
+            <returns>result of creating a timer and timer itself</returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.PresetController.UpdatePreset(GtdCommon.ModelsDto.PresetDto)">
+            <summary>
+            Method for updating a preset
+            </summary>
+            <param name="presetDto"> preset model</param>
+            <returns> result of updating a preset</returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.PresetController.UpdateTimer(GtdCommon.ModelsDto.TimerDto)">
+            <summary>
+            Method for updating a timer
+            </summary>
+            <param name="timerDto">timer model</param>
+            <returns> result of updating a timer</returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.PresetController.DeletePreset(System.Int32)">
+            <summary>
+            Method for deleting a preset
+            </summary>
+            <param name="presetid"> id of preset</param>
+            <returns> result of deleting a preset</returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.PresetController.DeleteTimer(System.Int32)">
+            <summary>
+            Method for deleting a timer
+            </summary>
+            <param name="timerid">id of chosen timer</param>
+            <returns> result of deleting a timer</returns>
+        </member>
+        <member name="T:GtdTimer.Controllers.TasksController">
+            <summary>
+            class for tasks controller
+            </summary>
+        </member>
+        <member name="F:GtdTimer.Controllers.TasksController.taskService">
+            <summary>
+            instance of task service
+            </summary>
+        </member>
+        <member name="F:GtdTimer.Controllers.TasksController.userIdentityService">
+            <summary>
+            instance of user identity service
+            </summary>
+        </member>
+        <member name="M:GtdTimer.Controllers.TasksController.#ctor(GtdServiceTier.Services.ITaskService,GtdServiceTier.Services.IUserIdentityService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:GtdTimer.Controllers.TasksController" /> class.
+            </summary>
+            <param name="taskService">instance of task service</param>
+            <param name="userIdentityService">instance of user identity service</param>
+        </member>
+        <member name="M:GtdTimer.Controllers.TasksController.GetAllTasks">
             <summary>
             Returns all users' tasks.
             </summary>
-            <returns></returns>
+            <returns>result of getting all users tasks.</returns>
         </member>
-        <member name="M:gtdtimer.Controllers.TasksController.GetAllActiveTasks">
+        <member name="M:GtdTimer.Controllers.TasksController.GetAllActiveTasks">
             <summary>
             Returns all users' active tasks.
             </summary>
-            <returns></returns>
+            <returns>result of getting all users' active tasks.</returns>
         </member>
-        <member name="M:gtdtimer.Controllers.TasksController.GetAllArchivedTasks">
+        <member name="M:GtdTimer.Controllers.TasksController.GetAllArchivedTasks">
             <summary>
             Returns all users' archived tasks.
             </summary>
-            <returns></returns>
+            <returns>result of getting all users' archived tasks.</returns>
         </member>
-        <member name="M:gtdtimer.Controllers.TasksController.GetTaskById(System.Int32)">
+        <member name="M:GtdTimer.Controllers.TasksController.GetTaskById(System.Int32)">
             <summary>
             Returns user's task by id.
             </summary>
-            <param name="taskId"></param>
-            <returns></returns>
+            <param name="taskId">id of chosen task</param>
+            <returns>result of getting user's task by id.</returns>
         </member>
-        <member name="M:gtdtimer.Controllers.TasksController.GetAllTasksByUserId">
+        <member name="M:GtdTimer.Controllers.TasksController.GetAllTasksByUserId">
             <summary>
             Returns all user's tasks.
             </summary>
-            <returns></returns>
+            <returns>result of getting all user's tasks.</returns>
         </member>
-        <member name="M:gtdtimer.Controllers.TasksController.GetAllActiveTasksByUserId">
+        <member name="M:GtdTimer.Controllers.TasksController.GetAllActiveTasksByUserId">
             <summary>
             Returns all user's active tasks.
             </summary>
-            <returns></returns>
+            <returns>result of getting all user's active tasks.</returns>
         </member>
-        <member name="M:gtdtimer.Controllers.TasksController.GetAllArchivedTasksByUserId">
+        <member name="M:GtdTimer.Controllers.TasksController.GetAllArchivedTasksByUserId">
             <summary>
             Returns all user's archived tasks.
             </summary>
-            <returns></returns>
+            <returns>result of getting all user's archived tasks.</returns>
         </member>
-        <member name="M:gtdtimer.Controllers.TasksController.CreateTask(Common.ModelsDTO.TaskDTO)">
+        <member name="M:GtdTimer.Controllers.TasksController.CreateTask(GtdCommon.ModelsDto.TaskDto)">
             <summary>
             Creates a task.
             </summary>
-            <param name="model"></param>
-            <returns></returns>
+            <param name="model">task model</param>
+            <returns>result of creating task</returns>
         </member>
-        <member name="M:gtdtimer.Controllers.TasksController.UpdateTask(Common.ModelsDTO.TaskDTO)">
+        <member name="M:GtdTimer.Controllers.TasksController.UpdateTask(GtdCommon.ModelsDto.TaskDto)">
             <summary>
             Updates the task.
             </summary>
-            <param name="model"></param>
-            <returns></returns>
+            <param name="model">task model</param>
+            <returns>result of updating the task.</returns>
         </member>
-        <member name="M:gtdtimer.Controllers.TasksController.DeleteTask(System.Int32)">
+        <member name="M:GtdTimer.Controllers.TasksController.DeleteTask(System.Int32)">
             <summary>
             Deletes the task by id.
+            </summary>
+            <param name="taskId">id of chosen task</param>
+            <returns>result of deleting the task by id.</returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.TasksController.SwitchArchivedStatus(GtdCommon.ModelsDto.TaskDto)">
+            <summary>
+            Changes IsActive status of the task.
+            </summary>
+            <param name="model">task model</param>
+            <returns>result of changing IsActive status of the task.</returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.TasksController.StartTask(GtdCommon.ModelsDto.TaskDto)">
+            <summary>
+            Sets IsRunning status of the task to true.
+            </summary>
+            <param name="model">task model</param>
+            <returns>result of setting IsRunning status of the task to true.</returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.TasksController.PauseTask(GtdCommon.ModelsDto.TaskDto)">
+            <summary>
+            Sets IsRunning status of the task to false.
+            </summary>
+            <param name="model">task model</param>
+            <returns>result of setting IsRunning status of the task to false.</returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.TasksController.ResetTask(GtdCommon.ModelsDto.TaskDto)">
+            <summary>
+            Resets task's properties.
+            </summary>
+            <param name="model">task model</param>
+            <returns>result of resetting task's properties.</returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.TasksController.ExportAllTasksAsXmlByUserId">
+            <summary>
+            Converts all user's tasks to xml format. 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.TasksController.ExportAllActiveTasksAsXmlByUserId">
+            <summary>
+            Converts all user's active tasks to xml format.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.TasksController.ExportAllArchivedTasksAsXmlByUserId">
+            <summary>
+            Converts all user's archived tasks to xml format.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.TasksController.ExportTaskAsXmlById(System.Int32)">
+            <summary>
+            Converts  user's task by id to xml format.
             </summary>
             <param name="taskId"></param>
             <returns></returns>
         </member>
-        <member name="M:gtdtimer.Controllers.TasksController.SwitchArchivedStatus(Common.ModelsDTO.TaskDTO)">
+        <member name="M:GtdTimer.Controllers.TasksController.ExportAllTasksAsCsvByUserId">
             <summary>
-            Changes IsActive status of the task.
+            Converts all user's tasks to csv format.
             </summary>
-            <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:gtdtimer.Controllers.TasksController.StartTask(Common.ModelsDTO.TaskDTO)">
+        <member name="M:GtdTimer.Controllers.TasksController.ExportAllActiveTasksAsCsvByUserId">
             <summary>
-            Sets IsRunning status of the task to true.
+            Converts all user's active tasks to csv format.
             </summary>
-            <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:gtdtimer.Controllers.TasksController.PauseTask(Common.ModelsDTO.TaskDTO)">
+        <member name="M:GtdTimer.Controllers.TasksController.ExportAllArchivedTasksAsCsvByUserId">
             <summary>
-            Sets IsRunning status of the task to false.
+            Converts all user's archived tasks to csv format.
             </summary>
-            <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:gtdtimer.Controllers.TasksController.ResetTask(Common.ModelsDTO.TaskDTO)">
+        <member name="M:GtdTimer.Controllers.TasksController.ExportTaskAsCsvById(System.Int32)">
             <summary>
-            Resets task's properties.
+            Converts  user's task by id to csv format.
             </summary>
-            <param name="model"></param>
+            <param name="taskId"></param>
             <returns></returns>
         </member>
-        <member name="M:gtdtimer.Controllers.UserController.Get">
+        <member name="M:GtdTimer.Controllers.TasksController.ImportTasksAsCsv(Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            Imports file of user's tasks in .csv format.
+            </summary>
+            <param name="uploadFile"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.TasksController.ImportTasksAsXml(Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            Imports file of user's tasks in .xml format.
+            </summary>
+            <param name="uploadFile"></param>
+            <returns></returns>
+        </member>
+        <member name="T:GtdTimer.Controllers.UserController">
+            <summary>
+            class for user controller
+            </summary>
+        </member>
+        <member name="F:GtdTimer.Controllers.UserController.userIdentityService">
+            <summary>
+            instance of user identity service
+            </summary>
+        </member>
+        <member name="F:GtdTimer.Controllers.UserController.usersService">
+            <summary>
+            instance of user service
+            </summary>
+        </member>
+        <member name="M:GtdTimer.Controllers.UserController.#ctor(GtdServiceTier.Services.IUserIdentityService,GtdServiceTier.Services.IUsersService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:GtdTimer.Controllers.UserController" /> class.
+            </summary>
+            <param name="userIdentityService">instance of user identity service</param>
+            <param name="usersService">instance of user service</param>
+        </member>
+        <member name="M:GtdTimer.Controllers.UserController.Get">
             <summary>
             Retrieve current user.
             </summary>
-            <returns></returns>
+            <returns>result of retrieving current user.</returns>
         </member>
-        <member name="M:gtdtimer.Controllers.UserController.Post(Common.ModelsDTO.UserDTO)">
+        <member name="M:GtdTimer.Controllers.UserController.Post(GtdCommon.ModelsDto.UserDto)">
             <summary>
             Create user.
             </summary>
-            <param name="model">The DTO model of User entity</param>
-            <returns></returns>
+            <param name="model">The Dto model of User entity</param>
+            <returns>result of creating user.</returns>
         </member>
-        <member name="M:gtdtimer.Controllers.UserController.Put(Common.ModelsDTO.UpdatePasswordDTO)">
+        <member name="M:GtdTimer.Controllers.UserController.Put(GtdCommon.ModelsDto.UpdatePasswordDto)">
             <summary>
             Update current user password.
             </summary>
-            <param name="model">The DTO model of Password entity</param>
-            <returns></returns>
+            <param name="model">The Dto model of Password entity</param>
+            <returns>result of updating current user password.</returns>
         </member>
-        <member name="M:gtdtimer.Controllers.UserController.Delete">
+        <member name="M:GtdTimer.Controllers.UserController.Delete">
             <summary>
             Delete current user.
             </summary>
-            <returns></returns>
+            <returns>result of deleting current user.</returns>
         </member>
-        <member name="M:gtdtimer.Controllers.UserController.AddToRole(Common.ModelsDTO.RoleDTO)">
+        <member name="M:GtdTimer.Controllers.UserController.AdDtoRole(GtdCommon.ModelsDto.RoleDto)">
             <summary>
             Add role
             </summary>
-            <param name="model"></param>
-            <returns></returns>
+            <param name="model">role model</param>
+            <returns>result of adding role</returns>
         </member>
-        <member name="M:gtdtimer.Controllers.UserController.RemoveFromRoles(Common.ModelsDTO.RoleDTO)">
+        <member name="M:GtdTimer.Controllers.UserController.RemoveFromRoles(System.String,System.String)">
             <summary>
-            RemoveRole
+            Remove role
             </summary>
-            <param name="model"></param>
+            <param name="email"></param>
+            <param name="role"></param>
             <returns></returns>
         </member>
-        <member name="M:gtdtimer.Controllers.UserController.GetUsersEmailsAsync">
+        <member name="M:GtdTimer.Controllers.UserController.DeleteUserByEmail(System.String)">
             <summary>
             Get users emails
             </summary>
-            <returns></returns>
+            <param name="email">user email</param>
+            <returns>result of getting users emails</returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.UserController.GetUsersEmails(System.String)">
+            <summary>
+            Delete user by email
+            </summary>
+            <param name="roleName">user role</param>
+            <returns>result of getting users emails</returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.UserController.GetRolesOfUser">
+            <summary>
+            Get roles of user
+            </summary>
+            <returns>roles of chosen user</returns>
+        </member>
+        <member name="T:GtdTimer.Middleware.ErrorHandlingMiddleware">
+            <summary>
+            class for handling different types of custom errors
+            </summary>
+        </member>
+        <member name="F:GtdTimer.Middleware.ErrorHandlingMiddleware.next">
+            <summary>
+            instance of request delegate
+            </summary>
+        </member>
+        <member name="F:GtdTimer.Middleware.ErrorHandlingMiddleware.logger">
+            <summary>
+            interface for logger
+            </summary>
+        </member>
+        <member name="M:GtdTimer.Middleware.ErrorHandlingMiddleware.#ctor(Microsoft.AspNetCore.Http.RequestDelegate,Microsoft.Extensions.Logging.ILogger{GtdTimer.Middleware.ErrorHandlingMiddleware})">
+            <summary>
+            Initializes a new instance of the <see cref="T:GtdTimer.Middleware.ErrorHandlingMiddleware" /> class.
+            </summary>
+            <param name="next">instance of request delegate</param>
+            <param name="logger">class which gives right for logging</param>
+        </member>
+        <member name="M:GtdTimer.Middleware.ErrorHandlingMiddleware.Invoke(Microsoft.AspNetCore.Http.HttpContext)">
+            <summary>
+            implementation of chain of responsibility pattern
+            </summary>
+            <param name="context">http context</param>
+            <returns>result of passing action context handler</returns>
+        </member>
+        <member name="M:GtdTimer.Middleware.ErrorHandlingMiddleware.HandleExceptionAsync(Microsoft.AspNetCore.Http.HttpContext,System.Exception)">
+            <summary>
+            Method for handling custom exceptions
+            </summary>
+            <param name="context">http context</param>
+            <param name="exception">custom exception</param>
+            <returns>result of handling exception</returns>
+        </member>
+        <member name="M:GtdTimer.Middleware.ErrorHandlingMiddleware.GetExceptionCode(System.Exception)">
+            <summary>
+            Method for define type of exception
+            </summary>
+            <param name="exception">custom exception</param>
+            <returns>result of defining type of exception</returns>
+        </member>
+        <member name="T:GtdTimer.Program">
+            <summary>
+            class for running a project
+            </summary>
+        </member>
+        <member name="M:GtdTimer.Program.Main(System.String[])">
+            <summary>
+            Method to run project
+            </summary>
+            <param name="args">array for specific running parameters</param>
+        </member>
+        <member name="M:GtdTimer.Program.CreateWebHostBuilder(System.String[])">
+            <summary>
+            Method for hosting project on web
+            </summary>
+            <param name="args">array for specific running parameters</param>
+            <returns>web host builder</returns>
+        </member>
+        <member name="T:GtdTimer.Startup">
+            <summary>
+            class for configuring project
+            </summary>
+        </member>
+        <member name="M:GtdTimer.Startup.#ctor(Microsoft.AspNetCore.Hosting.IHostingEnvironment)">
+            <summary>
+            Initializes a new instance of the <see cref="T:GtdTimer.Startup" /> class.
+            </summary>
+            <param name="env">hosting environment</param>
+        </member>
+        <member name="M:GtdTimer.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Method for configuring services
+            </summary>
+            <param name="services">list of services</param>
+        </member>
+        <member name="M:GtdTimer.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IHostingEnvironment,Microsoft.Extensions.Logging.ILoggerFactory,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Method for configuring application
+            </summary>
+            <param name="app">application builder</param>
+            <param name="env">hosting environment</param>
+            <param name="loggerFactory">class which registers logger</param>
+            <param name="configuration">class which helps configure project</param>
         </member>
     </members>
 </doc>

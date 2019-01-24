@@ -1,7 +1,16 @@
-﻿using System;
+﻿//-----------------------------------------------------------------------
+// <copyright file="IBaseService.cs" company="SoftServe">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
 
-namespace ServiceTier.Services
+using System;
+
+namespace GtdServiceTier.Services
 {
+    /// <summary>
+    /// interface for base service class
+    /// </summary>
     public interface IBaseService : IDisposable
     {
     }

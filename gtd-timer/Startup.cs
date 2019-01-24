@@ -1,31 +1,44 @@
+//-----------------------------------------------------------------------
+// <copyright file="Startup.cs" company="SoftServe">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+
+using System;
+using System.IO;
+using System.Reflection;
+using System.Text;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNet.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.IO;
-using System.Reflection;
-using System.Text;
-
-using gtdtimer.Middleware;
-using Timer.DAL.Timer.DAL.Repositories;
-using Timer.DAL.Timer.DAL.Entities;
-using Timer.DAL.Timer.DAL.UnitOfWork;
-using ServiceTier.Services;
 using Swashbuckle.AspNetCore.Swagger;
-using gtdtimer.Services;
-using Common.IoC;
 
-namespace gtd_timer
+using GtdCommon.IoC;
+using GtdTimer.Middleware;
+using GtdServiceTier.Services;
+using GtdTimerDAL.Entities;
+using GtdTimerDAL.Repositories;
+using GtdTimerDAL.UnitOfWork;
+
+namespace GtdTimer
 {
+    /// <summary>
+    /// class for configuring project
+    /// </summary>
     public class Startup
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Startup" /> class.
+        /// </summary>
+        /// <param name="env">hosting environment</param>
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -37,24 +50,25 @@ namespace gtd_timer
 
             var config = builder.Build();
             
-
             builder.AddAzureKeyVault(
                 $"https://{config["AzureKeyVault:vault"]}.vault.azure.net/",
                 config["AzureKeyVault:clientId"],
-                config["AzureKeyVault:clientSecret"]
-            );
+                config["AzureKeyVault:clientSecret"]);
             IoCContainer.Configuration = builder.Build();
         }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        /// <summary>
+        /// Method for configuring services
+        /// </summary>
+        /// <param name="services">list of services</param>
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors(options =>
             {
-                options.AddPolicy("AllowSpecificOrigin",
+                options.AddPolicy(
+                    "AllowSpecificOrigin",
                     builder => builder.WithOrigins(IoCContainer.Configuration["Origins"]).AllowAnyHeader().AllowAnyMethod());
             });
-          
             services.AddDbContext<TimerContext>(opts => opts.UseSqlServer(IoCContainer.Configuration["AzureConnection"]));
             services.AddIdentity<User, Role>().AddEntityFrameworkStores<TimerContext>().AddDefaultTokenProviders();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -65,13 +79,13 @@ namespace gtd_timer
             services.AddScoped<ITaskService, TaskService>();
             services.AddScoped<IUserIdentityService, UserIdentityService>();
 
-            services.AddScoped<IRepository<Timer.DAL.Timer.DAL.Entities.Timer>, Repository<Timer.DAL.Timer.DAL.Entities.Timer>>();
+            services.AddScoped<IRepository<Timer>, Repository<Timer>>();
             services.AddScoped<IRepository<Preset>, Repository<Preset>>();
             services.AddScoped<IRepository<Role>, Repository<Role>>();
             services.AddScoped<IRepository<Tasks>, Repository<Tasks>>();
             services.AddScoped<IRepository<UserRole>, Repository<UserRole>>();
             services.AddScoped<IApplicationUserManager<User, int>, ApplicationUserManager>();
-            services.AddScoped<IUserStore<User,int>, UserRepository>(); 
+            services.AddScoped<IUserStore<User, int>, UserRepository>();
 
             services.AddAuthentication(opts =>
             {
@@ -91,17 +105,17 @@ namespace gtd_timer
                     ValidAudience = "Tokens:Audience",
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(IoCContainer.Configuration["JWTSecretKey"]))
                 };
-            }
-            );
+            });
 
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc(
                     IoCContainer.Configuration.GetValue<string>("SwaggerDocument:Name"),
-                    new Info {
+                    new Info
+                    {
                         Title = IoCContainer.Configuration.GetValue<string>("SwaggerDocument:Title"),
-                        Version =  IoCContainer.Configuration.GetValue<string>("SwaggerDocument:Version")
-                        });
+                        Version = IoCContainer.Configuration.GetValue<string>("SwaggerDocument:Version")
+                    });
 
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.XML";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
@@ -111,8 +125,14 @@ namespace gtd_timer
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        /// <summary>
+        /// Method for configuring application
+        /// </summary>
+        /// <param name="app">application builder</param>
+        /// <param name="env">hosting environment</param>
+        /// <param name="loggerFactory">class which registers logger</param>
+        /// <param name="configuration">class which helps configure project</param>
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IConfiguration configuration)
         {
             app.UseCors("AllowSpecificOrigin");
             if (env.IsDevelopment())
@@ -123,17 +143,19 @@ namespace gtd_timer
             {
                 app.UseHsts();
             }
+
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint(
                     $"/swagger/{IoCContainer.Configuration.GetValue<string>("SwaggerDocument:Name")}/swagger.json",
-                    IoCContainer.Configuration.GetValue<string>("SwaggerDocument:Name")
-                    );
+                    IoCContainer.Configuration.GetValue<string>("SwaggerDocument:Name"));
             });
+
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
+            loggerFactory.AddLog4Net(configuration.GetValue<string>("Log4NetConfigFile:Name"));
             app.UseMvc();
         }
     }
