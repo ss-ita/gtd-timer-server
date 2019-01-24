@@ -51,6 +51,11 @@ namespace GtdTimerDAL.UnitOfWork
         private Lazy<IRepository<PresetTasks>> presetTasks;
 
         /// <summary>
+        /// Records table
+        /// </summary>
+        private Lazy<IRepository<Record>> records;
+
+        /// <summary>
         /// Value indicating whether it is disposed 
         /// </summary>
         private bool disposed;
@@ -152,6 +157,18 @@ namespace GtdTimerDAL.UnitOfWork
             set
             {
                 userRoles = new Lazy<IRepository<UserRole>>(() => value);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets records table
+        /// </summary>
+        public IRepository<Record> Reords
+        {
+            get => records.Value;
+            set
+            {
+                records = new Lazy<IRepository<Record>>(() => value); 
             }
         }
 
