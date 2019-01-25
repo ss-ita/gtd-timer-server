@@ -371,10 +371,10 @@ namespace GtdTimer.Controllers
         }
 
         [HttpGet("[action]")]
-        public IActionResult GetAllTaskRecords()
+        public IActionResult GetAllTaskRecordsByUserId()
         {
             var userId = userIdentityService.GetUserId();
-            var taskRecords = taskService.GetAllTaskRecords(userId);
+            var taskRecords = taskService.GetAllTaskRecordsByUserId(userId);
 
             return Ok(taskRecords);
         }
@@ -386,6 +386,15 @@ namespace GtdTimer.Controllers
             taskService.CreateTaskRecord(taskRecord);
 
             return Ok();
+        }
+
+        [HttpGet("[action]/{taskId}")]
+        public IActionResult GetAllTaskRecordsByTaskId(int taskId)
+        {
+            var userId = userIdentityService.GetUserId();
+            var taskRecords = taskService.GetAllTaskRecordsByTaskId(userId, taskId);
+
+            return Ok(taskRecords);
         }
     }
 }

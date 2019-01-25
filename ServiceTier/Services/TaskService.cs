@@ -221,12 +221,12 @@ namespace GtdServiceTier.Services
             return AddTaskToDatabase(listOfTasksDTO, userId);
         }
 
-        public IEnumerable<TaskRecordDto> GetAllTaskRecords(int userId)
+        public IEnumerable<TaskRecordDto> GetAllTaskRecordsByUserId(int userId)
         {
-            var listOfRecords = this.UnitOfWork.Records.GetAllEntities();
-            var listOfTasks = this.UnitOfWork.Tasks.GetAllEntities();
-            var listOfTaskRecords = (from taskRecord in listOfRecords
-                                     join tasks in listOfTasks on taskRecord.TaskId equals tasks.Id
+
+            var listOfTasks = this.UnitOfWork.Tasks.GetAllEntitiesByFilter(task => task.UserId == userId);
+            var listOfTaskRecords = (from tasks in listOfTasks
+                                     from taskRecord in UnitOfWork.Records.GetAllEntitiesByFilter(record=>record.TaskId==tasks.Id)
                                      select new TaskRecordDto
                                      {
                                          Id = taskRecord.Id,
@@ -246,6 +246,17 @@ namespace GtdServiceTier.Services
             Record record = taskRecord.ToRecord();
             UnitOfWork.Records.Create(record);
             UnitOfWork.Save();
+        }
+
+        public IEnumerable<TaskRecordDto> GetAllTaskRecordsByTaskId(int userId,int taskId)
+        {
+            var listOfRecords = (UnitOfWork.Records.GetAllEntitiesByFilter(record=>record.TaskId == taskId)
+                .Where(record => record.TaskId == taskId)
+                .Select(record => record.ToTaskRecord(UnitOfWork.Tasks.GetByID(taskId))))
+                .ToList();
+
+            return listOfRecords;
+
         }
     }
 }

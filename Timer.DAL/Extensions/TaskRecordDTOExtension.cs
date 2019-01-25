@@ -28,6 +28,7 @@ namespace GtdTimerDAL.Extensions
             Record recordToReturn = new Record
             {
                 Id = record.Id,
+               
                 Action = record.Action,
                 StartTime = record.StartTime,
                 StopTime = record.StopTime,

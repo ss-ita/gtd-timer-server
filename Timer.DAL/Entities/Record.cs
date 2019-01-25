@@ -19,6 +19,7 @@ namespace GtdTimerDAL.Entities
         /// </summary>
         public int Id { get; set; }
 
+        
         /// <summary>
         /// Time when timer was started
         /// </summary>
