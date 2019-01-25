@@ -74,6 +74,11 @@ namespace GtdTimerDAL.Entities
         public virtual DbSet<Record> Records { get; set; }
 
         /// <summary>
+        /// Gets or sets set of alarms
+        /// </summary>
+        public virtual DbSet<Alarm> Alarms { get; set; }
+
+        /// <summary>
         /// method used when creating database models
         /// </summary>
         /// <param name="builder"> model builder instance </param>
