@@ -30,6 +30,11 @@ namespace GtdTimerDAL.Entities
         public DateTime StopTime { get; set; }
 
         /// <summary>
+        /// What's happened with timer
+        /// </summary>
+        public string Action { get; set; }
+
+        /// <summary>
         /// Foreign key that reference to Task
         /// </summary>
         public int TaskId { get; set; }

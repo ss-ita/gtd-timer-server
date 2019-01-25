@@ -101,6 +101,8 @@ namespace GtdTimerDAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Action");
+
                     b.Property<DateTime>("StartTime");
 
                     b.Property<DateTime>("StopTime");
