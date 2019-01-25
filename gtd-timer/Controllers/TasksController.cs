@@ -371,30 +371,40 @@ namespace GtdTimer.Controllers
         }
 
         [HttpGet("[action]")]
-        public IActionResult GetAllTaskRecordsByUserId()
+        public IActionResult GetAllRecordsByUserId()
         {
             var userId = userIdentityService.GetUserId();
-            var taskRecords = taskService.GetAllTaskRecordsByUserId(userId);
+            var taskRecords = taskService.GetAllRecordsByUserId(userId);
 
             return Ok(taskRecords);
         }
 
         [HttpPost("[action]")]
-        public IActionResult CreateTaskRecord([FromBody]TaskRecordDto taskRecord)
+        public IActionResult CreateRecord([FromBody]TaskRecordDto taskRecord)
         {
             var userId = userIdentityService.GetUserId();
-            taskService.CreateTaskRecord(taskRecord);
+            taskService.CreateRecord(taskRecord);
 
             return Ok();
         }
 
         [HttpGet("[action]/{taskId}")]
-        public IActionResult GetAllTaskRecordsByTaskId(int taskId)
+        public IActionResult GetAllRecordsByTaskId(int taskId)
         {
             var userId = userIdentityService.GetUserId();
-            var taskRecords = taskService.GetAllTaskRecordsByTaskId(userId, taskId);
+            var taskRecords = taskService.GetAllRecordsByTaskId(userId, taskId);
 
             return Ok(taskRecords);
         }
+
+        [HttpDelete("[action]/{taskId")]
+        public IActionResult DeleteRecordById(int taskId)
+        {
+            taskService.DeleteRecordById(taskId);
+
+            return Ok();
+        }
+
+
     }
 }

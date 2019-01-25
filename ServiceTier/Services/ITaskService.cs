@@ -128,10 +128,12 @@ namespace GtdServiceTier.Services
         /// <returns></returns>
         IEnumerable<TaskDto> AddTaskToDatabase(IEnumerable<TaskDto> listOfTasksDto, int userId);
 
-        IEnumerable<TaskRecordDto> GetAllTaskRecordsByUserId(int userId);
+        IEnumerable<TaskRecordDto> GetAllRecordsByUserId(int userId);
 
-        void CreateTaskRecord(TaskRecordDto taskRecord);
+        void CreateRecord(TaskRecordDto taskRecord);
 
-        IEnumerable<TaskRecordDto> GetAllTaskRecordsByTaskId(int userId,int taskId);
+        IEnumerable<TaskRecordDto> GetAllRecordsByTaskId(int userId,int taskId);
+
+        void DeleteRecordById(int taskId)
     }
 }

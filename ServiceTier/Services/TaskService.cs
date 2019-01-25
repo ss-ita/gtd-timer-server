@@ -221,7 +221,7 @@ namespace GtdServiceTier.Services
             return AddTaskToDatabase(listOfTasksDTO, userId);
         }
 
-        public IEnumerable<TaskRecordDto> GetAllTaskRecordsByUserId(int userId)
+        public IEnumerable<TaskRecordDto> GetAllRecordsByUserId(int userId)
         {
 
             var listOfTasks = this.UnitOfWork.Tasks.GetAllEntitiesByFilter(task => task.UserId == userId);
@@ -241,14 +241,14 @@ namespace GtdServiceTier.Services
             return listOfTaskRecords;    
         }
 
-        public void CreateTaskRecord(TaskRecordDto taskRecord)
+        public void CreateRecord(TaskRecordDto taskRecord)
         {
             Record record = taskRecord.ToRecord();
             UnitOfWork.Records.Create(record);
             UnitOfWork.Save();
         }
 
-        public IEnumerable<TaskRecordDto> GetAllTaskRecordsByTaskId(int userId,int taskId)
+        public IEnumerable<TaskRecordDto> GetAllRecordsByTaskId(int userId,int taskId)
         {
             var listOfRecords = (UnitOfWork.Records.GetAllEntitiesByFilter(record=>record.TaskId == taskId)
                 .Where(record => record.TaskId == taskId)
@@ -257,6 +257,20 @@ namespace GtdServiceTier.Services
 
             return listOfRecords;
 
+        }
+
+        public void DeleteRecordById(int taskId)
+        {
+            var toDelete =  UnitOfWork.Records.GetByID(taskId);
+            if (toDelete != null)
+            {
+                UnitOfWork.Records.Delete(toDelete);
+                UnitOfWork.Save();
+            }
+            else
+            {
+                throw new TaskNotFoundException();
+            }
         }
     }
 }
