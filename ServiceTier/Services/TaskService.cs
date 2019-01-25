@@ -220,5 +220,32 @@ namespace GtdServiceTier.Services
 
             return AddTaskToDatabase(listOfTasksDTO, userId);
         }
+
+        public IEnumerable<TaskRecordDto> GetAllTaskRecords(int userId)
+        {
+            var listOfRecords = this.UnitOfWork.Records.GetAllEntities();
+            var listOfTasks = this.UnitOfWork.Tasks.GetAllEntities();
+            var listOfTaskRecords = (from taskRecord in listOfRecords
+                                     join tasks in listOfTasks on taskRecord.TaskId equals tasks.Id
+                                     select new TaskRecordDto
+                                     {
+                                         Id = taskRecord.Id,
+                                         TaskId = tasks.Id,
+                                         Name = tasks.Name,
+                                         Description = tasks.Description,
+                                         Action = taskRecord.Action,
+                                         StartTime = taskRecord.StartTime,
+                                         StopTime = taskRecord.StopTime
+                                     }).ToList();
+
+            return listOfTaskRecords;    
+        }
+
+        public void CreateTaskRecord(TaskRecordDto taskRecord)
+        {
+            Record record = taskRecord.ToRecord();
+            UnitOfWork.Records.Create(record);
+            UnitOfWork.Save();
+        }
     }
 }

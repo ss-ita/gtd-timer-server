@@ -127,5 +127,9 @@ namespace GtdServiceTier.Services
         /// <param name="userId">Id of current user.</param>
         /// <returns></returns>
         IEnumerable<TaskDto> AddTaskToDatabase(IEnumerable<TaskDto> listOfTasksDto, int userId);
+
+        IEnumerable<TaskRecordDto> GetAllTaskRecords(int userId);
+
+        void CreateTaskRecord(TaskRecordDto taskRecord);
     }
 }
