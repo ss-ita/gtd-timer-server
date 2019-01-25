@@ -109,7 +109,7 @@ namespace GtdServiceTier.Services
         /// </summary>
         /// <param name="uploadFile">File being imported.</param>
         /// <param name="userId">Id of current user.</param>
-        /// <returns></returns>
+        /// <returns>returns result of importing a file to datebase</returns>
         IEnumerable<TaskDto> ImportTasksFromCsv(IFormFile uploadFile, int userId);
 
         /// <summary>
@@ -117,7 +117,7 @@ namespace GtdServiceTier.Services
         /// </summary>
         /// <param name="uploadFile">File being imported.</param>
         /// <param name="userId">Id of current user.</param>
-        /// <returns></returns>
+        /// <returns>returns result of importing a file to datebase</returns>
         IEnumerable<TaskDto> ImportTasksFromXml(IFormFile uploadFile, int userId);
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace GtdServiceTier.Services
         /// </summary>
         /// <param name="listOfTasksDto">List of tasks to be added.</param>
         /// <param name="userId">Id of current user.</param>
-        /// <returns></returns>
+        /// <returns>returns result of importing a file to datebase</returns>
         IEnumerable<TaskDto> AddTaskToDatabase(IEnumerable<TaskDto> listOfTasksDto, int userId);
 
         /// <summary>
