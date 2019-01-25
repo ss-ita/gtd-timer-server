@@ -65,9 +65,9 @@ namespace GtdTimer.Controllers
         [HttpGet("[action]")]
         public IActionResult GetAllActiveTasks()
         {
-            var allTasks = this.taskService.GetAllActiveTasks();
+            var allTasks = taskService.GetAllActiveTasks();
 
-            return this.Ok(allTasks);
+            return Ok(allTasks);
         }
 
         /// <summary>
@@ -78,9 +78,9 @@ namespace GtdTimer.Controllers
         [HttpGet("[action]")]
         public IActionResult GetAllArchivedTasks()
         {
-            var allTasks = this.taskService.GetAllArchivedTasks();
+            var allTasks = taskService.GetAllArchivedTasks();
 
-            return this.Ok(allTasks);
+            return Ok(allTasks);
         }
 
         /// <summary>
@@ -103,10 +103,10 @@ namespace GtdTimer.Controllers
         [HttpGet("[action]")]
         public IActionResult GetAllTasksByUserId()
         {
-            var userId = this.userIdentityService.GetUserId();
-            var tasks = this.taskService.GetAllTasksByUserId(userId);
+            var userId = userIdentityService.GetUserId();
+            var tasks = taskService.GetAllTasksByUserId(userId);
 
-            return this.Ok(tasks);
+            return Ok(tasks);
         }
 
         /// <summary>
@@ -116,10 +116,10 @@ namespace GtdTimer.Controllers
         [HttpGet("[action]")]
         public IActionResult GetAllActiveTasksByUserId()
         {
-            var userId = this.userIdentityService.GetUserId();
-            var tasks = this.taskService.GetAllActiveTasksByUserId(userId);
+            var userId = userIdentityService.GetUserId();
+            var tasks = taskService.GetAllActiveTasksByUserId(userId);
 
-            return this.Ok(tasks);
+            return Ok(tasks);
         }
 
         /// <summary>
@@ -129,10 +129,10 @@ namespace GtdTimer.Controllers
         [HttpGet("[action]")]
         public IActionResult GetAllArchivedTasksByUserId()
         {
-            var userId = this.userIdentityService.GetUserId();
-            var tasks = this.taskService.GetAllArchivedTasksByUserId(userId);
+            var userId = userIdentityService.GetUserId();
+            var tasks = taskService.GetAllArchivedTasksByUserId(userId);
 
-            return this.Ok(tasks);
+            return Ok(tasks);
         }
 
         /// <summary>
@@ -159,10 +159,10 @@ namespace GtdTimer.Controllers
         [HttpPut("[action]")]
         public IActionResult UpdateTask([FromBody]TaskDto model)
         {
-            model.UserId = this.userIdentityService.GetUserId();
-            this.taskService.UpdateTask(model);
+            model.UserId = userIdentityService.GetUserId();
+            taskService.UpdateTask(model);
 
-            return this.Ok();
+            return Ok();
         }
 
         /// <summary>
@@ -173,9 +173,9 @@ namespace GtdTimer.Controllers
         [HttpDelete("DeleteTask/{taskId}")]
         public IActionResult DeleteTask(int taskId)
         {
-            this.taskService.DeleteTaskById(taskId);
+            taskService.DeleteTaskById(taskId);
 
-            return this.Ok();
+            return Ok();
         }
 
         /// <summary>
@@ -187,10 +187,10 @@ namespace GtdTimer.Controllers
         [HttpPut("[action]")]
         public IActionResult SwitchArchivedStatus([FromBody]TaskDto model)
         {
-            model.UserId = this.userIdentityService.GetUserId();
-            this.taskService.SwitchArchivedStatus(model);
+            model.UserId = userIdentityService.GetUserId();
+            taskService.SwitchArchivedStatus(model);
 
-            return this.Ok();
+            return Ok();
         }
 
         /// <summary>
@@ -202,10 +202,10 @@ namespace GtdTimer.Controllers
         [HttpPut("[action]")]
         public IActionResult StartTask([FromBody]TaskDto model)
         {
-            model.UserId = this.userIdentityService.GetUserId();
-            this.taskService.StartTask(model);
+            model.UserId = userIdentityService.GetUserId();
+            taskService.StartTask(model);
 
-            return this.Ok();
+            return Ok();
         }
 
         /// <summary>
@@ -217,10 +217,10 @@ namespace GtdTimer.Controllers
         [HttpPut("[action]")]
         public IActionResult PauseTask([FromBody]TaskDto model)
         {
-            model.UserId = this.userIdentityService.GetUserId();
-            this.taskService.PauseTask(model);
+            model.UserId = userIdentityService.GetUserId();
+            taskService.PauseTask(model);
 
-            return this.Ok();
+            return Ok();
         }
 
         /// <summary>
@@ -232,10 +232,10 @@ namespace GtdTimer.Controllers
         [HttpPut("[action]")]
         public IActionResult ResetTask([FromBody]TaskDto model)
         {
-            model.UserId = this.userIdentityService.GetUserId();
-            this.taskService.ResetTask(model);
+            model.UserId = userIdentityService.GetUserId();
+            taskService.ResetTask(model);
 
-            return this.Ok();
+            return Ok();
         }
 
         /// <summary>
@@ -352,7 +352,7 @@ namespace GtdTimer.Controllers
         {
             var userId = userIdentityService.GetUserId();
             var listOfTasks = taskService.ImportTasksFromCsv(uploadFile, userId);
-            
+
             return Ok(listOfTasks);
         }
 
@@ -368,6 +368,32 @@ namespace GtdTimer.Controllers
             var listOfTasks = taskService.ImportTasksFromXml(uploadFile, userId);
 
             return Ok(listOfTasks);
+        }
+
+        /// <summary>
+        /// Returns all user's timers.
+        /// </summary>
+        /// <returns>result of getting all user's timers.</returns>
+        [HttpGet("[action]")]
+        public IActionResult GetAllTimersByUserId()
+        {
+            var userId = userIdentityService.GetUserId();
+            var tasks = taskService.GetAllTimersByUserId(userId);
+
+            return Ok(tasks);
+        }
+
+        /// <summary>
+        /// Returns all user's stopwatches.
+        /// </summary>
+        /// <returns>result of getting all user's stopwatches.</returns>
+        [HttpGet("[action]")]
+        public IActionResult GetAllStopwathesByUserId()
+        {
+            var userId = userIdentityService.GetUserId();
+            var tasks = taskService.GetAllStopwatchesByUserId(userId);
+
+            return Ok(tasks);
         }
     }
 }

@@ -3,8 +3,9 @@
 //     Company copyright tag.
 // </copyright>
 //-----------------------------------------------------------------------
-﻿using System;
+using System;
 using System.Xml.Serialization;
+using GtdCommon.Constant;
 
 namespace GtdCommon.ModelsDto
 {
@@ -14,6 +15,9 @@ namespace GtdCommon.ModelsDto
     [Serializable, XmlRoot("TaskDto")]
     public class TaskDto
     {
+        /// <summary>
+        /// Gets or sets a value of Id property
+        /// </summary>
         [XmlIgnore]
         public int Id { get; set; }
 
@@ -57,5 +61,10 @@ namespace GtdCommon.ModelsDto
         /// </summary>
         [XmlIgnore]
         public int UserId { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether property is running
+        /// </summary>
+        public WatchType WatchType { get; set; }
     }
 }

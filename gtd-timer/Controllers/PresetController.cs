@@ -31,21 +31,21 @@ namespace GtdTimer.Controllers
         private readonly IPresetService presetService;
 
         /// <summary>
-        /// instance of timer service
+        /// instance of task service
         /// </summary>
-        private readonly ITimerService timerService;
+        private readonly ITaskService taskService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PresetController" /> class.
         /// </summary>
         /// <param name="userIdentityService">instance of user identity service</param>
         /// <param name="presetService">instance of preset service</param>
-        /// <param name="timerService">instance of timer service</param>
-        public PresetController(IUserIdentityService userIdentityService, IPresetService presetService, ITimerService timerService)
+        /// <param name="taskService">instance of task service</param>
+        public PresetController(IUserIdentityService userIdentityService, IPresetService presetService, ITaskService taskService)
         {
             this.userIdentityService = userIdentityService;
             this.presetService = presetService;
-            this.timerService = timerService;
+            this.taskService = taskService;
         }
 
         /// <summary>
@@ -53,39 +53,39 @@ namespace GtdTimer.Controllers
         /// </summary>
         /// <param name="presetid"> id of preset</param>
         /// <returns> result of getting preset with chosen id </returns>
-        //[HttpGet("GetPreset/{presetid}")]
-        //public IActionResult GetPreset(int presetid)
-        //{
-        //    var preset = presetService.GetPresetById(presetid);
+        [HttpGet("GetPreset/{presetid}")]
+        public IActionResult GetPreset(int presetid)
+        {
+            var preset = presetService.GetPresetById(presetid);
 
-        //    return Ok(preset);
-        //}
+            return Ok(preset);
+        }
 
         /// <summary>
         /// Method for getting all custom presets of chosen user
         /// </summary>
-        ///// <returns> result of getting a list of all custom presets of chosen user </returns>
-        //[HttpGet("[action]")]
-        //public IActionResult GetAllCustomPresets()
-        //{
-        //    var userid = userIdentityService.GetUserId();
-        //    var query = presetService.GetAllCustomPresetsByUserId(userid);
+        /// <returns> result of getting a list of all custom presets of chosen user </returns>
+        [HttpGet("[action]")]
+        public IActionResult GetAllCustomPresets()
+        {
+            var userid = userIdentityService.GetUserId();
+            var query = presetService.GetAllCustomPresetsByUserId(userid);
 
-        //    return Ok(query);
-        //}
+            return Ok(query);
+        }
 
         /// <summary>
         /// Method for getting all standard presets
         /// </summary>
         /// <returns> result of getting a list of all standard presets</returns>
-        //[AllowAnonymous]
-        //[HttpGet("[action]")]
-        //public IActionResult GetAllStandardPresets()
-        //{
-        //    var listOfPresets = presetService.GetAllStandardPresets();
+        [AllowAnonymous]
+        [HttpGet("[action]")]
+        public IActionResult GetAllStandardPresets()
+        {
+            var listOfPresets = presetService.GetAllStandardPresets();
 
-        //    return Ok(listOfPresets);
-        //}
+            return Ok(listOfPresets);
+        }
 
         /// <summary>
         /// Method for creating a preset
@@ -96,22 +96,18 @@ namespace GtdTimer.Controllers
         public IActionResult CreatePreset([FromBody]PresetDto presetDto)
         {
             presetDto.UserId = userIdentityService.GetUserId();
+            if (presetDto.Tasks != null)
+            {
+                foreach (var task in presetDto.Tasks)
+                {
+                    task.UserId = userIdentityService.GetUserId();
+                }
+            }
+
             presetService.CreatePreset(presetDto);
 
             return Ok(presetDto);
         }
-
-        /// <summary>
-        /// Method for creating a timer
-        /// </summary>
-        /// <param name="timerDto">timer model</param>
-        /// <returns>result of creating a timer and timer itself</returns>
-        //[HttpPost("[action]")]
-        //public IActionResult CreateTimer([FromBody]TimerDto timerDto)
-        //{
-        //    timerService.CreateTimer(timerDto);
-        //    return Ok(timerDto);
-        //}
 
         /// <summary>
         /// Method for updating a preset
@@ -132,30 +128,17 @@ namespace GtdTimer.Controllers
         /// </summary>
         /// <param name="presetid"> id of preset</param>
         /// <returns> result of deleting a preset</returns>
-        //[HttpDelete("DeletePreset/{presetid}")]
-        //public IActionResult DeletePreset(int presetid)
-        //{
-        //    if ((presetService.GetPresetById(presetid).UserId == null) || (presetService.GetPresetById(presetid).UserId != this.userIdentityService.GetUserId()))
-        //    {
-        //        throw new AccessDeniedException();
-        //    }
+        [HttpDelete("DeletePreset/{presetid}")]
+        public IActionResult DeletePreset(int presetid)
+        {
+            if ((presetService.GetPresetById(presetid).UserId == null) || (presetService.GetPresetById(presetid).UserId != userIdentityService.GetUserId()))
+            {
+                throw new AccessDeniedException();
+            }
 
-        //    presetService.DeletePresetById(presetid);
+            presetService.DeletePresetById(presetid);
 
-        //    return Ok();
-        //}
-
-        /// <summary>
-        /// Method for deleting a timer
-        /// </summary>
-        /// <param name="timerid">id of chosen timer</param>
-        /// <returns> result of deleting a timer</returns>
-        //[HttpDelete("DeleteTimer/{timerid}")]
-        //public IActionResult DeleteTimer(int timerid)
-        //{
-        //    timerService.DeleteTimer(timerid);
-
-        //    return Ok();
-        //}
+            return Ok();
+        }
     }
 }

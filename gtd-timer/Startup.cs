@@ -49,7 +49,7 @@ namespace GtdTimer
                  .AddEnvironmentVariables();
 
             var config = builder.Build();
-            
+
             builder.AddAzureKeyVault(
                 $"https://{config["AzureKeyVault:vault"]}.vault.azure.net/",
                 config["AzureKeyVault:clientId"],
@@ -74,7 +74,6 @@ namespace GtdTimer
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ILogInService, LogInService>();
             services.AddScoped<IPresetService, PresetService>();
-            services.AddScoped<ITimerService, TimerService>();
             services.AddScoped<IUsersService, UsersService>();
             services.AddScoped<ITaskService, TaskService>();
             services.AddScoped<IUserIdentityService, UserIdentityService>();
@@ -84,8 +83,6 @@ namespace GtdTimer
             services.AddScoped<IRepository<Role>, Repository<Role>>();
             services.AddScoped<IRepository<Tasks>, Repository<Tasks>>();
             services.AddScoped<IRepository<UserRole>, Repository<UserRole>>();
-            services.AddScoped<IRepository<Record>, Repository<Record>>();
-            services.AddScoped<IRepository<Alarm>, Repository<Alarm>>();
             services.AddScoped<IApplicationUserManager<User, int>, ApplicationUserManager>();
             services.AddScoped<IUserStore<User, int>, UserRepository>();
 
@@ -157,7 +154,7 @@ namespace GtdTimer
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
-            //loggerFactory.AddLog4Net(configuration.GetValue<string>("Log4NetConfigFile:Name"));
+            loggerFactory.AddLog4Net(configuration.GetValue<string>("Log4NetConfigFile:Name"));
             app.UseMvc();
         }
     }

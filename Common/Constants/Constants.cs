@@ -6,6 +6,18 @@
 
 namespace GtdCommon.Constant
 {
+    /// <summary>
+    /// Enum, which contains types of supported watches.
+    /// </summary>
+    public enum WatchType
+    {
+        Stopwatch,
+        Timer
+    }
+
+    /// <summary>
+    /// Class for storing contstants
+    /// </summary>
     public class Constants
     {
         public const string SecretKey = "This is my custom Secret key for authnetication";

@@ -5,18 +5,10 @@
 //-----------------------------------------------------------------------
 
 using System;
+using GtdCommon.Constant;
 
 namespace GtdTimerDAL.Entities
 {
-    /// <summary>
-    /// Enum, which contains types of supported watches.
-    /// </summary>
-    public enum WatchType
-    {
-        Stopwatch,
-        Timer
-    }
-
     /// <summary>
     /// Fields of task table
     /// </summary>

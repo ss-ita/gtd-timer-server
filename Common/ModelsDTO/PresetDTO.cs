@@ -26,7 +26,7 @@ namespace GtdCommon.ModelsDto
         /// <summary>
         /// Gets or sets a value of list of timers property
         /// </summary>
-        public IEnumerable<TimerDto> Timers { get; set; }
+        public IEnumerable<TaskDto> Tasks { get; set; }
 
         /// <summary>
         /// Gets or sets a value of user id foreign key property
