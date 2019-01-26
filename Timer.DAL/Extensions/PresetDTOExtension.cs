@@ -35,15 +35,15 @@ namespace GtdTimerDAL.Extensions
         /// Convert to presetDto method
         /// </summary>
         /// <param name="preset">preset model</param>
-        /// <param name="timers">list of timers</param>
+        /// <param name="tasks">list of timers</param>
         /// <returns>returns presetDto</returns>
-        public static PresetDto ToPresetDto(this Preset preset, List<TimerDto> timers)
+        public static PresetDto ToPresetDto(this Preset preset, List<TaskDto> tasks)
         {
             return new PresetDto
             {
                 PresetName = preset.Name,
                 Id = preset.Id,
-                Timers = timers,
+                Tasks = tasks,
                 UserId = preset.UserId
             };
         }

@@ -23,11 +23,12 @@ namespace GtdServiceTierTests
     {
         private readonly int presetid = 1;
         private readonly int userid = 1;
-        //private readonly List<Timer> timers = new List<Timer>();
+        private readonly List<PresetTasks> presetTasks = new List<PresetTasks>();
+        private readonly List<Tasks> tasks = new List<Tasks>();
         private Preset preset = new Preset { Name = "preset", UserId = 1, Id = 1 };
         private List<Preset> presets = new List<Preset>();
         private Mock<IUnitOfWork> unitOfWork;
-        private Mock<ITimerService> timerService;      
+        private Mock<ITaskService> taskService;
         private PresetService subject;
 
         /// <summary>
@@ -37,8 +38,8 @@ namespace GtdServiceTierTests
         public void Setup()
         {
             unitOfWork = new Mock<IUnitOfWork>();
-            timerService = new Mock<ITimerService>();
-            subject = new PresetService(unitOfWork.Object, timerService.Object);
+            taskService = new Mock<ITaskService>();
+            subject = new PresetService(unitOfWork.Object, taskService.Object);
             presets.Add(preset);
         }
 
@@ -48,12 +49,12 @@ namespace GtdServiceTierTests
         [Test]
         public void CreatePreset()
         {
-            List<TimerDto> timers = new List<TimerDto>();
+            List<TaskDto> tasks = new List<TaskDto>();
             var presetRepository = new Mock<IRepository<Preset>>();
 
             unitOfWork.Setup(_ => _.Presets).Returns(presetRepository.Object);
 
-            subject.CreatePreset(preset.ToPresetDto(timers));
+            subject.CreatePreset(preset.ToPresetDto(tasks));
 
             unitOfWork.Verify(_ => _.Save(), Times.Once);
         }
@@ -64,12 +65,12 @@ namespace GtdServiceTierTests
         [Test]
         public void UpdatePreset()
         {
-            List<TimerDto> timers = new List<TimerDto>();
+            List<TaskDto> tasks = new List<TaskDto>();
             var presetRepository = new Mock<IRepository<Preset>>();
 
             unitOfWork.Setup(_ => _.Presets).Returns(presetRepository.Object);
 
-            subject.UpdatePreset(preset.ToPresetDto(timers));
+            subject.UpdatePreset(preset.ToPresetDto(tasks));
 
             unitOfWork.Verify(_ => _.Save(), Times.Once);
         }
@@ -92,17 +93,17 @@ namespace GtdServiceTierTests
         /// <summary>
         /// Get preset by id throws exception test
         /// </summary>
-        //[Test]
-        //public void ThrowsExceptionGetPresetById()
-        //{
-        //    var presetRepository = new Mock<IRepository<Preset>>();
+        [Test]
+        public void ThrowsExceptionGetPresetById()
+        {
+            var presetRepository = new Mock<IRepository<Preset>>();
 
-        //    unitOfWork.Setup(_ => _.Presets).Returns(presetRepository.Object);
+            unitOfWork.Setup(_ => _.Presets).Returns(presetRepository.Object);
 
-        //    var ex = Assert.Throws<PresetNotFoundException>(() => subject.GetPresetById(presetid));
+            var ex = Assert.Throws<PresetNotFoundException>(() => subject.GetPresetById(presetid));
 
-        //    Assert.That(ex.Message, Is.EqualTo("Preset does not Exist!"));
-        //}
+            Assert.That(ex.Message, Is.EqualTo("Preset does not Exist!"));
+        }
 
         /// <summary>
         /// Delete Preset test
@@ -123,46 +124,50 @@ namespace GtdServiceTierTests
         /// <summary>
         /// Get Preset By Id test
         /// </summary>
-        //[Test]
-        //public void GetPresetById()
-        //{
-        //    var presetRepository = new Mock<IRepository<Preset>>();
+        [Test]
+        public void GetPresetById()
+        {
+            var presetRepository = new Mock<IRepository<Preset>>();
 
-        //    unitOfWork.Setup(_ => _.Presets).Returns(presetRepository.Object);
-        //    unitOfWork.Setup(_ => _.Presets.GetByID(presetid)).Returns(preset);
+            unitOfWork.Setup(_ => _.Presets).Returns(presetRepository.Object);
+            unitOfWork.Setup(_ => _.Presets.GetByID(presetid)).Returns(preset);
+            unitOfWork.Setup(_ => _.PresetTasks.GetAllEntitiesByFilter(It.IsAny<Func<PresetTasks, bool>>())).Returns(presetTasks);
 
-        //    Assert.AreEqual(subject.GetPresetById(presetid).PresetName, preset.Name);
-        //}
+            Assert.AreEqual(subject.GetPresetById(presetid).PresetName, preset.Name);
+        }
 
         /// <summary>
         /// Get All Standard Presets test
         /// </summary>
-        //[Test]
-        //public void GetAllStandartPresets()
-        //{
-        //    var presetRepository = new Mock<IRepository<Preset>>();
+        [Test]
+        public void GetAllStandartPresets()
+        {
+            var presetRepository = new Mock<IRepository<Preset>>();
 
-        //    unitOfWork.Setup(_ => _.Presets).Returns(presetRepository.Object);
-        //    unitOfWork.Setup(_ => _.Presets.GetAllEntitiesByFilter(It.IsAny<Func<Preset, bool>>())).Returns(presets);
-        //    unitOfWork.Setup(_ => _.Timers.GetAllEntities()).Returns(timers);
-        //    preset.UserId = null;
-            
-        //    Assert.AreEqual(subject.GetAllStandardPresets()[0].PresetName, preset.Name);
-        //}
+            unitOfWork.Setup(_ => _.Presets).Returns(presetRepository.Object);
+            unitOfWork.Setup(_ => _.Presets.GetAllEntitiesByFilter(It.IsAny<Func<Preset, bool>>())).Returns(presets);
+            unitOfWork.Setup(_ => _.Tasks.GetAllEntities()).Returns(tasks);
+            unitOfWork.Setup(_ => _.PresetTasks.GetAllEntitiesByFilter(It.IsAny<Func<PresetTasks, bool>>())).Returns(presetTasks);
+
+            preset.UserId = null;
+
+            Assert.AreEqual(subject.GetAllStandardPresets()[0].PresetName, preset.Name);
+        }
 
         /// <summary>
         /// Get All Custom Presets test
         /// </summary>
-        //[Test]
-        //public void GetAllCustomPresets()
-        //{
-        //    var presetRepository = new Mock<IRepository<Preset>>();
+        [Test]
+        public void GetAllCustomPresets()
+        {
+            var presetRepository = new Mock<IRepository<Preset>>();
 
-        //    unitOfWork.Setup(_ => _.Presets).Returns(presetRepository.Object);
-        //    unitOfWork.Setup(_ => _.Presets.GetAllEntitiesByFilter(It.IsAny<Func<Preset, bool>>())).Returns(presets);
-        //    unitOfWork.Setup(_ => _.Timers.GetAllEntities()).Returns(timers);
+            unitOfWork.Setup(_ => _.Presets).Returns(presetRepository.Object);
+            unitOfWork.Setup(_ => _.Presets.GetAllEntitiesByFilter(It.IsAny<Func<Preset, bool>>())).Returns(presets);
+            unitOfWork.Setup(_ => _.Tasks.GetAllEntities()).Returns(tasks);
+            unitOfWork.Setup(_ => _.PresetTasks.GetAllEntitiesByFilter(It.IsAny<Func<PresetTasks, bool>>())).Returns(presetTasks);
 
-        //    Assert.AreEqual(subject.GetAllCustomPresetsByUserId(userid)[0].PresetName, preset.Name);
-        //}
+            Assert.AreEqual(subject.GetAllCustomPresetsByUserId(userid)[0].PresetName, preset.Name);
+        }
     }
 }

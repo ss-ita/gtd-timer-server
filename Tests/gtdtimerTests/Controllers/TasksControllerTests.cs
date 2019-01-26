@@ -246,5 +246,37 @@ namespace GtdTimerTests.Controllers
             Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
             taskService.Verify(_ => _.PauseTask(model), Times.Once);
         }
+
+        /// <summary>
+        /// Get All Timers By User Id test
+        /// </summary>
+        [Test]
+        public void GetAllTimersByUserId()
+        {
+            List<TaskDto> tasks = new List<TaskDto>();
+            var userId = 315;
+            userIdentityService.Setup(_ => _.GetUserId()).Returns(userId);
+            taskService.Setup(_ => _.GetAllTimersByUserId(userId)).Returns(tasks);
+            var actual = (OkObjectResult)subject.GetAllTimersByUserId();
+
+            Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
+            Assert.AreSame(actual.Value, tasks);
+        }
+
+        /// <summary>
+        /// Get All Timers By User Id test
+        /// </summary>
+        [Test]
+        public void GetAllStopwatchesByUserId()
+        {
+            List<TaskDto> tasks = new List<TaskDto>();
+            var userId = 315;
+            userIdentityService.Setup(_ => _.GetUserId()).Returns(userId);
+            taskService.Setup(_ => _.GetAllStopwatchesByUserId(userId)).Returns(tasks);
+            var actual = (OkObjectResult)subject.GetAllStopwathesByUserId();
+
+            Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
+            Assert.AreSame(actual.Value, tasks);
+        }
     }
 }
