@@ -45,6 +45,7 @@ namespace GtdTimerDAL.UnitOfWork
         /// </summary>
         IRepository<PresetTasks> PresetTasks { get; set; }
 
+        IRepository<Record> Records { get; set; }
         /// <summary>
         /// Method for saving changes
         /// </summary>
