@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GtdTimer", "gtd-timer\GtdTimer.csproj", "{19E15B65-C9BF-4807-A144-A0C673EDF4AD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GtdTimer", "gtd-timer\gtdtimer.csproj", "{19E15B65-C9BF-4807-A144-A0C673EDF4AD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GtdServiceTier", "ServiceTier\GtdServiceTier.csproj", "{A4A1215D-C073-40A7-B1E8-3C20E1363F4D}"
 EndProject
