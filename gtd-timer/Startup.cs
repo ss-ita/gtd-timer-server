@@ -59,7 +59,7 @@ namespace GtdTimer
             IoCContainer.Configuration = builder.Build();
 
             cors = Environment.GetEnvironmentVariable("AzureCors") ?? IoCContainer.Configuration["Origins"];
-            Console.WriteLine(cors);
+            
             
         }
 
@@ -143,24 +143,23 @@ namespace GtdTimer
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint(
+                        $"/swagger/{IoCContainer.Configuration.GetValue<string>("SwaggerDocument:Name")}/swagger.json",
+                        IoCContainer.Configuration.GetValue<string>("SwaggerDocument:Name"));
+                });
             }
             else
             {
                 app.UseHsts();
             }
 
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint(
-                    $"/swagger/{IoCContainer.Configuration.GetValue<string>("SwaggerDocument:Name")}/swagger.json",
-                    IoCContainer.Configuration.GetValue<string>("SwaggerDocument:Name"));
-            });
-
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
-            loggerFactory.AddLog4Net(configuration.GetValue<string>("Log4NetConfigFile:Name"));
+            loggerFactory.AddLog4Net(env.ContentRootPath + configuration.GetValue<string>("Log4NetConfigFile:Name"));
             app.UseMvc();
         }
     }
