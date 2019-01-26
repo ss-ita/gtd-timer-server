@@ -397,7 +397,7 @@ namespace GtdTimer.Controllers
             return Ok(taskRecords);
         }
 
-        [HttpDelete("[action]/{taskId")]
+        [HttpDelete("[action]/{taskId}")]
         public IActionResult DeleteRecordById(int taskId)
         {
             taskService.DeleteRecordById(taskId);
