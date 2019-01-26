@@ -5,7 +5,7 @@
 //-----------------------------------------------------------------------
 
 using System.Collections.Generic;
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 
 using GtdCommon.ModelsDto;
 
@@ -109,7 +109,7 @@ namespace GtdServiceTier.Services
         /// </summary>
         /// <param name="uploadFile">File being imported.</param>
         /// <param name="userId">Id of current user.</param>
-        /// <returns></returns>
+        /// <returns>returns result of importing a file to datebase</returns>
         IEnumerable<TaskDto> ImportTasksFromCsv(IFormFile uploadFile, int userId);
 
         /// <summary>
@@ -117,7 +117,7 @@ namespace GtdServiceTier.Services
         /// </summary>
         /// <param name="uploadFile">File being imported.</param>
         /// <param name="userId">Id of current user.</param>
-        /// <returns></returns>
+        /// <returns>returns result of importing a file to datebase</returns>
         IEnumerable<TaskDto> ImportTasksFromXml(IFormFile uploadFile, int userId);
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace GtdServiceTier.Services
         /// </summary>
         /// <param name="listOfTasksDto">List of tasks to be added.</param>
         /// <param name="userId">Id of current user.</param>
-        /// <returns></returns>
+        /// <returns>returns result of importing a file to datebase</returns>
         IEnumerable<TaskDto> AddTaskToDatabase(IEnumerable<TaskDto> listOfTasksDto, int userId);
 
         IEnumerable<TaskRecordDto> GetAllRecordsByUserId(int userId);
@@ -135,5 +135,25 @@ namespace GtdServiceTier.Services
         IEnumerable<TaskRecordDto> GetAllRecordsByTaskId(int userId,int taskId);
 
         void DeleteRecordById(int taskId);
+        /// <summary>
+        /// Method for getting all timers by preset id
+        /// </summary>
+        /// <param name="presetid">id of chosen preset</param>
+        /// <returns>list of timers of chosen preset</returns>
+        List<TaskDto> GetAllTasksByPresetId(int presetid);
+
+        /// <summary>
+        /// Method for getting all timers of chosen user
+        /// </summary>
+        /// <param name="userId">id of chosen user</param>
+        /// <returns>all timers of chosen user</returns>
+        IEnumerable<TaskDto> GetAllTimersByUserId(int userId);
+
+        /// <summary>
+        /// Method for getting all stopwatches of chosen user
+        /// </summary>
+        /// <param name="userId">id of chosen user</param>
+        /// <returns>all stopwatches of chosen user</returns>
+        IEnumerable<TaskDto> GetAllStopwatchesByUserId(int userId);
     }
 }

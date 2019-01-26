@@ -16,6 +16,7 @@ using GtdServiceTier.Services;
 using GtdTimerDAL.Entities;
 using GtdTimerDAL.Repositories;
 using GtdTimerDAL.UnitOfWork;
+using GtdTimerDAL.Extensions;
 
 namespace GtdServiceTierTests
 {
@@ -184,7 +185,7 @@ namespace GtdServiceTierTests
         [Test]
         public void GetAllTasks()
         {
-             var taskRepository = new Mock<IRepository<Tasks>>();
+            var taskRepository = new Mock<IRepository<Tasks>>();
 
             unitOfWork.Setup(_ => _.Tasks).Returns(taskRepository.Object);
             unitOfWork.Setup(_ => _.Tasks.GetAllEntities()).Returns(tasks);
@@ -260,6 +261,65 @@ namespace GtdServiceTierTests
             unitOfWork.Setup(_ => _.Tasks.GetAllEntitiesByFilter(It.IsAny<Func<Tasks, bool>>())).Returns(tasks);
 
             Assert.AreEqual(subject.GetAllArchivedTasksByUserId(userId).ToList()[0].Name, task.Name);
+        }
+
+        /// <summary>
+        /// Get All Timers By Preset Id test
+        /// </summary>
+        [Test]
+        public void GetAllTasksByPresetId()
+        {
+            int presetid = 12;
+            Tasks task = new Tasks { Name = "task", Id = 1, IsActive = true };
+            List<Tasks> tasks = new List<Tasks>
+            {
+                task
+            };
+            PresetTasks presetTasks = new PresetTasks { Id = 1, PresetId = presetid, TaskId = task.Id };
+            List<PresetTasks> presetsTasks = new List<PresetTasks>
+            {
+                presetTasks
+            };
+            List<TaskDto> taskDtos = new List<TaskDto>
+            {
+                task.ToTaskDto()
+            };
+            var tasksRepository = new Mock<IRepository<Tasks>>();
+
+            unitOfWork.Setup(_ => _.Tasks).Returns(tasksRepository.Object);
+            unitOfWork.Setup(_ => _.Tasks.GetAllEntitiesByFilter(It.IsAny<Func<Tasks, bool>>())).Returns(tasks);
+            unitOfWork.Setup(_ => _.PresetTasks.GetAllEntitiesByFilter(It.IsAny<Func<PresetTasks, bool>>())).Returns(presetsTasks);
+            unitOfWork.Setup(_ => _.Tasks.GetByID(task.Id)).Returns(task);
+
+            Assert.AreEqual(subject.GetAllTasksByPresetId(presetid)[0].IsActive, taskDtos[0].IsActive);
+        }
+
+        /// <summary>
+        /// Get All Timers By User Id test
+        /// </summary>
+        [Test]
+        public void GetAllTimersByUserId()
+        {
+            var taskRepository = new Mock<IRepository<Tasks>>();
+
+            unitOfWork.Setup(_ => _.Tasks).Returns(taskRepository.Object);
+            unitOfWork.Setup(_ => _.Tasks.GetAllEntitiesByFilter(It.IsAny<Func<Tasks, bool>>())).Returns(tasks);
+
+            Assert.AreEqual(subject.GetAllTimersByUserId(userId).ToList()[0].Name, task.Name);
+        }
+
+        /// <summary>
+        /// Get All Stopwatches By User Id test
+        /// </summary>
+        [Test]
+        public void GetAllStopwatchesByUserId()
+        {
+            var taskRepository = new Mock<IRepository<Tasks>>();
+
+            unitOfWork.Setup(_ => _.Tasks).Returns(taskRepository.Object);
+            unitOfWork.Setup(_ => _.Tasks.GetAllEntitiesByFilter(It.IsAny<Func<Tasks, bool>>())).Returns(tasks);
+
+            Assert.AreEqual(subject.GetAllStopwatchesByUserId(userId).ToList()[0].Name, task.Name);
         }
     }
 }

@@ -16,6 +16,7 @@ using GtdTimerDAL.Extensions;
 using GtdTimerDAL.Entities;
 using GtdTimerDAL.UnitOfWork;
 using ServiceStack.Text;
+using GtdCommon.Constant;
 
 namespace GtdServiceTier.Services
 {
@@ -37,13 +38,14 @@ namespace GtdServiceTier.Services
             var task = taskDto.ToTask();
             UnitOfWork.Tasks.Create(task);
             UnitOfWork.Save();
+            taskDto.Id = task.Id;
         }
 
         public IEnumerable<TaskDto> AddTaskToDatabase(IEnumerable<TaskDto> listOfTasksDto, int userId)
         {
             var newTasks = new List<Tasks>();
 
-            foreach(var taskDto in listOfTasksDto)
+            foreach (var taskDto in listOfTasksDto)
             {
                 taskDto.UserId = userId;
                 var task = taskDto.ToTask();
@@ -271,6 +273,29 @@ namespace GtdServiceTier.Services
             {
                 throw new TaskNotFoundException();
             }
+        }
+        public List<TaskDto> GetAllTasksByPresetId(int presetid)
+        {
+            return UnitOfWork.PresetTasks.GetAllEntitiesByFilter(task => task.PresetId == presetid)
+                .Select(tasks => UnitOfWork.Tasks.GetByID(tasks.Id).ToTaskDto()).ToList();
+        }
+
+        public IEnumerable<TaskDto> GetAllTimersByUserId(int userId)
+        {
+            var listOfTasksDto = UnitOfWork.Tasks.GetAllEntitiesByFilter((task) => (task.UserId == userId && task.WatchType == WatchType.Timer))
+                .Select(task => task.ToTaskDto())
+                .ToList();
+
+            return listOfTasksDto;
+        }
+
+        public IEnumerable<TaskDto> GetAllStopwatchesByUserId(int userId)
+        {
+            var listOfTasksDto = UnitOfWork.Tasks.GetAllEntitiesByFilter((task) => (task.UserId == userId && task.WatchType == WatchType.Stopwatch))
+                .Select(task => task.ToTaskDto())
+                .ToList();
+
+            return listOfTasksDto;
         }
     }
 }

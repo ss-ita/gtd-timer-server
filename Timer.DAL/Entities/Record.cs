@@ -1,9 +1,8 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="Tasks.cs" company="SoftServe">
+// <copyright file="Record.cs" company="SoftServe">
 //     Company copyright tag.
 // </copyright>
 //-----------------------------------------------------------------------
-
 
 using System;
 
@@ -15,18 +14,18 @@ namespace GtdTimerDAL.Entities
     public class Record
     {
         /// <summary>
-        /// Primary key for Record
+        /// Gets or sets Primary key for Record
         /// </summary>
         public int Id { get; set; }
 
         
         /// <summary>
-        /// Time when timer was started
+        /// Gets or sets Time when timer was started
         /// </summary>
         public DateTime StartTime { get; set; }
 
         /// <summary>
-        /// Time when timer was stopped
+        /// Gets or sets Time when timer was stopped
         /// </summary>
         public DateTime StopTime { get; set; }
 
@@ -36,12 +35,12 @@ namespace GtdTimerDAL.Entities
         public string Action { get; set; }
 
         /// <summary>
-        /// Foreign key that reference to Task
+        /// Gets or sets Foreign key that reference to Task
         /// </summary>
         public int TaskId { get; set; }
 
         /// <summary>
-        /// Task that are referenced by this record
+        /// Gets or sets Task that are referenced by this record
         /// </summary>
         public Tasks Task { get; set; }
     }

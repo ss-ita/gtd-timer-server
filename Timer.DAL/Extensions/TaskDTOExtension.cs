@@ -33,7 +33,8 @@ namespace GtdTimerDAL.Extensions
                 LastStartTime = taskDto.LastStartTime,
                 IsActive = taskDto.IsActive,
                 IsRunning = taskDto.IsRunning,
-                UserId = taskDto.UserId
+                UserId = taskDto.UserId,
+                WatchType = taskDto.WatchType
             };
         }
 
@@ -54,7 +55,8 @@ namespace GtdTimerDAL.Extensions
                 LastStartTime = task.LastStartTime,
                 IsActive = task.IsActive,
                 IsRunning = task.IsRunning,
-                UserId = task.UserId
+                UserId = task.UserId,
+                WatchType = task.WatchType
             };
         }
     }

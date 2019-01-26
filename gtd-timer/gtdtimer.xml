@@ -111,18 +111,37 @@
             instance of preset service
             </summary>
         </member>
-        <member name="F:GtdTimer.Controllers.PresetController.timerService">
+        <member name="F:GtdTimer.Controllers.PresetController.taskService">
             <summary>
-            instance of timer service
+            instance of task service
             </summary>
         </member>
-        <member name="M:GtdTimer.Controllers.PresetController.#ctor(GtdServiceTier.Services.IUserIdentityService,GtdServiceTier.Services.IPresetService,GtdServiceTier.Services.ITimerService)">
+        <member name="M:GtdTimer.Controllers.PresetController.#ctor(GtdServiceTier.Services.IUserIdentityService,GtdServiceTier.Services.IPresetService,GtdServiceTier.Services.ITaskService)">
             <summary>
             Initializes a new instance of the <see cref="T:GtdTimer.Controllers.PresetController" /> class.
             </summary>
             <param name="userIdentityService">instance of user identity service</param>
             <param name="presetService">instance of preset service</param>
-            <param name="timerService">instance of timer service</param>
+            <param name="taskService">instance of task service</param>
+        </member>
+        <member name="M:GtdTimer.Controllers.PresetController.GetPreset(System.Int32)">
+            <summary>
+            Method for obtaining a preset by id
+            </summary>
+            <param name="presetid"> id of preset</param>
+            <returns> result of getting preset with chosen id </returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.PresetController.GetAllCustomPresets">
+            <summary>
+            Method for getting all custom presets of chosen user
+            </summary>
+            <returns> result of getting a list of all custom presets of chosen user </returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.PresetController.GetAllStandardPresets">
+            <summary>
+            Method for getting all standard presets
+            </summary>
+            <returns> result of getting a list of all standard presets</returns>
         </member>
         <member name="M:GtdTimer.Controllers.PresetController.CreatePreset(GtdCommon.ModelsDto.PresetDto)">
             <summary>
@@ -137,6 +156,13 @@
             </summary>
             <param name="presetDto"> preset model</param>
             <returns> result of updating a preset</returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.PresetController.DeletePreset(System.Int32)">
+            <summary>
+            Method for deleting a preset
+            </summary>
+            <param name="presetid"> id of preset</param>
+            <returns> result of deleting a preset</returns>
         </member>
         <member name="T:GtdTimer.Controllers.TasksController">
             <summary>
@@ -315,6 +341,18 @@
             </summary>
             <param name="uploadFile">file which user choses to import</param>
             <returns>result of importing file to database</returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.TasksController.GetAllTimersByUserId">
+            <summary>
+            Returns all user's timers.
+            </summary>
+            <returns>result of getting all user's timers.</returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.TasksController.GetAllStopwathesByUserId">
+            <summary>
+            Returns all user's stopwatches.
+            </summary>
+            <returns>result of getting all user's stopwatches.</returns>
         </member>
         <member name="T:GtdTimer.Controllers.UserController">
             <summary>
