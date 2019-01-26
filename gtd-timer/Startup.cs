@@ -58,7 +58,7 @@ namespace GtdTimer
                 config["AzureKeyVault:clientSecret"]);
             IoCContainer.Configuration = builder.Build();
 
-            cors = Environment.GetEnvironmentVariable("AzureCors") ?? IoCContainer.Configuration["Origins"];
+            cors = /*Environment.GetEnvironmentVariable("AzureCors") ?? */IoCContainer.Configuration["Origins"];
             Console.WriteLine(cors);
             
         }
