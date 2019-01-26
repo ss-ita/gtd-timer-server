@@ -134,6 +134,6 @@ namespace GtdServiceTier.Services
 
         IEnumerable<TaskRecordDto> GetAllRecordsByTaskId(int userId,int taskId);
 
-        void DeleteRecordById(int taskId)
+        void DeleteRecordById(int taskId);
     }
 }

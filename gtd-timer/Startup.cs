@@ -55,6 +55,7 @@ namespace GtdTimer
                 config["AzureKeyVault:clientId"],
                 config["AzureKeyVault:clientSecret"]);
             IoCContainer.Configuration = builder.Build();
+
         }
 
         /// <summary>
