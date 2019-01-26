@@ -60,6 +60,7 @@ namespace GtdTimer
 
             cors = Environment.GetEnvironmentVariable("AzureCors") ?? IoCContainer.Configuration["Origins"];
             Console.WriteLine(cors);
+            
         }
 
         /// <summary>
