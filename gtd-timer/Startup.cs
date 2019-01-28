@@ -76,6 +76,7 @@ namespace GtdTimer
             services.AddScoped<IPresetService, PresetService>();
             services.AddScoped<IUsersService, UsersService>();
             services.AddScoped<ITaskService, TaskService>();
+            services.AddScoped<IAlarmService, AlarmService>();
             services.AddScoped<IUserIdentityService, UserIdentityService>();
 
             services.AddScoped<IRepository<PresetTasks>, Repository<PresetTasks>>();
@@ -155,6 +156,7 @@ namespace GtdTimer
             app.UseHttpsRedirection();
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
             loggerFactory.AddLog4Net(env.ContentRootPath + configuration.GetValue<string>("Log4NetConfigFile:Name"));
+
             app.UseMvc();
         }
     }
