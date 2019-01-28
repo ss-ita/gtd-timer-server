@@ -17,7 +17,8 @@ namespace GtdTimerDAL.Extensions
                 Action = record.Action,
                 StartTime = record.StartTime,
                 StopTime = record.StopTime,
-                TaskId = task.Id
+                TaskId = task.Id,
+                ElapsedTime = record.ElapsedTime
             };
 
             return recordToReturn;
@@ -32,9 +33,11 @@ namespace GtdTimerDAL.Extensions
                 Action = record.Action,
                 StartTime = record.StartTime,
                 StopTime = record.StopTime,
-                TaskId = record.TaskId
+                TaskId = record.TaskId,
+                ElapsedTime = record.ElapsedTime
+                
             };
-
+           
             return recordToReturn;
         }
     }

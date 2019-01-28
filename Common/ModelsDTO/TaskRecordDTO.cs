@@ -16,6 +16,8 @@ namespace GtdCommon.ModelsDto
 
         public DateTime StopTime { get; set; }
 
+        public int ElapsedTime { get; set; }
+
         public int TaskId { get; set; }
     }
 }

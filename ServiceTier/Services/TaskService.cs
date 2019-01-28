@@ -237,7 +237,8 @@ namespace GtdServiceTier.Services
                                          Description = tasks.Description,
                                          Action = taskRecord.Action,
                                          StartTime = taskRecord.StartTime,
-                                         StopTime = taskRecord.StopTime
+                                         StopTime = taskRecord.StopTime,
+                                         ElapsedTime =taskRecord.ElapsedTime
                                      }).ToList();
 
             return listOfTaskRecords;    
