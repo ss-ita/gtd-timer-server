@@ -35,12 +35,12 @@ namespace GtdTimer
     /// </summary>
     public class Startup
     {
+        public string cors { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Startup" /> class.
         /// </summary>
         /// <param name="env">hosting environment</param>
-
-        public string cors{get;set;} 
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -59,8 +59,8 @@ namespace GtdTimer
             IoCContainer.Configuration = builder.Build();
 
             cors = Environment.GetEnvironmentVariable("AzureCors") ?? IoCContainer.Configuration["Origins"];
-            
-            
+
+
         }
 
         /// <summary>

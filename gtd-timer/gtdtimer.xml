@@ -504,7 +504,7 @@
             class for configuring project
             </summary>
         </member>
-        <member name="P:GtdTimer.Startup.cors">
+        <member name="M:GtdTimer.Startup.#ctor(Microsoft.AspNetCore.Hosting.IHostingEnvironment)">
             <summary>
             Initializes a new instance of the <see cref="T:GtdTimer.Startup" /> class.
             </summary>
