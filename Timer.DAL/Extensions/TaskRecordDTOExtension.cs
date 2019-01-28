@@ -1,12 +1,25 @@
-﻿using System;
+﻿//-----------------------------------------------------------------------
+// <copyright file="TaskRecordDtoExtension.cs" company="SoftServe">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
 
 using GtdCommon.ModelsDto;
 using GtdTimerDAL.Entities;
 
 namespace GtdTimerDAL.Extensions
 {
+    /// <summary>
+    /// TaskRecordDtoExtension class for converting to record and vice versa
+    /// </summary>
     public static class TaskRecordDTOExtension
     {
+        /// <summary>
+        /// Convert to TaskRecord method
+        /// </summary>
+        /// <param name="record">Record variable</param>
+        /// <param name="task">Task variable</param>
+        /// <returns></returns>
         public static TaskRecordDto ToTaskRecord(this Record record, Tasks task)
         {
             TaskRecordDto recordToReturn = new TaskRecordDto
@@ -24,6 +37,11 @@ namespace GtdTimerDAL.Extensions
             return recordToReturn;
         }
 
+        /// <summary>
+        /// Convert to record method
+        /// </summary>
+        /// <param name="record">TaskRecordDto model</param>
+        /// <returns></returns>
         public static Record ToRecord(this TaskRecordDto record)
         {
             Record recordToReturn = new Record

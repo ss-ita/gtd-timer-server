@@ -128,13 +128,33 @@ namespace GtdServiceTier.Services
         /// <returns>returns result of importing a file to datebase</returns>
         IEnumerable<TaskDto> AddTaskToDatabase(IEnumerable<TaskDto> listOfTasksDto, int userId);
 
+        /// <summary>
+        /// Method for getting all users' Records.
+        /// </summary>
+        /// <param name="userId"> Id of user which records to return</param>
+        /// <returns>result of getting all users' records.</returns>
         IEnumerable<TaskRecordDto> GetAllRecordsByUserId(int userId);
 
+        /// <summary>
+        /// Method for creating record
+        /// </summary>
+        /// <param name="taskRecord">TaskRecord model to create</param>
         void CreateRecord(TaskRecordDto taskRecord);
 
+        /// <summary>
+        /// Method for getting all records by task id
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="taskId"></param>
+        /// <returns></returns>
         IEnumerable<TaskRecordDto> GetAllRecordsByTaskId(int userId,int taskId);
 
+        /// <summary>
+        /// Method of deleting record by id
+        /// </summary>
+        /// <param name="taskId">Id of record to delete</param>
         void DeleteRecordById(int taskId);
+
         /// <summary>
         /// Method for getting all timers by preset id
         /// </summary>
