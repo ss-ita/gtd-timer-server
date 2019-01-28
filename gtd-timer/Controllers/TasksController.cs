@@ -371,6 +371,61 @@ namespace GtdTimer.Controllers
         }
 
         /// <summary>
+        /// Returns all users' Records.
+        /// </summary>
+        /// <returns>result of getting all users' records.</returns>
+        [HttpGet("[action]")]
+        public IActionResult GetAllRecordsByUserId()
+        {
+            var userId = userIdentityService.GetUserId();
+            var taskRecords = taskService.GetAllRecordsByUserId(userId);
+
+            return Ok(taskRecords);
+        }
+
+        /// <summary>
+        /// Create record
+        /// </summary>
+        /// <param name="taskRecord">TaskRecordDto model </param>
+        /// <returns>Returns result of creating record</returns>
+        [HttpPost("[action]")]
+        public IActionResult CreateRecord([FromBody]TaskRecordDto taskRecord)
+        {
+            var userId = userIdentityService.GetUserId();
+            taskService.CreateRecord(taskRecord);
+
+            return Ok();
+        }
+
+        /// <summary>
+        /// Returns all records by Task id
+        /// </summary>
+        /// <param name="taskId">Task id</param>
+        /// <returns>Return result of getting records by task id</returns>
+        [HttpGet("[action]/{taskId}")]
+        public IActionResult GetAllRecordsByTaskId(int taskId)
+        {
+            var userId = userIdentityService.GetUserId();
+            var taskRecords = taskService.GetAllRecordsByTaskId(userId, taskId);
+
+            return Ok(taskRecords);
+        }
+
+        /// <summary>
+        /// Delete Record by id
+        /// </summary>
+        /// <param name="taskId">Id of record to delete</param>
+        /// <returns>Results of deleting record</returns>
+        [HttpDelete("[action]/{taskId}")]
+        public IActionResult DeleteRecordById(int taskId)
+        {
+            taskService.DeleteRecordById(taskId);
+
+            return Ok();
+        }
+
+
+        /// <summary>
         /// Returns all user's timers.
         /// </summary>
         /// <returns>result of getting all user's timers.</returns>

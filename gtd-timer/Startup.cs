@@ -35,6 +35,8 @@ namespace GtdTimer
     /// </summary>
     public class Startup
     {
+        public string cors { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Startup" /> class.
         /// </summary>
@@ -55,6 +57,10 @@ namespace GtdTimer
                 config["AzureKeyVault:clientId"],
                 config["AzureKeyVault:clientSecret"]);
             IoCContainer.Configuration = builder.Build();
+
+            cors = Environment.GetEnvironmentVariable("AzureCors") ?? IoCContainer.Configuration["Origins"];
+
+
         }
 
         /// <summary>
@@ -67,7 +73,7 @@ namespace GtdTimer
             {
                 options.AddPolicy(
                     "AllowSpecificOrigin",
-                    builder => builder.WithOrigins(IoCContainer.Configuration["Origins"]).AllowAnyHeader().AllowAnyMethod());
+                    builder => builder.WithOrigins(cors).AllowAnyHeader().AllowAnyMethod());
             });
             services.AddDbContext<TimerContext>(opts => opts.UseSqlServer(IoCContainer.Configuration["AzureConnection"]));
             services.AddIdentity<User, Role>().AddEntityFrameworkStores<TimerContext>().AddDefaultTokenProviders();
@@ -141,25 +147,27 @@ namespace GtdTimer
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint(
+                        $"/swagger/{IoCContainer.Configuration.GetValue<string>("SwaggerDocument:Name")}/swagger.json",
+                        IoCContainer.Configuration.GetValue<string>("SwaggerDocument:Name"));
+                });
             }
             else
             {
                 app.UseHsts();
             }
 
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint(
-                    $"/swagger/{IoCContainer.Configuration.GetValue<string>("SwaggerDocument:Name")}/swagger.json",
-                    IoCContainer.Configuration.GetValue<string>("SwaggerDocument:Name"));
-            });
-
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
             loggerFactory.AddLog4Net(env.ContentRootPath + configuration.GetValue<string>("Log4NetConfigFile:Name"));
+<<<<<<< HEAD
+=======
 
+>>>>>>> db195de73807765e410e8889309754476d93c9f8
             app.UseMvc();
         }
     }

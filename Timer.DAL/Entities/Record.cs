@@ -18,6 +18,7 @@ namespace GtdTimerDAL.Entities
         /// </summary>
         public int Id { get; set; }
 
+        
         /// <summary>
         /// Gets or sets Time when timer was started
         /// </summary>
@@ -27,6 +28,16 @@ namespace GtdTimerDAL.Entities
         /// Gets or sets Time when timer was stopped
         /// </summary>
         public DateTime StopTime { get; set; }
+
+        /// <summary>
+        /// What's happened with timer
+        /// </summary>
+        public string Action { get; set; }
+
+        /// <summary>
+        /// Gets or sets how much time this record was runned
+        /// </summary>
+        public int ElapsedTime { get; set; }
 
         /// <summary>
         /// Gets or sets Foreign key that reference to Task
