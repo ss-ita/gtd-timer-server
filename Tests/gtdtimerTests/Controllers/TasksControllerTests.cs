@@ -14,6 +14,8 @@ using GtdCommon.ModelsDto;
 using GtdTimer.Controllers;
 using GtdServiceTier.Services;
 using GtdTimerDAL.UnitOfWork;
+using GtdTimer.ActionResults;
+using Microsoft.AspNetCore.Http;
 
 namespace GtdTimerTests.Controllers
 {
@@ -23,8 +25,9 @@ namespace GtdTimerTests.Controllers
         private Mock<ITaskService> taskService;
         private Mock<IUserIdentityService> userIdentityService;
         private Mock<IUnitOfWork> unitOfWork;
-
         private TasksController subject;
+        private int userId = 315;
+        private int taskId = 9;
 
         /// <summary>
         /// Method which is called immediately in each test run
@@ -44,7 +47,6 @@ namespace GtdTimerTests.Controllers
         [Test]
         public void GetTaskById()
         {
-            int taskId = 9;
             TaskDto taskDto = new TaskDto();
             taskService.Setup(task => task.GetTaskById(taskId)).Returns(taskDto);
 
@@ -103,7 +105,6 @@ namespace GtdTimerTests.Controllers
         public void GetAllTasksByUserId()
         {
             List<TaskDto> tasks = new List<TaskDto>();
-            var userId = 315;
             userIdentityService.Setup(_ => _.GetUserId()).Returns(userId);
             taskService.Setup(_ => _.GetAllTasksByUserId(userId)).Returns(tasks);
             var actual = (OkObjectResult)subject.GetAllTasksByUserId();
@@ -119,7 +120,6 @@ namespace GtdTimerTests.Controllers
         public void GetAllActiveTasksByUserId()
         {
             List<TaskDto> tasks = new List<TaskDto>();
-            var userId = 315;
             userIdentityService.Setup(_ => _.GetUserId()).Returns(userId);
             taskService.Setup(_ => _.GetAllActiveTasksByUserId(userId)).Returns(tasks);
             var actual = (OkObjectResult)subject.GetAllActiveTasksByUserId();
@@ -135,7 +135,6 @@ namespace GtdTimerTests.Controllers
         public void GetAllArchivedTasksByUserId()
         {
             List<TaskDto> tasks = new List<TaskDto>();
-            var userId = 315;
             userIdentityService.Setup(_ => _.GetUserId()).Returns(userId);
             taskService.Setup(_ => _.GetAllArchivedTasksByUserId(userId)).Returns(tasks);
             var actual = (OkObjectResult)subject.GetAllArchivedTasksByUserId();
@@ -150,7 +149,6 @@ namespace GtdTimerTests.Controllers
         [Test]
         public void CreateTask()
         {
-            var userId = 315;
             userIdentityService.Setup(_ => _.GetUserId()).Returns(userId);
             TaskDto model = new TaskDto();
             var actual = (OkObjectResult)subject.CreateTask(model);
@@ -165,7 +163,6 @@ namespace GtdTimerTests.Controllers
         [Test]
         public void UpdateTask()
         {
-            var userId = 315;
             userIdentityService.Setup(_ => _.GetUserId()).Returns(userId);
             TaskDto model = new TaskDto();
             var actual = (OkResult)subject.UpdateTask(model);
@@ -180,7 +177,6 @@ namespace GtdTimerTests.Controllers
         [Test]
         public void DeleteTask()
         {
-            var taskId = 2;
             var actual = (OkResult)subject.DeleteTask(taskId);
 
             Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
@@ -193,7 +189,6 @@ namespace GtdTimerTests.Controllers
         [Test]
         public void SwitchArchivedStatus()
         {
-            var userId = 315;
             userIdentityService.Setup(_ => _.GetUserId()).Returns(userId);
             TaskDto model = new TaskDto();
             var actual = (OkResult)subject.SwitchArchivedStatus(model);
@@ -208,7 +203,6 @@ namespace GtdTimerTests.Controllers
         [Test]
         public void ResetTask()
         {
-            var userId = 315;
             userIdentityService.Setup(_ => _.GetUserId()).Returns(userId);
             TaskDto model = new TaskDto();
             var actual = (OkResult)subject.ResetTask(model);
@@ -223,7 +217,6 @@ namespace GtdTimerTests.Controllers
         [Test]
         public void StartTask()
         {
-            var userId = 315;
             userIdentityService.Setup(_ => _.GetUserId()).Returns(userId);
             TaskDto model = new TaskDto();
             var actual = (OkResult)subject.StartTask(model);
@@ -238,7 +231,6 @@ namespace GtdTimerTests.Controllers
         [Test]
         public void PauseTask()
         {
-            var userId = 315;
             userIdentityService.Setup(_ => _.GetUserId()).Returns(userId);
             TaskDto model = new TaskDto();
             var actual = (OkResult)subject.PauseTask(model);
@@ -254,7 +246,6 @@ namespace GtdTimerTests.Controllers
         public void GetAllTimersByUserId()
         {
             List<TaskDto> tasks = new List<TaskDto>();
-            var userId = 315;
             userIdentityService.Setup(_ => _.GetUserId()).Returns(userId);
             taskService.Setup(_ => _.GetAllTimersByUserId(userId)).Returns(tasks);
             var actual = (OkObjectResult)subject.GetAllTimersByUserId();
@@ -270,13 +261,104 @@ namespace GtdTimerTests.Controllers
         public void GetAllStopwatchesByUserId()
         {
             List<TaskDto> tasks = new List<TaskDto>();
-            var userId = 315;
             userIdentityService.Setup(_ => _.GetUserId()).Returns(userId);
             taskService.Setup(_ => _.GetAllStopwatchesByUserId(userId)).Returns(tasks);
             var actual = (OkObjectResult)subject.GetAllStopwathesByUserId();
 
             Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
             Assert.AreSame(actual.Value, tasks);
+        }
+
+        /// <summary>
+        /// ExportAllTasksAsXmlByUserId method's unit test.
+        /// </summary>
+        [Test]
+        public void ExportAllTasksAsXmlByUserId()
+        {
+            List<TaskDto> tasks = new List<TaskDto>();
+            userIdentityService.Setup(_ => _.GetUserId()).Returns(userId);
+            taskService.Setup(_ => _.GetAllTasksByUserId(userId)).Returns(tasks);
+            var actual = subject.ExportAllTasksAsXmlByUserId();
+
+            Assert.IsInstanceOf(typeof(XmlResult), actual);
+            Assert.AreSame(tasks, (actual as XmlResult).ObjectToSerialize);
+        }
+
+        /// <summary>
+        /// ExportAllTasksAsCsvByUserId method's unit test.
+        /// </summary>
+        [Test]
+        public void ExportAllTasksAsCsvByUserId()
+        {
+            List<TaskDto> tasks = new List<TaskDto>();
+            userIdentityService.Setup(_ => _.GetUserId()).Returns(userId);
+            taskService.Setup(_ => _.GetAllTasksByUserId(userId)).Returns(tasks);
+            var actual = subject.ExportAllTasksAsCsvByUserId();
+
+            Assert.IsInstanceOf(typeof(CsvResult), actual);
+            Assert.AreSame(tasks, (actual as CsvResult).ObjectToSerialize);
+        }
+
+        /// <summary>
+        /// ExportTaskAsXmlById method's unit test.
+        /// </summary>
+        [Test]
+        public void ExportTaskAsXmlById()
+        {
+            TaskDto taskDto = new TaskDto();
+            taskService.Setup(task => task.GetTaskById(taskId)).Returns(taskDto);
+
+            var actual = subject.ExportTaskAsXmlById(taskId);
+
+            Assert.IsInstanceOf(typeof(XmlResult), actual);
+            Assert.AreSame(taskDto, (actual as XmlResult).ObjectToSerialize);
+        }
+
+        /// <summary>
+        /// ImportTasksAsCsv method's unit test.
+        /// </summary>
+        [Test]
+        public void ImportTasksAsCsv()
+        {
+            var fileMock = new Mock<IFormFile>();
+            List<TaskDto> listOfTasksDto = new List<TaskDto>();
+
+            userIdentityService.Setup(_ => _.GetUserId()).Returns(userId);
+            taskService.Setup(task => task.ImportTasksFromCsv(fileMock.Object, userId)).Returns(listOfTasksDto);
+            var actual = subject.ImportTasksAsCsv(fileMock.Object);
+
+            Assert.IsInstanceOf(typeof(OkObjectResult), actual);
+            Assert.AreSame(listOfTasksDto, (actual as OkObjectResult).Value);
+        }
+
+        /// <summary>
+        /// ImportTasksAsXml method's unit test.
+        /// </summary>
+        [Test]
+        public void ImportTasksAsXml()
+        {
+            var fileMock = new Mock<IFormFile>();
+            List<TaskDto> listOfTasksDto = new List<TaskDto>();
+            userIdentityService.Setup(_ => _.GetUserId()).Returns(userId);
+            taskService.Setup(task => task.ImportTasksFromXml(fileMock.Object, userId)).Returns(listOfTasksDto);
+            var actual = subject.ImportTasksAsXml(fileMock.Object);
+
+            Assert.IsInstanceOf(typeof(OkObjectResult), actual);
+            Assert.AreSame(listOfTasksDto, (actual as OkObjectResult).Value);
+        }
+
+        /// <summary>
+        /// ExportTaskAsCsvById method's unit test.
+        /// </summary>
+        [Test]
+        public void ExportTaskAsCsvById()
+        {
+            TaskDto taskDto = new TaskDto();
+            taskService.Setup(task => task.GetTaskById(taskId)).Returns(taskDto);
+            var actual = subject.ExportTaskAsCsvById(taskId);
+
+            Assert.IsInstanceOf(typeof(CsvResult), actual);
+            Assert.AreSame(taskDto, (actual as CsvResult).ObjectToSerialize);
         }
     }
 }

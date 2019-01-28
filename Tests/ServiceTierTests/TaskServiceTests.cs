@@ -17,6 +17,8 @@ using GtdTimerDAL.Entities;
 using GtdTimerDAL.Repositories;
 using GtdTimerDAL.UnitOfWork;
 using GtdTimerDAL.Extensions;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace GtdServiceTierTests
 {
@@ -27,6 +29,21 @@ namespace GtdServiceTierTests
         private List<Tasks> tasks = new List<Tasks>();
         private Mock<IUnitOfWork> unitOfWork;
         private TaskService subject;
+        string contentCsv = "testData";
+        string contentXml = @"<?xml version = ""1.0"" encoding=""utf-8""?>
+                              <ArrayOfTaskDto xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+                                <TaskDto>
+                                    <Name>Test</Name>
+                                    <Description />
+                                    <ElapsedTime>0</ElapsedTime>
+                                    <LastStartTime>0001-01-01T00:00:00</LastStartTime>
+                                    <Goal xsi:nil=""true"" />
+                                    <IsActive>true</IsActive>
+                                    <IsRunning>true</IsRunning>
+                                </TaskDto>
+                              </ArrayOfTaskDto>";
+        string fileNameCsv = "test.csv";
+        string fileNameXml = "test.xml";
 
         /// <summary>
         /// Method which is called immediately in each test run
@@ -320,6 +337,72 @@ namespace GtdServiceTierTests
             unitOfWork.Setup(_ => _.Tasks.GetAllEntitiesByFilter(It.IsAny<Func<Tasks, bool>>())).Returns(tasks);
 
             Assert.AreEqual(subject.GetAllStopwatchesByUserId(userId).ToList()[0].Name, task.Name);
+        }
+
+        /// <summary>
+        /// AddTasksToDatabase method's unit test.
+        /// </summary>
+        [Test]
+        public void AddTasksToDatabase()
+        {
+            List<TaskDto> listOfTasksDto = new List<TaskDto>();
+            var taskRepository = new Mock<IRepository<Tasks>>();
+
+            unitOfWork.Setup(_ => _.Tasks).Returns(taskRepository.Object);
+            var result = subject.AddTaskToDatabase(listOfTasksDto, userId);
+
+            Assert.IsInstanceOf(typeof(IEnumerable<TaskDto>), result);
+            unitOfWork.Verify(_ => _.Save(), Times.Once);
+        }
+
+        /// <summary>
+        /// ImportTasksFromCsv method's unit test.
+        /// </summary>
+        [Test]
+        public void ImportTasksFromCsv()
+        {
+            var fileMock = new Mock<IFormFile>();
+            List<TaskDto> listOfTasksDto = new List<TaskDto>();
+
+            var taskRepository = new Mock<IRepository<Tasks>>();
+            var memoryStream = new MemoryStream();
+            var writer = new StreamWriter(memoryStream);
+            writer.Write(contentCsv);
+            writer.Flush();
+            memoryStream.Position = 0;
+            fileMock.Setup(_ => _.OpenReadStream()).Returns(memoryStream);
+            fileMock.Setup(_ => _.FileName).Returns(fileNameCsv);
+            fileMock.Setup(_ => _.Length).Returns(memoryStream.Length);
+            unitOfWork.Setup(_ => _.Tasks).Returns(taskRepository.Object);
+            var result = subject.ImportTasksFromCsv(fileMock.Object, userId);
+
+            Assert.IsInstanceOf(typeof(IEnumerable<TaskDto>), result);
+            unitOfWork.Verify(_ => _.Save(), Times.Once);
+        }
+
+        /// <summary>
+        /// ImportTasksFromXml method's unit test.
+        /// </summary>
+        [Test]
+        public void ImportTasksFromXml()
+        {
+            var fileMock = new Mock<IFormFile>();
+            List<TaskDto> listOfTasksDto = new List<TaskDto>();
+
+            var taskRepository = new Mock<IRepository<Tasks>>();
+            var memoryStream = new MemoryStream();
+            var writer = new StreamWriter(memoryStream);
+            writer.Write(contentXml);
+            writer.Flush();
+            memoryStream.Position = 0;
+            fileMock.Setup(_ => _.OpenReadStream()).Returns(memoryStream);
+            fileMock.Setup(_ => _.FileName).Returns(fileNameXml);
+            fileMock.Setup(_ => _.Length).Returns(memoryStream.Length);
+            unitOfWork.Setup(_ => _.Tasks).Returns(taskRepository.Object);
+            var result = subject.ImportTasksFromXml(fileMock.Object, userId);
+
+            Assert.IsInstanceOf(typeof(IEnumerable<TaskDto>), result);
+            unitOfWork.Verify(_ => _.Save(), Times.Once);
         }
     }
 }
