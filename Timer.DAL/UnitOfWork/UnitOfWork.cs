@@ -50,8 +50,14 @@ namespace GtdTimerDAL.UnitOfWork
         /// </summary>
         private Lazy<IRepository<PresetTasks>> presetTasks;
 
+        /// <summary>
+        /// Records table
+        /// </summary>
         private Lazy<IRepository<Record>> records;
 
+        /// <summary>
+        /// Alarm table
+        /// </summary>
         private Lazy<IRepository<Alarm>> alarms;
 
         /// <summary>
@@ -75,7 +81,9 @@ namespace GtdTimerDAL.UnitOfWork
             IRepository<Preset> preset,
             IRepository<PresetTasks> presetTasks,
             IRepository<Tasks> tasks,
-            IRepository<UserRole> userRole)
+            IRepository<UserRole> userRole,
+            IRepository<Record> record,
+            IRepository<Alarm> alarm)
         {
             this.context = context;
             disposed = false;
@@ -85,6 +93,8 @@ namespace GtdTimerDAL.UnitOfWork
             Presets = preset;
             PresetTasks = presetTasks;
             UserRoles = userRole;
+            Records = record;
+            Alarms = alarm;
         }
 
         /// <summary>
@@ -162,7 +172,6 @@ namespace GtdTimerDAL.UnitOfWork
         /// <summary>
         /// Gets or sets records table
         /// </summary>
-
         public IRepository<Record> Records
         {
             get => records.Value;

@@ -45,7 +45,16 @@ namespace GtdTimerDAL.UnitOfWork
         /// </summary>
         IRepository<PresetTasks> PresetTasks { get; set; }
 
+        /// <summary>
+        /// Gets or sets records table
+        /// </summary>
         IRepository<Record> Records { get; set; }
+
+        /// <summary>
+        /// Gets or sets alarms table
+        /// </summary>
+        IRepository<Alarm> Alarms { get; set; }
+
         /// <summary>
         /// Method for saving changes
         /// </summary>
