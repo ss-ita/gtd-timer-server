@@ -61,6 +61,11 @@ namespace GtdTimerDAL.UnitOfWork
         private Lazy<IRepository<Alarm>> alarms;
 
         /// <summary>
+        /// Users table
+        /// </summary>
+        private Lazy<IRepository<User>> users;
+
+        /// <summary>
         /// Value indicating whether it is disposed 
         /// </summary>
         private bool disposed;
@@ -83,7 +88,8 @@ namespace GtdTimerDAL.UnitOfWork
             IRepository<Tasks> tasks,
             IRepository<UserRole> userRole,
             IRepository<Record> record,
-            IRepository<Alarm> alarm)
+            IRepository<Alarm> alarm,
+            IRepository<User> users)
         {
             this.context = context;
             disposed = false;
@@ -95,6 +101,7 @@ namespace GtdTimerDAL.UnitOfWork
             UserRoles = userRole;
             Records = record;
             Alarms = alarm;
+            Users = users;
         }
 
         /// <summary>
@@ -193,6 +200,17 @@ namespace GtdTimerDAL.UnitOfWork
             }
         }
 
+        /// <summary>
+        /// Gets or sets users table
+        /// </summary>
+        public IRepository<User> Users {
+            get => users.Value;
+            set
+            {
+                users = new Lazy<IRepository<User>>(() => value);
+            }  
+        }
+        
         public void Save()
         {
             context.SaveChanges();

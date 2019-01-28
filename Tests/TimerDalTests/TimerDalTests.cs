@@ -48,9 +48,8 @@ namespace GtdTimerDalTests
                 LastName = "Kataryna",
                 PasswordHash = "qwertyQWERTY@@22"
             };
-            var timerContext = new Mock<TimerContext>();
 
-            unitOfWork.Setup(obj => obj.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
+            unitOfWork.Setup(obj => obj.UserManager).Returns(new ApplicationUserManager(userRepository.Object));
             userManager.Setup(obj => obj.FindByEmailAsync(user.Email)).ReturnsAsync((User)null);
 
             unitOfWork.Object.UserManager.CreateAsync(user);
@@ -71,9 +70,8 @@ namespace GtdTimerDalTests
                 LastName = "Kataryna",
                 PasswordHash = "qwertyQWERTY@@22"
             };
-            var timerContext = new Mock<TimerContext>();
 
-            unitOfWork.Setup(obj => obj.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
+            unitOfWork.Setup(obj => obj.UserManager).Returns(new ApplicationUserManager(userRepository.Object));
 
             unitOfWork.Object.UserManager.DeleteAsync(user);
             userRepository.Verify(obj => obj.DeleteAsync(user), Times.Once);
@@ -93,9 +91,8 @@ namespace GtdTimerDalTests
                 LastName = "Kataryna",
                 PasswordHash = "qwertyQWERTY@@22"
             };
-            var timerContext = new Mock<TimerContext>();
 
-            unitOfWork.Setup(obj => obj.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
+            unitOfWork.Setup(obj => obj.UserManager).Returns(new ApplicationUserManager(userRepository.Object));
 
             unitOfWork.Object.UserManager.UpdateAsync(user);
             userRepository.Verify(obj => obj.UpdateAsync(user), Times.Once);

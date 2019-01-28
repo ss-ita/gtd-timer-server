@@ -17,15 +17,20 @@ namespace GtdTimerDAL.Repositories
     /// <summary>
     /// class which implement user store repository
     /// </summary>
-    public class UserRepository : Repository<User>, IUserStoreRepository
+    public class UserStore : IUserStore
     {
+        /// <summary>
+        /// Gets or sets timer context
+        /// </summary>
+        public TimerContext TimerContext { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="UserRepository" /> class.
         /// </summary>
         /// <param name="context"> timer context instance </param>
-        public UserRepository(TimerContext context) : base(context)
+        public UserStore(TimerContext context)
         {
-            this.Timercontext = context;
+            this.TimerContext = context;
         }
 
         public async Task CreateAsync(User user)
@@ -35,7 +40,7 @@ namespace GtdTimerDAL.Repositories
                 throw new ArgumentNullException(nameof(user));
             }
 
-            Timercontext.Users.Add(user);
+            TimerContext.Users.Add(user);
             await this.SaveChanges();
         }
 
@@ -46,32 +51,32 @@ namespace GtdTimerDAL.Repositories
                 throw new ArgumentNullException(nameof(user));
             }
 
-            Timercontext.Users.Attach(user);
-            Timercontext.Entry(user).State = EntityState.Modified;
+            TimerContext.Users.Attach(user);
+            TimerContext.Entry(user).State = EntityState.Modified;
             await this.SaveChanges();
         }
 
         public async Task DeleteAsync(User user)
         {
-            if (Timercontext.Entry(user).State == EntityState.Detached)
+            if (TimerContext.Entry(user).State == EntityState.Detached)
             {
-                Timercontext.Users.Attach(user);
+                TimerContext.Users.Attach(user);
             }
 
-           Timercontext.Users.Remove(user);
-            await Timercontext.SaveChangesAsync();
+           TimerContext.Users.Remove(user);
+            await TimerContext.SaveChangesAsync();
         }
 
         public async Task<User> FindByIdAsync(int userId)
         {
-            return await Timercontext.Users.FindAsync(userId);
+            return await TimerContext.Users.FindAsync(userId);
         }
 
         public async Task<User> FindByNameAsync(string userName)
         {
             User userRes = await Task.Run(() =>
             {
-                var user = Timercontext.Users.Where(userToFind => userToFind.UserName == userName).ToList<User>();
+                var user = TimerContext.Users.Where(userToFind => userToFind.UserName == userName).ToList<User>();
                 if (user.Count == 0)
                 {
                     return null;
@@ -91,7 +96,7 @@ namespace GtdTimerDAL.Repositories
                 throw new ArgumentNullException(nameof(user));
             }
 
-            User userToUpdate = await Timercontext.Users.FindAsync(user);
+            User userToUpdate = await TimerContext.Users.FindAsync(user);
             userToUpdate.Email = email;
         }
 
@@ -102,7 +107,7 @@ namespace GtdTimerDAL.Repositories
                 throw new ArgumentNullException(nameof(user));
             }
 
-            User userToReturnEmail = await Timercontext.Users.FindAsync(user.Id);
+            User userToReturnEmail = await TimerContext.Users.FindAsync(user.Id);
             return userToReturnEmail.Email;
         }
 
@@ -113,7 +118,7 @@ namespace GtdTimerDAL.Repositories
                 throw new ArgumentNullException(nameof(user));
             }
 
-            User userToReturnEmailConfirmed = await Timercontext.Users.FindAsync(user.Id);
+            User userToReturnEmailConfirmed = await TimerContext.Users.FindAsync(user.Id);
             return userToReturnEmailConfirmed.EmailConfirmed;
         }
 
@@ -124,13 +129,13 @@ namespace GtdTimerDAL.Repositories
                 throw new ArgumentNullException(nameof(user));
             }
 
-            User userToConfrim = await Timercontext.Users.FindAsync(user.Id);
+            User userToConfrim = await TimerContext.Users.FindAsync(user.Id);
             user.EmailConfirmed = bl;
         }
 
         public async Task<User> FindByEmailAsync(string email)
         {
-            List<User> list = Timercontext.Users.Where(userToFind => userToFind.Email == email).ToList<User>();
+            List<User> list = TimerContext.Users.Where(userToFind => userToFind.Email == email).ToList<User>();
             if (list.Count == 0)
             {
                 return null;
@@ -141,9 +146,9 @@ namespace GtdTimerDAL.Repositories
 
         public void Dispose()
         {
-            if (this.Timercontext != null)
+            if (this.TimerContext != null)
             {
-                this.Timercontext.Dispose();
+                this.TimerContext.Dispose();
             }
 
             GC.SuppressFinalize(this);
@@ -151,8 +156,8 @@ namespace GtdTimerDAL.Repositories
 
         public async Task<IList<string>> GetRolesAsync(User user)
         {
-            List<string> roles = (from userRole in Timercontext.UserRoles
-                                  join role in Timercontext.Roles
+            List<string> roles = (from userRole in TimerContext.UserRoles
+                                  join role in TimerContext.Roles
                                 on userRole.RoleId equals role.Id
                                   where userRole.UserId == user.Id
                                   select role.Name).ToList<string>();
@@ -161,7 +166,7 @@ namespace GtdTimerDAL.Repositories
 
         public Task AddToRoleAsync(User user, string roleName)
         {
-            var roleToAdd = (from role in Timercontext.Roles
+            var roleToAdd = (from role in TimerContext.Roles
                              where role.Name == roleName
                              select role).First();
             UserRole userRole = new UserRole
@@ -171,13 +176,13 @@ namespace GtdTimerDAL.Repositories
                 User = user,
                 Role = roleToAdd
             };
-            Timercontext.UserRoles.Add(userRole);
-            return Timercontext.SaveChangesAsync();
+            TimerContext.UserRoles.Add(userRole);
+            return TimerContext.SaveChangesAsync();
         }
 
         public Task RemoveFromRoleAsync(User user, string roleName)
         {
-            var roleToRemove = (from role in Timercontext.Roles
+            var roleToRemove = (from role in TimerContext.Roles
                                 where role.Name == roleName
                                 select role).First();
             UserRole userRole = new UserRole
@@ -187,17 +192,17 @@ namespace GtdTimerDAL.Repositories
                 User = user,
                 Role = roleToRemove
             };
-            Timercontext.UserRoles.Remove(userRole);
-            return Timercontext.SaveChangesAsync();
+            TimerContext.UserRoles.Remove(userRole);
+            return TimerContext.SaveChangesAsync();
         }
 
         public async Task<bool> IsInRoleAsync(User user, string roleName)
         {
-            var check = (from role in Timercontext.Roles
+            var check = (from role in TimerContext.Roles
              where role.Name == roleName
              select role).First();
 
-            if (check != null)
+            if (check == null)
             {
                 return false;
             }
@@ -234,7 +239,7 @@ namespace GtdTimerDAL.Repositories
 
         private async Task SaveChanges()
         {
-            await Timercontext.SaveChangesAsync();
+            await TimerContext.SaveChangesAsync();
         }
     }
 }
