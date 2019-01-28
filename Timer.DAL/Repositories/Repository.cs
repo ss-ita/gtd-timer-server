@@ -30,14 +30,14 @@ namespace GtdTimerDAL.Repositories
         /// <param name="context">timer context instance</param>
         public Repository(TimerContext context)
         {
-            Timercontext = context;
+            TimerContext = context;
             dbSet = context.Set<TEntity>();
         }
 
         /// <summary>
         /// Gets or sets timer context
         /// </summary>
-        public TimerContext Timercontext { get; set; }
+        public TimerContext TimerContext { get; set; }
 
         public IEnumerable<TEntity> GetAllEntities()
         {
@@ -67,7 +67,7 @@ namespace GtdTimerDAL.Repositories
 
         public void Delete(TEntity entityToDelete)
         {
-            if (Timercontext.Entry(entityToDelete).State == EntityState.Detached)
+            if (TimerContext.Entry(entityToDelete).State == EntityState.Detached)
             {
                 dbSet.Attach(entityToDelete);
             }
@@ -78,12 +78,12 @@ namespace GtdTimerDAL.Repositories
         public void Update(TEntity entityToUpdate)
         {
             dbSet.Attach(entityToUpdate);
-            Timercontext.Entry(entityToUpdate).State = EntityState.Modified;
+            TimerContext.Entry(entityToUpdate).State = EntityState.Modified;
         }
 
         public void Save()
         {
-            Timercontext.SaveChanges();
+            TimerContext.SaveChanges();
         }
     }
 }
