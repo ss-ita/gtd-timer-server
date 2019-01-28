@@ -44,9 +44,8 @@ namespace GtdServiceTierTests
             int userID = 1;
             User user = new User();
             var userRepository = new Mock<IUserStore<User, int>>();
-            var timerContext = new Mock<TimerContext>();
 
-            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
+            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object));
             userRepository.Setup(_ => _.FindByIdAsync(userID)).ReturnsAsync(user);
 
             var actual = subject.Get(userID);
@@ -107,9 +106,8 @@ namespace GtdServiceTierTests
             UpdatePasswordDto model = new UpdatePasswordDto { PasswordOld = password };
             User user = new User { PasswordHash = password };
 
-            var timerContext = new Mock<TimerContext>();
             var userRepository = new Mock<IUserStore<User, int>>();
-            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
+            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object));
             unitOfWork.Setup(_ => _.UserManager.FindByIdAsync(userId)).ReturnsAsync(user);
             unitOfWork.Setup(_ => _.UserManager.CheckPasswordAsync(user, model.PasswordOld)).ReturnsAsync(true);
 
@@ -129,8 +127,7 @@ namespace GtdServiceTierTests
             User user = new User { PasswordHash = "password" };
 
             var userRepository = new Mock<IUserStore<User, int>>();
-            var timerContext = new Mock<TimerContext>();
-            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
+            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object));
             unitOfWork.Setup(_ => _.UserManager.FindByIdAsync(userId)).ReturnsAsync(user);
             unitOfWork.Setup(_ => _.UserManager.CheckPasswordAsync(user, model.PasswordOld)).ReturnsAsync(false);
 
@@ -148,9 +145,8 @@ namespace GtdServiceTierTests
             int userId = 1;
             User user = new User();
             var userRepository = new Mock<IUserEmailStore<User, int>>();
-            var timerContext = new Mock<TimerContext>();
 
-            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
+            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object));
             userRepository.Setup(_ => _.FindByIdAsync(userId)).ReturnsAsync(user);
 
             subject.Delete(userId);
@@ -181,9 +177,8 @@ namespace GtdServiceTierTests
             var roles = new List<string>();
             var identity = new IdentityResult();
 
-            var timerContext = new Mock<TimerContext>();
             var userRepository = new Mock<IUserStore<User, int>>();
-            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
+            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object));
             unitOfWork.Setup(_ => _.UserManager.FindByEmailAsync(model.Email)).ReturnsAsync(user);
             unitOfWork.Setup(_ => _.UserManager.GetRolesAsync(user.Id)).ReturnsAsync(roles);
             unitOfWork.Setup(_ => _.UserManager.AddToRoleAsync(user.Id, model.Role)).ReturnsAsync(identity);
@@ -203,9 +198,8 @@ namespace GtdServiceTierTests
             User user = new User();
             var identity = new IdentityResult();
 
-            var timerContext = new Mock<TimerContext>();
             var userRepository = new Mock<IUserStore<User, int>>();
-            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
+            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object));
             unitOfWork.Setup(_ => _.UserManager.FindByEmailAsync(model.Email)).ReturnsAsync(user);
             unitOfWork.Setup(_ => _.UserManager.RemoveFromRoleAsync(user.Id, model.Role)).ReturnsAsync(identity);
 
@@ -220,17 +214,25 @@ namespace GtdServiceTierTests
         [Test]
         public void GetAllEmailTest_ReturnsOkRequest()
         {
-            var emails = new List<string>();
+            var roles = new List<Role>();
+            var users = new List<User>();
+            var userRoles = new List<UserRole>();
+            Role role = new Role();
+            role.Name = "Admin";
+            roles.Add(role);
 
             var userRepository = new Mock<IUserEmailStore<User, int>>();
-            var timerContext = new Mock<TimerContext>();
 
-            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
-            unitOfWork.Setup(_ => _.UserManager.GetAllEmails(GtdCommon.Constant.Constants.AdminRole)).ReturnsAsync(emails);
+            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object));
+            unitOfWork.Setup(_ => _.Roles.GetAllEntities()).Returns(roles);
+            unitOfWork.Setup(_ => _.Users.GetAllEntities()).Returns(users);
+            unitOfWork.Setup(_ => _.UserRoles.GetAllEntities()).Returns(userRoles);
 
             var actual = subject.GetUsersEmails(GtdCommon.Constant.Constants.AdminRole);
 
-            Assert.AreSame(actual, emails);
+            unitOfWork.Verify(_ => _.Roles.GetAllEntities(), Times.Once);
+            unitOfWork.Verify(_ => _.UserRoles.GetAllEntities(), Times.Once);
+            unitOfWork.Verify(_ => _.Users.GetAllEntities(), Times.Once);
         }
 
         /// <summary>
@@ -243,9 +245,8 @@ namespace GtdServiceTierTests
             int id = 1;
 
             var userRepository = new Mock<IUserEmailStore<User, int>>();
-            var timerContext = new Mock<TimerContext>();
 
-            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
+            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object));
             unitOfWork.Setup(_ => _.UserManager.GetRolesAsync(id)).ReturnsAsync(roles);
 
             var actual = subject.GetRolesOfUser(id);
@@ -263,9 +264,8 @@ namespace GtdServiceTierTests
             User user = new User();
             var identity = new IdentityResult();
 
-            var timerContext = new Mock<TimerContext>();
             var userRepository = new Mock<IUserStore<User, int>>();
-            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
+            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object));
             unitOfWork.Setup(_ => _.UserManager.FindByEmailAsync(email)).ReturnsAsync(user);
             unitOfWork.Setup(_ => _.UserManager.DeleteAsync(user)).ReturnsAsync(identity);
 
@@ -283,9 +283,8 @@ namespace GtdServiceTierTests
             RoleDto model = new RoleDto() { Email = GtdCommon.Constant.Constants.CorectEmail, Role = GtdCommon.Constant.Constants.AdminRole };
             User user = null;
 
-            var timerContext = new Mock<TimerContext>();
             var userRepository = new Mock<IUserStore<User, int>>();
-            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
+            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object));
             unitOfWork.Setup(_ => _.UserManager.FindByEmailAsync(model.Email)).ReturnsAsync(user);
 
             var ex = Assert.Throws<UserNotFoundException>(() => subject.RemoveFromRoles(model.Email, model.Role));
@@ -302,9 +301,8 @@ namespace GtdServiceTierTests
             RoleDto model = new RoleDto() { Email = GtdCommon.Constant.Constants.CorectEmail, Role = GtdCommon.Constant.Constants.AdminRole };
             User user = null;
 
-            var timerContext = new Mock<TimerContext>();
             var userRepository = new Mock<IUserStore<User, int>>();
-            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
+            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object));
             unitOfWork.Setup(_ => _.UserManager.FindByEmailAsync(model.Email)).ReturnsAsync(user);
 
             var ex = Assert.Throws<UserNotFoundException>(() => subject.AddToRole(model));
@@ -323,7 +321,7 @@ namespace GtdServiceTierTests
 
             var timerContext = new Mock<TimerContext>();
             var userRepository = new Mock<IUserStore<User, int>>();
-            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object, timerContext.Object));
+            unitOfWork.Setup(_ => _.UserManager).Returns(new ApplicationUserManager(userRepository.Object));
             unitOfWork.Setup(_ => _.UserManager.FindByEmailAsync(model.Email)).ReturnsAsync(user);
 
             var ex = Assert.Throws<UserNotFoundException>(() => subject.DeleteUserByEmail(model.Email));

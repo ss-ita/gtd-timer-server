@@ -51,6 +51,21 @@ namespace GtdTimerDAL.UnitOfWork
         private Lazy<IRepository<PresetTasks>> presetTasks;
 
         /// <summary>
+<<<<<<< HEAD
+=======
+        /// Records table
+        /// </summary>
+        private Lazy<IRepository<Record>> records;
+
+        /// <summary>
+        /// Alarm table
+        /// </summary>
+        private Lazy<IRepository<Alarm>> alarms;
+
+        private Lazy<IRepository<User>> users;
+
+        /// <summary>
+>>>>>>> aaa4e735fb9f77e1a11660af26ba7880fd55d784
         /// Value indicating whether it is disposed 
         /// </summary>
         private bool disposed;
@@ -71,7 +86,14 @@ namespace GtdTimerDAL.UnitOfWork
             IRepository<Preset> preset,
             IRepository<PresetTasks> presetTasks,
             IRepository<Tasks> tasks,
+<<<<<<< HEAD
             IRepository<UserRole> userRole)
+=======
+            IRepository<UserRole> userRole,
+            IRepository<Record> record,
+            IRepository<Alarm> alarm,
+            IRepository<User> users)
+>>>>>>> aaa4e735fb9f77e1a11660af26ba7880fd55d784
         {
             this.context = context;
             disposed = false;
@@ -81,6 +103,12 @@ namespace GtdTimerDAL.UnitOfWork
             Presets = preset;
             PresetTasks = presetTasks;
             UserRoles = userRole;
+<<<<<<< HEAD
+=======
+            Records = record;
+            Alarms = alarm;
+            Users = users;
+>>>>>>> aaa4e735fb9f77e1a11660af26ba7880fd55d784
         }
 
         /// <summary>
@@ -155,6 +183,41 @@ namespace GtdTimerDAL.UnitOfWork
             }
         }
 
+<<<<<<< HEAD
+=======
+        /// <summary>
+        /// Gets or sets records table
+        /// </summary>
+        public IRepository<Record> Records
+        {
+            get => records.Value;
+            set
+            {
+                records = new Lazy<IRepository<Record>>(() => value); 
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets alarms table
+        /// </summary>
+        public IRepository<Alarm> Alarms
+        {
+            get => alarms.Value;
+            set
+            {
+                alarms = new Lazy<IRepository<Alarm>>(() => value);
+            }
+        }
+
+        public IRepository<User> Users {
+            get => users.Value;
+            set
+            {
+                users = new Lazy<IRepository<User>>(() => value);
+            }  
+        }
+
+>>>>>>> aaa4e735fb9f77e1a11660af26ba7880fd55d784
         public void Save()
         {
             context.SaveChanges();

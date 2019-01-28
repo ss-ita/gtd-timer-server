@@ -84,8 +84,14 @@ namespace GtdTimer
             services.AddScoped<IRepository<Role>, Repository<Role>>();
             services.AddScoped<IRepository<Tasks>, Repository<Tasks>>();
             services.AddScoped<IRepository<UserRole>, Repository<UserRole>>();
+<<<<<<< HEAD
+=======
+            services.AddScoped<IRepository<Record>, Repository<Record>>();
+            services.AddScoped<IRepository<Alarm>, Repository<Alarm>>();
+            services.AddScoped<IRepository<User>, Repository<User>>();
+>>>>>>> aaa4e735fb9f77e1a11660af26ba7880fd55d784
             services.AddScoped<IApplicationUserManager<User, int>, ApplicationUserManager>();
-            services.AddScoped<IUserStore<User, int>, UserRepository>();
+            services.AddScoped<IUserStore<User, int>, UserStore>();
 
             services.AddAuthentication(opts =>
             {
@@ -156,7 +162,10 @@ namespace GtdTimer
             app.UseHttpsRedirection();
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
             loggerFactory.AddLog4Net(env.ContentRootPath + configuration.GetValue<string>("Log4NetConfigFile:Name"));
+<<<<<<< HEAD
 
+=======
+>>>>>>> aaa4e735fb9f77e1a11660af26ba7880fd55d784
             app.UseMvc();
         }
     }
