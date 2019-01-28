@@ -60,6 +60,9 @@ namespace GtdTimerDAL.UnitOfWork
         /// </summary>
         private Lazy<IRepository<Alarm>> alarms;
 
+        /// <summary>
+        /// Users table
+        /// </summary>
         private Lazy<IRepository<User>> users;
 
         /// <summary>
@@ -197,6 +200,9 @@ namespace GtdTimerDAL.UnitOfWork
             }
         }
 
+        /// <summary>
+        /// Gets or sets users table
+        /// </summary>
         public IRepository<User> Users {
             get => users.Value;
             set
@@ -204,7 +210,7 @@ namespace GtdTimerDAL.UnitOfWork
                 users = new Lazy<IRepository<User>>(() => value);
             }  
         }
-
+        
         public void Save()
         {
             context.SaveChanges();
