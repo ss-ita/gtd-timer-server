@@ -76,6 +76,7 @@ namespace GtdTimer
             services.AddScoped<IPresetService, PresetService>();
             services.AddScoped<IUsersService, UsersService>();
             services.AddScoped<ITaskService, TaskService>();
+            services.AddScoped<IAlarmService, AlarmService>();
             services.AddScoped<IUserIdentityService, UserIdentityService>();
 
             services.AddScoped<IRepository<PresetTasks>, Repository<PresetTasks>>();
@@ -83,6 +84,8 @@ namespace GtdTimer
             services.AddScoped<IRepository<Role>, Repository<Role>>();
             services.AddScoped<IRepository<Tasks>, Repository<Tasks>>();
             services.AddScoped<IRepository<UserRole>, Repository<UserRole>>();
+            services.AddScoped<IRepository<Record>, Repository<Record>>();
+            services.AddScoped<IRepository<Alarm>, Repository<Alarm>>();
             services.AddScoped<IApplicationUserManager<User, int>, ApplicationUserManager>();
             services.AddScoped<IUserStore<User, int>, UserRepository>();
 
