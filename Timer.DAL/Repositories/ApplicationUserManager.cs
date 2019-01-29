@@ -10,7 +10,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 
 using GtdTimerDAL.Entities;
+
 using GtdTimerDAL.TokensProvider;
+
+using System;
+
 
 namespace GtdTimerDAL.Repositories
 {
@@ -24,47 +28,66 @@ namespace GtdTimerDAL.Repositories
         /// </summary>
         /// <param name="store"> I user store instance</param>
         /// <param name="context"> timer context instance </param>
-        public ApplicationUserManager(IUserStore<User, int> store) : base(store)
+        public ApplicationUserManager(IUserStore<User, int> store, 
+            IRepository<Role> roles,
+            IRepository<UserRole> userRoles,
+            IRepository<User> users) : base(store)
         {
             this.UserTokenProvider = new UserTokenProvider<IUser>();
+            Roles = roles;
+            UserRoles = userRoles;
+            Users = users;
         }
 
         /// <summary>
-        /// Gets or sets timer context
+        /// Roles table
         /// </summary>
-        public TimerContext TimerContext { get; set; }
+        private Lazy<IRepository<Role>> roles;
 
-        public async Task<IList<string>> GetAllEmails(string roleName)
+        /// <summary>
+        /// User roles table
+        /// </summary>
+        private Lazy<IRepository<UserRole>> userRoles;
+
+        /// <summary>
+        /// Users table
+        /// </summary>
+        private Lazy<IRepository<User>> users;
+
+        /// <summary>
+        /// Gets or sets roles table
+        /// </summary>
+        public IRepository<Role> Roles
         {
-            Role role = (from rol in TimerContext.Roles
-                         where rol.Name == roleName
-                         select rol).FirstOrDefault();
-            IList<string> emails = new List<string>();
-
-            if (role.Name == GtdCommon.Constant.Constants.UserRole)
+            get => roles.Value;
+            set
             {
-                emails = (from user in TimerContext.Users
-                          join userRole in TimerContext.UserRoles
-                          on user.Id equals userRole.UserId
-                          where userRole.RoleId == role.Id
-                          select user.Email).ToList<string>().Except(
-                         (from user in TimerContext.Users
-                          join userRole in TimerContext.UserRoles
-                         on user.Id equals userRole.UserId
-                          where userRole.RoleId == 2 || userRole.RoleId == 3
-                          select user.Email).ToList<string>()).ToList();
+                roles = new Lazy<IRepository<Role>>(() => value);
             }
+        }
 
-            if (role.Name == GtdCommon.Constant.Constants.AdminRole)
+        /// <summary>
+        /// Gets or sets user roles table
+        /// </summary>
+        public IRepository<UserRole> UserRoles
+        {
+            get => userRoles.Value;
+            set
             {
-                emails = (from user in TimerContext.Users
-                          join userRole in TimerContext.UserRoles
-                          on user.Id equals userRole.UserId
-                          where userRole.RoleId == role.Id
-                          select user.Email).ToList<string>();
+                userRoles = new Lazy<IRepository<UserRole>>(() => value);
             }
+        }
 
-            return await Task.FromResult((IList<string>)emails);
+        /// <summary>
+        /// Gets or sets user users table
+        /// </summary>
+        public IRepository<User> Users
+        {
+            get => users.Value;
+            set
+            {
+                users = new Lazy<IRepository<User>>(() => value);
+            }
         }
     }
 }

@@ -47,11 +47,6 @@ namespace GtdCommon.ModelsDto
         public TimeSpan? Goal { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether property is active
-        /// </summary>
-        public bool IsActive { get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether property is running
         /// </summary>
         public bool IsRunning { get; set; }

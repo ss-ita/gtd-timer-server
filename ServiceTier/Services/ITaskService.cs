@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 
 using GtdCommon.ModelsDto;
+using System;
 
 namespace GtdServiceTier.Services
 {
@@ -28,32 +29,6 @@ namespace GtdServiceTier.Services
         /// <param name="userId">id of chosen user</param>
         /// <returns>all tasks of chosen user</returns>
         IEnumerable<TaskDto> GetAllTasksByUserId(int userId);
-
-        /// <summary>
-        /// Method for getting all active tasks
-        /// </summary>
-        /// <returns>all active tasks</returns>
-        IEnumerable<TaskDto> GetAllActiveTasks();
-
-        /// <summary>
-        /// Method for getting all active tasks of chosen user
-        /// </summary>
-        /// <param name="userId">id of chosen user</param>
-        /// <returns>all active tasks of chosen user</returns>
-        IEnumerable<TaskDto> GetAllActiveTasksByUserId(int userId);
-
-        /// <summary>
-        /// Method for getting all archived tasks
-        /// </summary>
-        /// <returns>returns list of all archived tasks</returns>
-        IEnumerable<TaskDto> GetAllArchivedTasks();
-
-        /// <summary>
-        /// Method for getting all archived tasks of chosen user
-        /// </summary>
-        /// <param name="userId">id of chosen user</param>
-        /// <returns>all archived tasks of chosen user</returns>
-        IEnumerable<TaskDto> GetAllArchivedTasksByUserId(int userId);
 
         /// <summary>
         /// Method for getting task by task id
@@ -79,12 +54,6 @@ namespace GtdServiceTier.Services
         /// </summary>
         /// <param name="taskId">id of chosen task</param>
         void DeleteTaskById(int taskId);
-
-        /// <summary>
-        /// Method for switching status of task from archived to active and vice versa
-        /// </summary>
-        /// <param name="taskDto">task model</param>
-        void SwitchArchivedStatus(TaskDto taskDto);
 
         /// <summary>
         /// Method for resetting a task
@@ -175,5 +144,14 @@ namespace GtdServiceTier.Services
         /// <param name="userId">id of chosen user</param>
         /// <returns>all stopwatches of chosen user</returns>
         IEnumerable<TaskDto> GetAllStopwatchesByUserId(int userId);
+
+        /// <summary>
+        /// Method for getting all tasks in specified period of time.
+        /// </summary>
+        /// <param name="userId">Id of current user.</param>
+        /// <param name="start">Filter's start date.</param>
+        /// <param name="end">Filter's end date.</param>
+        /// <returns>Tasks of current user, filtered by date range.</returns>
+        IEnumerable<TaskDto> GetAllTasksByDate(int userId, DateTime start, DateTime end);
     }
 }

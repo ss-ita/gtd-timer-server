@@ -6,6 +6,7 @@
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GtdTimerDAL.Entities;
 using Microsoft.AspNet.Identity;
 
 namespace GtdTimerDAL.Repositories
@@ -17,6 +18,21 @@ namespace GtdTimerDAL.Repositories
     /// <typeparam name="TKey"> generic key instance</typeparam>
     public interface IApplicationUserManager<TUser, TKey>
     {
+        /// <summary>
+        /// Gets or sets user roles table
+        /// </summary>
+        IRepository<UserRole> UserRoles { get; set; }
+
+        /// <summary>
+        /// Gets or sets users table
+        /// </summary>
+        IRepository<User> Users { get; set; }
+
+        /// <summary>
+        /// Gets or sets roles table
+        /// </summary>
+        IRepository<Role> Roles { get; set; }
+
         /// <summary>
         /// Method for creating a user
         /// </summary>
