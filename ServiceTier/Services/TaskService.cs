@@ -4,6 +4,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -276,6 +277,30 @@ namespace GtdServiceTier.Services
                 throw new TaskNotFoundException();
             }
         }
+
+        public void ResetTaskFromHistory(int taskId)
+        {
+            var taskToUpdate = UnitOfWork.Tasks.GetByID(taskId);
+            if (taskToUpdate.IsRunning)
+            {
+                var timeNow = DateTime.Now;
+                var ellapsedTime = (timeNow - taskToUpdate.LastStartTime).Milliseconds;
+                Record recordToCreate = new Record
+                {
+                    Action = "Reset",
+                    Task = taskToUpdate,
+                    TaskId = taskId,
+                    StartTime = taskToUpdate.LastStartTime,
+                    StopTime = timeNow,
+
+                };
+            }
+            else
+            {
+
+            }
+        }
+
         public List<TaskDto> GetAllTasksByPresetId(int presetid)
         {
             return UnitOfWork.PresetTasks.GetAllEntitiesByFilter(task => task.PresetId == presetid)
