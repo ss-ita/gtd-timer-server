@@ -44,6 +44,8 @@ namespace GtdServiceTierTests
                               </ArrayOfTaskDto>";
         string fileNameCsv = "test.csv";
         string fileNameXml = "test.xml";
+        private DateTime start = DateTime.Now;
+        private DateTime end = DateTime.Now;
 
         /// <summary>
         /// Method which is called immediately in each test run
@@ -118,21 +120,6 @@ namespace GtdServiceTierTests
             unitOfWork.Setup(_ => _.Tasks.GetByID(taskId)).Returns(task);
 
             Assert.AreEqual(subject.GetTaskById(taskId).Name, task.Name);
-        }
-
-        /// <summary>
-        /// Switch Task Status test
-        /// </summary>
-        [Test]
-        public void UpdateTaskStatus()
-        {
-            TaskDto task = new TaskDto();
-            var taskRepository = new Mock<IRepository<Tasks>>();
-
-            unitOfWork.Setup(_ => _.Tasks).Returns(taskRepository.Object);
-            subject.SwitchArchivedStatus(task);
-
-            unitOfWork.Verify(_ => _.Save(), Times.Once);
         }
 
         /// <summary>
@@ -225,59 +212,17 @@ namespace GtdServiceTierTests
         }
 
         /// <summary>
-        /// Get All Active Tasks test
+        /// Get All Tasks By Date test
         /// </summary>
         [Test]
-        public void GetAllActiveTasks()
+        public void GetAllTasksByDate()
         {
             var taskRepository = new Mock<IRepository<Tasks>>();
 
             unitOfWork.Setup(_ => _.Tasks).Returns(taskRepository.Object);
             unitOfWork.Setup(_ => _.Tasks.GetAllEntitiesByFilter(It.IsAny<Func<Tasks, bool>>())).Returns(tasks);
 
-            Assert.AreEqual(subject.GetAllActiveTasks().ToList()[0].Name, task.Name);
-        }
-
-        /// <summary>
-        /// Get All Active Tasks By User Id test
-        /// </summary>
-        [Test]
-        public void GetAllActiveTasksByUserId()
-        {
-            var taskRepository = new Mock<IRepository<Tasks>>();
-
-            unitOfWork.Setup(_ => _.Tasks).Returns(taskRepository.Object);
-            unitOfWork.Setup(_ => _.Tasks.GetAllEntitiesByFilter(It.IsAny<Func<Tasks, bool>>())).Returns(tasks);
-
-            Assert.AreEqual(subject.GetAllActiveTasksByUserId(userId).ToList()[0].Name, task.Name);
-        }
-
-        /// <summary>
-        /// Get All Archived Tasks test
-        /// </summary>
-        [Test]
-        public void GetAllArchivedTasks()
-        {
-            var taskRepository = new Mock<IRepository<Tasks>>();
-
-            unitOfWork.Setup(_ => _.Tasks).Returns(taskRepository.Object);
-            unitOfWork.Setup(_ => _.Tasks.GetAllEntitiesByFilter(It.IsAny<Func<Tasks, bool>>())).Returns(tasks);
-
-            Assert.AreEqual(subject.GetAllArchivedTasks().ToList()[0].Name, task.Name);
-        }
-
-        /// <summary>
-        /// Get All Archived Tasks By User Id test
-        /// </summary>
-        [Test]
-        public void GetAllArchivedTasksByUserId()
-        {
-            var taskRepository = new Mock<IRepository<Tasks>>();
-
-            unitOfWork.Setup(_ => _.Tasks).Returns(taskRepository.Object);
-            unitOfWork.Setup(_ => _.Tasks.GetAllEntitiesByFilter(It.IsAny<Func<Tasks, bool>>())).Returns(tasks);
-
-            Assert.AreEqual(subject.GetAllArchivedTasksByUserId(userId).ToList()[0].Name, task.Name);
+            Assert.AreEqual(subject.GetAllTasksByDate(userId, start, end).ToList()[0].Name, task.Name);
         }
 
         /// <summary>
@@ -287,7 +232,7 @@ namespace GtdServiceTierTests
         public void GetAllTasksByPresetId()
         {
             int presetid = 12;
-            Tasks task = new Tasks { Name = "task", Id = 1, IsActive = true };
+            Tasks task = new Tasks { Name = "task", Id = 1 };
             List<Tasks> tasks = new List<Tasks>
             {
                 task
@@ -308,7 +253,7 @@ namespace GtdServiceTierTests
             unitOfWork.Setup(_ => _.PresetTasks.GetAllEntitiesByFilter(It.IsAny<Func<PresetTasks, bool>>())).Returns(presetsTasks);
             unitOfWork.Setup(_ => _.Tasks.GetByID(task.Id)).Returns(task);
 
-            Assert.AreEqual(subject.GetAllTasksByPresetId(presetid)[0].IsActive, taskDtos[0].IsActive);
+            Assert.AreEqual(subject.GetAllTasksByPresetId(presetid)[0].Name, taskDtos[0].Name);
         }
 
         /// <summary>

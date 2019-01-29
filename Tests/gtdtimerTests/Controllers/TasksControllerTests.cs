@@ -16,6 +16,7 @@ using GtdServiceTier.Services;
 using GtdTimerDAL.UnitOfWork;
 using GtdTimer.ActionResults;
 using Microsoft.AspNetCore.Http;
+using System;
 
 namespace GtdTimerTests.Controllers
 {
@@ -28,6 +29,8 @@ namespace GtdTimerTests.Controllers
         private TasksController subject;
         private int userId = 315;
         private int taskId = 9;
+        private DateTime start = DateTime.Now;
+        private DateTime end = DateTime.Now;
 
         /// <summary>
         /// Method which is called immediately in each test run
@@ -71,34 +74,6 @@ namespace GtdTimerTests.Controllers
         }
 
         /// <summary>
-        /// Get All Active Tasks test
-        /// </summary>
-        [Test]
-        public void GetAllActiveTasks()
-        {
-            List<TaskDto> tasks = new List<TaskDto>();
-            taskService.Setup(_ => _.GetAllActiveTasks()).Returns(tasks);
-            var actual = (OkObjectResult)subject.GetAllActiveTasks();
-
-            Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
-            Assert.AreSame(actual.Value, tasks);
-        }
-
-        /// <summary>
-        /// Get All Archived Tasks test
-        /// </summary>
-        [Test]
-        public void GetAllArchivedTasks()
-        {
-            List<TaskDto> tasks = new List<TaskDto>();
-            taskService.Setup(_ => _.GetAllArchivedTasks()).Returns(tasks);
-            var actual = (OkObjectResult)subject.GetAllArchivedTasks();
-
-            Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
-            Assert.AreSame(actual.Value, tasks);
-        }
-
-        /// <summary>
         /// Get All Tasks By User Id test
         /// </summary>
         [Test]
@@ -110,37 +85,19 @@ namespace GtdTimerTests.Controllers
             var actual = (OkObjectResult)subject.GetAllTasksByUserId();
 
             Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
-            Assert.AreSame(actual.Value, tasks);
+            Assert.AreSame(tasks, actual.Value);
         }
 
-        /// <summary>
-        /// Get All Active Tasks By User Id test
-        /// </summary>
         [Test]
-        public void GetAllActiveTasksByUserId()
+        public void GetAllTasksByDate()
         {
             List<TaskDto> tasks = new List<TaskDto>();
             userIdentityService.Setup(_ => _.GetUserId()).Returns(userId);
-            taskService.Setup(_ => _.GetAllActiveTasksByUserId(userId)).Returns(tasks);
-            var actual = (OkObjectResult)subject.GetAllActiveTasksByUserId();
+            taskService.Setup(_ => _.GetAllTasksByDate(userId, start, end)).Returns(tasks);
+            var actual = (OkObjectResult)subject.GetAllTasksByDate(start, end);
 
             Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
-            Assert.AreSame(actual.Value, tasks);
-        }
-
-        /// <summary>
-        /// Get All Archived Tasks By User Id test
-        /// </summary>
-        [Test]
-        public void GetAllArchivedTasksByUserId()
-        {
-            List<TaskDto> tasks = new List<TaskDto>();
-            userIdentityService.Setup(_ => _.GetUserId()).Returns(userId);
-            taskService.Setup(_ => _.GetAllArchivedTasksByUserId(userId)).Returns(tasks);
-            var actual = (OkObjectResult)subject.GetAllArchivedTasksByUserId();
-
-            Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
-            Assert.AreSame(actual.Value, tasks);
+            Assert.AreSame(tasks, actual.Value);
         }
 
         /// <summary>
@@ -181,20 +138,6 @@ namespace GtdTimerTests.Controllers
 
             Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
             taskService.Verify(_ => _.DeleteTaskById(taskId), Times.Once);
-        }
-
-        /// <summary>
-        /// Switch Archived Status test
-        /// </summary>
-        [Test]
-        public void SwitchArchivedStatus()
-        {
-            userIdentityService.Setup(_ => _.GetUserId()).Returns(userId);
-            TaskDto model = new TaskDto();
-            var actual = (OkResult)subject.SwitchArchivedStatus(model);
-
-            Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
-            taskService.Verify(_ => _.SwitchArchivedStatus(model), Times.Once);
         }
 
         /// <summary>

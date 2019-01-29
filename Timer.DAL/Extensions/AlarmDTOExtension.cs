@@ -27,8 +27,8 @@ namespace GtdTimerDAL.Extensions
             {
                 Id = alarmDto.Id,
                 CronExpression = alarmDto.CronExpression,
-                IsTurnOn = alarmDto.IsTurnOn,
-                IsSound = alarmDto.IsSound,
+                IsOn = alarmDto.IsOn,
+                SoundOn = alarmDto.SoundOn,
                 Message = alarmDto.Message,
                 UserId = alarmDto.UserId
             };
@@ -45,8 +45,8 @@ namespace GtdTimerDAL.Extensions
             {
                 Id = alarm.Id,
                 CronExpression = alarm.CronExpression,
-                IsTurnOn = alarm.IsTurnOn,
-                IsSound = alarm.IsSound,
+                IsOn = alarm.IsOn,
+                SoundOn = alarm.SoundOn,
                 Message = alarm.Message,
                 UserId = alarm.UserId
             };

@@ -13,6 +13,7 @@ using GtdCommon.ModelsDto;
 using GtdTimer.Attributes;
 using GtdTimer.ActionResults;
 using GtdServiceTier.Services;
+using System;
 
 namespace GtdTimer.Controllers
 {
@@ -58,32 +59,6 @@ namespace GtdTimer.Controllers
         }
 
         /// <summary>
-        /// Returns all users' active tasks.
-        /// </summary>
-        /// <returns>result of getting all users' active tasks.</returns>
-        [Authorize(Roles = Constants.AdminRole)]
-        [HttpGet("[action]")]
-        public IActionResult GetAllActiveTasks()
-        {
-            var allTasks = taskService.GetAllActiveTasks();
-
-            return Ok(allTasks);
-        }
-
-        /// <summary>
-        /// Returns all users' archived tasks.
-        /// </summary>
-        /// <returns>result of getting all users' archived tasks.</returns>
-        [Authorize(Roles = Constants.AdminRole)]
-        [HttpGet("[action]")]
-        public IActionResult GetAllArchivedTasks()
-        {
-            var allTasks = taskService.GetAllArchivedTasks();
-
-            return Ok(allTasks);
-        }
-
-        /// <summary>
         /// Returns user's task by id.
         /// </summary>
         /// <param name="taskId">id of chosen task</param>
@@ -110,27 +85,14 @@ namespace GtdTimer.Controllers
         }
 
         /// <summary>
-        /// Returns all user's active tasks.
+        /// Returns all user's tasks within specified date range.
         /// </summary>
-        /// <returns>result of getting all user's active tasks.</returns>
+        /// <returns>result of getting all user's tasks within date range.</returns>
         [HttpGet("[action]")]
-        public IActionResult GetAllActiveTasksByUserId()
+        public IActionResult GetAllTasksByDate(DateTime start, DateTime end)
         {
             var userId = userIdentityService.GetUserId();
-            var tasks = taskService.GetAllActiveTasksByUserId(userId);
-
-            return Ok(tasks);
-        }
-
-        /// <summary>
-        /// Returns all user's archived tasks.
-        /// </summary>
-        /// <returns>result of getting all user's archived tasks.</returns>
-        [HttpGet("[action]")]
-        public IActionResult GetAllArchivedTasksByUserId()
-        {
-            var userId = userIdentityService.GetUserId();
-            var tasks = taskService.GetAllArchivedTasksByUserId(userId);
+            var tasks = taskService.GetAllTasksByDate(userId, start, end);
 
             return Ok(tasks);
         }
@@ -174,21 +136,6 @@ namespace GtdTimer.Controllers
         public IActionResult DeleteTask(int taskId)
         {
             taskService.DeleteTaskById(taskId);
-
-            return Ok();
-        }
-
-        /// <summary>
-        /// Changes IsActive status of the task.
-        /// </summary>
-        /// <param name="model">task model</param>
-        /// <returns>result of changing IsActive status of the task.</returns>
-        [ValidateModel]
-        [HttpPut("[action]")]
-        public IActionResult SwitchArchivedStatus([FromBody]TaskDto model)
-        {
-            model.UserId = userIdentityService.GetUserId();
-            taskService.SwitchArchivedStatus(model);
 
             return Ok();
         }
@@ -252,32 +199,6 @@ namespace GtdTimer.Controllers
         }
 
         /// <summary>
-        /// Converts all user's active tasks to xml format.
-        /// </summary>
-        /// <returns>returns a text file</returns>
-        [HttpGet("[action]")]
-        public IActionResult ExportAllActiveTasksAsXmlByUserId()
-        {
-            var userId = userIdentityService.GetUserId();
-            var listOfTasks = taskService.GetAllActiveTasksByUserId(userId);
-
-            return new XmlResult(listOfTasks);
-        }
-
-        /// <summary>
-        /// Converts all user's archived tasks to xml format.
-        /// </summary>
-        /// <returns>returns text file</returns>
-        [HttpGet("[action]")]
-        public IActionResult ExportAllArchivedTasksAsXmlByUserId()
-        {
-            var userId = userIdentityService.GetUserId();
-            var listOfTasks = taskService.GetAllArchivedTasksByUserId(userId);
-
-            return new XmlResult(listOfTasks);
-        }
-
-        /// <summary>
         /// Converts  user's task by id to xml format.
         /// </summary>
         /// <param name="taskId">id of chosen task</param>
@@ -299,32 +220,6 @@ namespace GtdTimer.Controllers
         {
             var userId = userIdentityService.GetUserId();
             var listOfTasks = taskService.GetAllTasksByUserId(userId);
-
-            return new CsvResult(listOfTasks);
-        }
-
-        /// <summary>
-        /// Converts all user's active tasks to csv format.
-        /// </summary>
-        /// <returns>returns text file</returns>
-        [HttpGet("[action]")]
-        public IActionResult ExportAllActiveTasksAsCsvByUserId()
-        {
-            var userId = userIdentityService.GetUserId();
-            var listOfTasks = taskService.GetAllActiveTasksByUserId(userId);
-
-            return new CsvResult(listOfTasks);
-        }
-
-        /// <summary>
-        /// Converts all user's archived tasks to csv format.
-        /// </summary>
-        /// <returns>returns text file</returns>
-        [HttpGet("[action]")]
-        public IActionResult ExportAllArchivedTasksAsCsvByUserId()
-        {
-            var userId = userIdentityService.GetUserId();
-            var listOfTasks = taskService.GetAllArchivedTasksByUserId(userId);
 
             return new CsvResult(listOfTasks);
         }
