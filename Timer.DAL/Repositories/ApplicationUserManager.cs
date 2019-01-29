@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 
 using GtdTimerDAL.Entities;
+using GtdTimerDAL.TokensProvider;
 
 namespace GtdTimerDAL.Repositories
 {
@@ -26,6 +27,7 @@ namespace GtdTimerDAL.Repositories
         public ApplicationUserManager(IUserStore<User, int> store, TimerContext context) : base(store)
         {
             this.TimerContext = context;
+            this.UserTokenProvider = new UserTokenProvider<IUser>();
         }
 
         /// <summary>

@@ -516,7 +516,7 @@
             </summary>
             <param name="services">list of services</param>
         </member>
-        <member name="M:GtdTimer.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IHostingEnvironment,Microsoft.Extensions.Logging.ILoggerFactory,Microsoft.Extensions.Configuration.IConfiguration)">
+        <member name="M:GtdTimer.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IHostingEnvironment,Microsoft.Extensions.Logging.ILoggerFactory,Microsoft.Extensions.Configuration.IConfiguration,System.IServiceProvider)">
             <summary>
             Method for configuring application
             </summary>
@@ -524,6 +524,7 @@
             <param name="env">hosting environment</param>
             <param name="loggerFactory">class which registers logger</param>
             <param name="configuration">class which helps configure project</param>
+            <param name="serviceProvider">service provider to our application</param>
         </member>
     </members>
 </doc>

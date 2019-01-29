@@ -28,6 +28,7 @@ namespace GtdServiceTier.Services
         /// </summary>
         /// <param name="model">user model</param>
         void Create(UserDto model);
+        string Verify(string userId, string emailToken);
 
         /// <summary>
         /// Method for updating user password

@@ -22,11 +22,14 @@ using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
 
 using GtdCommon.IoC;
+using GtdCommon.Email.SendGrid;
+using GtdCommon.Email.Templates;
 using GtdTimer.Middleware;
 using GtdServiceTier.Services;
 using GtdTimerDAL.Entities;
 using GtdTimerDAL.Repositories;
 using GtdTimerDAL.UnitOfWork;
+using GtdCommon.Email;
 
 namespace GtdTimer
 {
@@ -63,6 +66,8 @@ namespace GtdTimer
         /// <param name="services">list of services</param>
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSendGridEmailSender();
+            services.AddEmailTemplateSender();
             services.AddCors(options =>
             {
                 options.AddPolicy(
@@ -131,8 +136,10 @@ namespace GtdTimer
         /// <param name="env">hosting environment</param>
         /// <param name="loggerFactory">class which registers logger</param>
         /// <param name="configuration">class which helps configure project</param>
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IConfiguration configuration)
+        /// <param name="serviceProvider">service provider to our application</param>
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IConfiguration configuration, IServiceProvider serviceProvider)
         {
+            IoCContainer.appBuilder = app;
             app.UseCors("AllowSpecificOrigin");
             if (env.IsDevelopment())
             {
@@ -154,7 +161,7 @@ namespace GtdTimer
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
-            loggerFactory.AddLog4Net(configuration.GetValue<string>("Log4NetConfigFile:Name"));
+            //loggerFactory.AddLog4Net(configuration.GetValue<string>("Log4NetConfigFile:Name"));
             app.UseMvc();
         }
     }

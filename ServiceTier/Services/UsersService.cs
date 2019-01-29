@@ -5,15 +5,17 @@
 //-----------------------------------------------------------------------
 
 using System;
+using System.Web;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 using GtdCommon.Constant;
 using GtdCommon.Exceptions;
 using GtdCommon.ModelsDto;
+using GtdCommon.Email;
 using GtdTimerDAL.Extensions;
 using GtdTimerDAL.Entities;
 using GtdTimerDAL.UnitOfWork;
+
 
 namespace GtdServiceTier.Services
 {
@@ -45,9 +47,29 @@ namespace GtdServiceTier.Services
             }
 
             User user = model.ToUser();
-            UnitOfWork.UserManager.CreateAsync(user, model.Password).GetAwaiter().GetResult();
+            var result = UnitOfWork.UserManager.CreateAsync(user, model.Password).GetAwaiter().GetResult();
             UnitOfWork.UserManager.AddToRoleAsync(user.Id, Constants.UserRole).GetAwaiter().GetResult();
             UnitOfWork.Save();
+            if (result.Succeeded)
+            {
+                var emailVerificationCode = UnitOfWork.UserManager.GenerateEmailConfirmationTokenAsync(user.Id).GetAwaiter().GetResult();
+                var confirmationUrl = $"http://localhost:4200/confirm-email/{HttpUtility.UrlEncode(user.Id.ToString())}/{HttpUtility.UrlEncode(emailVerificationCode)}";
+                GtdTimerEmailSender.SendUserVerificationEmailAsync(user.UserName, user.Email, confirmationUrl).GetAwaiter().GetResult();
+            }
+        }
+
+        public string Verify(string userId, string emailToken)
+        {
+            var user = UnitOfWork.UserManager.FindByIdAsync(Convert.ToInt32(userId)).GetAwaiter().GetResult();
+            if (user == null)
+                throw new UserNotFoundException();
+
+            var result = UnitOfWork.UserManager.ConfirmEmailAsync(user.Id, emailToken).GetAwaiter().GetResult();
+
+            if (result.Succeeded)
+                return "Email Verified :)";
+
+            return "Invalid Email Verification Token :(";
         }
 
         public void UpdatePassword(int id, UpdatePasswordDto model)

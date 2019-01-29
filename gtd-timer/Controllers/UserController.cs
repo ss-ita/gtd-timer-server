@@ -76,6 +76,16 @@ namespace GtdTimer.Controllers
             return this.Ok();
         }
 
+        [AllowAnonymous]
+        [ValidateModel]
+        [HttpGet("Verify/{userId}/{emailToken}")]
+        public ActionResult VerifyEmailAsync(string userId, string emailToken)
+        {
+            var response =  this.usersService.Verify(userId, emailToken);
+
+            return this.Ok(response);
+
+        }
         /// <summary>
         /// Update current user password.
         /// </summary>
