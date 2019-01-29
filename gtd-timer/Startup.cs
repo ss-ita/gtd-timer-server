@@ -38,6 +38,8 @@ namespace GtdTimer
     /// </summary>
     public class Startup
     {
+        public string cors { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Startup" /> class.
         /// </summary>
@@ -58,6 +60,10 @@ namespace GtdTimer
                 config["AzureKeyVault:clientId"],
                 config["AzureKeyVault:clientSecret"]);
             IoCContainer.Configuration = builder.Build();
+
+            cors = Environment.GetEnvironmentVariable("AzureCors") ?? IoCContainer.Configuration["Origins"];
+
+
         }
 
         /// <summary>
@@ -72,7 +78,7 @@ namespace GtdTimer
             {
                 options.AddPolicy(
                     "AllowSpecificOrigin",
-                    builder => builder.WithOrigins(IoCContainer.Configuration["Origins"]).AllowAnyHeader().AllowAnyMethod());
+                    builder => builder.WithOrigins(cors).AllowAnyHeader().AllowAnyMethod());
             });
             services.AddDbContext<TimerContext>(opts => opts.UseSqlServer(IoCContainer.Configuration["AzureConnection"]));
             services.AddIdentity<User, Role>().AddEntityFrameworkStores<TimerContext>().AddDefaultTokenProviders();
@@ -81,6 +87,7 @@ namespace GtdTimer
             services.AddScoped<IPresetService, PresetService>();
             services.AddScoped<IUsersService, UsersService>();
             services.AddScoped<ITaskService, TaskService>();
+            services.AddScoped<IAlarmService, AlarmService>();
             services.AddScoped<IUserIdentityService, UserIdentityService>();
 
             services.AddScoped<IRepository<PresetTasks>, Repository<PresetTasks>>();
@@ -88,8 +95,11 @@ namespace GtdTimer
             services.AddScoped<IRepository<Role>, Repository<Role>>();
             services.AddScoped<IRepository<Tasks>, Repository<Tasks>>();
             services.AddScoped<IRepository<UserRole>, Repository<UserRole>>();
+            services.AddScoped<IRepository<Record>, Repository<Record>>();
+            services.AddScoped<IRepository<Alarm>, Repository<Alarm>>();
+            services.AddScoped<IRepository<User>, Repository<User>>();
             services.AddScoped<IApplicationUserManager<User, int>, ApplicationUserManager>();
-            services.AddScoped<IUserStore<User, int>, UserRepository>();
+            services.AddScoped<IUserStore<User, int>, UserStore>();
 
             services.AddAuthentication(opts =>
             {
@@ -144,19 +154,18 @@ namespace GtdTimer
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint(
+                        $"/swagger/{IoCContainer.Configuration.GetValue<string>("SwaggerDocument:Name")}/swagger.json",
+                        IoCContainer.Configuration.GetValue<string>("SwaggerDocument:Name"));
+                });
             }
             else
             {
                 app.UseHsts();
             }
-
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint(
-                    $"/swagger/{IoCContainer.Configuration.GetValue<string>("SwaggerDocument:Name")}/swagger.json",
-                    IoCContainer.Configuration.GetValue<string>("SwaggerDocument:Name"));
-            });
 
             app.UseAuthentication();
             app.UseHttpsRedirection();

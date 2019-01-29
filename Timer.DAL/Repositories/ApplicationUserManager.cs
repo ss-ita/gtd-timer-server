@@ -24,9 +24,8 @@ namespace GtdTimerDAL.Repositories
         /// </summary>
         /// <param name="store"> I user store instance</param>
         /// <param name="context"> timer context instance </param>
-        public ApplicationUserManager(IUserStore<User, int> store, TimerContext context) : base(store)
+        public ApplicationUserManager(IUserStore<User, int> store) : base(store)
         {
-            this.TimerContext = context;
             this.UserTokenProvider = new UserTokenProvider<IUser>();
         }
 

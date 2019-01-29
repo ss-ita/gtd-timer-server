@@ -59,6 +59,55 @@
             </summary>
             <param name="context">instance of context</param>
         </member>
+        <member name="T:GtdTimer.Controllers.AlarmController">
+            <summary>
+            class for alarm controller
+            </summary>
+        </member>
+        <member name="F:GtdTimer.Controllers.AlarmController.userIdentityService">
+            <summary>
+            instance of user identity service
+            </summary>
+        </member>
+        <member name="F:GtdTimer.Controllers.AlarmController.alarmService">
+            <summary>
+            instance of alarm service
+            </summary>
+        </member>
+        <member name="M:GtdTimer.Controllers.AlarmController.#ctor(GtdServiceTier.Services.IAlarmService,GtdServiceTier.Services.IUserIdentityService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:GtdTimer.Controllers.AlarmController" /> class.
+            </summary>
+            <param name="alarmService">instance of alarm service</param>
+            <param name="userIdentityService">instance of user identity service</param>
+        </member>
+        <member name="M:GtdTimer.Controllers.AlarmController.GetAllAlarmsByUserId">
+            <summary>
+            Returns all user's alarms.
+            </summary>
+            <returns>result of getting all user's alarms.</returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.AlarmController.CreateAlarm(GtdCommon.ModelsDto.AlarmDto)">
+            <summary>
+            Creates a alarm.
+            </summary>
+            <param name="model">alarm model</param>
+            <returns>result id of creating alarm</returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.AlarmController.UpdateAlarm(GtdCommon.ModelsDto.AlarmDto)">
+            <summary>
+            Updates the alarm.
+            </summary>
+            <param name="model">alarm model</param>
+            <returns>result of updating the alarm.</returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.AlarmController.DeleteAlarm(System.Int32)">
+            <summary>
+            Deletes the alarm by id.
+            </summary>
+            <param name="alarmId">id of chosen alarm</param>
+            <returns>result of deleting the alarm by id.</returns>
+        </member>
         <member name="T:GtdTimer.Controllers.LogInController">
             <summary>
             class for log in controller
@@ -341,6 +390,33 @@
             </summary>
             <param name="uploadFile">file which user choses to import</param>
             <returns>result of importing file to database</returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.TasksController.GetAllRecordsByUserId">
+            <summary>
+            Returns all users' Records.
+            </summary>
+            <returns>result of getting all users' records.</returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.TasksController.CreateRecord(GtdCommon.ModelsDto.TaskRecordDto)">
+            <summary>
+            Create record
+            </summary>
+            <param name="taskRecord">TaskRecordDto model </param>
+            <returns>Returns result of creating record</returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.TasksController.GetAllRecordsByTaskId(System.Int32)">
+            <summary>
+            Returns all records by Task id
+            </summary>
+            <param name="taskId">Task id</param>
+            <returns>Return result of getting records by task id</returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.TasksController.DeleteRecordById(System.Int32)">
+            <summary>
+            Delete Record by id
+            </summary>
+            <param name="taskId">Id of record to delete</param>
+            <returns>Results of deleting record</returns>
         </member>
         <member name="M:GtdTimer.Controllers.TasksController.GetAllTimersByUserId">
             <summary>

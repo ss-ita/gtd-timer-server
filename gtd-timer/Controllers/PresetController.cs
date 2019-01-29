@@ -118,9 +118,17 @@ namespace GtdTimer.Controllers
         public IActionResult UpdatePreset([FromBody]PresetDto presetDto)
         {
             presetDto.UserId = userIdentityService.GetUserId();
+            if (presetDto.Tasks != null)
+            {
+                foreach (var task in presetDto.Tasks)
+                {
+                    task.UserId = userIdentityService.GetUserId();
+                }
+            }
+
             presetService.UpdatePreset(presetDto);
 
-            return Ok();
+            return Ok(presetDto);
         }
 
         /// <summary>

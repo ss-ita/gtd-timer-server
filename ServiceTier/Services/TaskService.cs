@@ -223,6 +223,58 @@ namespace GtdServiceTier.Services
             return AddTaskToDatabase(listOfTasksDTO, userId);
         }
 
+        public IEnumerable<TaskRecordDto> GetAllRecordsByUserId(int userId)
+        {
+
+            var listOfTasks = this.UnitOfWork.Tasks.GetAllEntitiesByFilter(task => task.UserId == userId);
+            var listOfTaskRecords = (from tasks in listOfTasks
+                                     from taskRecord in UnitOfWork.Records.GetAllEntitiesByFilter(record=>record.TaskId==tasks.Id)
+                                     select new TaskRecordDto
+                                     {
+                                         Id = taskRecord.Id,
+                                         TaskId = tasks.Id,
+                                         Name = tasks.Name,
+                                         Description = tasks.Description,
+                                         Action = taskRecord.Action,
+                                         StartTime = taskRecord.StartTime,
+                                         StopTime = taskRecord.StopTime,
+                                         ElapsedTime =taskRecord.ElapsedTime
+                                     }).ToList();
+
+            return listOfTaskRecords;    
+        }
+
+        public void CreateRecord(TaskRecordDto taskRecord)
+        {
+            Record record = taskRecord.ToRecord();
+            UnitOfWork.Records.Create(record);
+            UnitOfWork.Save();
+        }
+
+        public IEnumerable<TaskRecordDto> GetAllRecordsByTaskId(int userId,int taskId)
+        {
+            var listOfRecords = (UnitOfWork.Records.GetAllEntitiesByFilter(record=>record.TaskId == taskId)
+                .Where(record => record.TaskId == taskId)
+                .Select(record => record.ToTaskRecord(UnitOfWork.Tasks.GetByID(taskId))))
+                .ToList();
+
+            return listOfRecords;
+
+        }
+
+        public void DeleteRecordById(int taskId)
+        {
+            var toDelete =  UnitOfWork.Records.GetByID(taskId);
+            if (toDelete != null)
+            {
+                UnitOfWork.Records.Delete(toDelete);
+                UnitOfWork.Save();
+            }
+            else
+            {
+                throw new TaskNotFoundException();
+            }
+        }
         public List<TaskDto> GetAllTasksByPresetId(int presetid)
         {
             return UnitOfWork.PresetTasks.GetAllEntitiesByFilter(task => task.PresetId == presetid)

@@ -15,6 +15,7 @@ using GtdCommon.Email;
 using GtdTimerDAL.Extensions;
 using GtdTimerDAL.Entities;
 using GtdTimerDAL.UnitOfWork;
+using System.Linq;
 
 
 namespace GtdServiceTier.Services
@@ -127,9 +128,37 @@ namespace GtdServiceTier.Services
 
         public IList<string> GetUsersEmails(string roleName)
         {
-            var emailsList = UnitOfWork.UserManager.GetAllEmails(roleName).Result;
+            Role role = UnitOfWork.Roles.GetAllEntities().Select(userRole => userRole).Where(userRole => userRole.Name == roleName).FirstOrDefault();
+            IList<string> emails = new List<string>();
 
-            return emailsList;
+            if (role.Name == Constants.UserRole)
+            {
+                var userList = UnitOfWork.Users.GetAllEntities().Select(user => user).ToList();
+                var userRoleList = UnitOfWork.UserRoles.GetAllEntities().Select(userRole => userRole).ToList();
+                emails = (from user in userList
+                          join userRole in userRoleList
+                          on user.Id equals userRole.UserId
+                          where userRole.RoleId == role.Id
+                          select user.Email).ToList<string>().Except(
+                         (from user in userList
+                          join userRole in userRoleList
+                          on user.Id equals userRole.UserId
+                          where userRole.RoleId == 2 || userRole.RoleId == 3
+                          select user.Email).ToList<string>()).ToList();
+            }
+
+            if (role.Name == GtdCommon.Constant.Constants.AdminRole)
+            {
+                var userList = UnitOfWork.Users.GetAllEntities().Select(user => user).ToList();
+                var userRoleList = UnitOfWork.UserRoles.GetAllEntities().Select(userRole => userRole).ToList();
+                emails = (from user in userList
+                          join userRole in userRoleList
+                          on user.Id equals userRole.UserId
+                          where userRole.RoleId == role.Id
+                          select user.Email).ToList<string>();
+            }
+
+            return emails;
         }
 
         public void DeleteUserByEmail(string emeil)

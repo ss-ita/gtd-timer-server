@@ -60,10 +60,24 @@ namespace GtdServiceTier.Services
             Preset preset = presetDto.ToPreset();
             foreach (var task in presetDto.Tasks)
             {
-                taskService.UpdateTask(task);
+                if (task.Id == 0)
+                {
+                    taskService.CreateTask(task);
+                    UnitOfWork.PresetTasks.Create(new PresetTasks
+                    {
+                        PresetId = preset.Id,
+                        TaskId = task.Id
+                    });
+                    UnitOfWork.Save();
+                }
+                else
+                {
+                    taskService.UpdateTask(task);
+                }
             }
             UnitOfWork.Presets.Update(preset);
             UnitOfWork.Save();
+            presetDto.Id = preset.Id;
         }
 
         public void DeletePresetById(int presetid)
