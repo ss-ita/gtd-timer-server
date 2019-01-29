@@ -18,9 +18,8 @@ namespace GtdTimerDalTests
     public class TimerDalTests
     {
         private Mock<TimerContext> mockContext;
-        private Mock<IUserStore<User, int>> userRepository;
         private Mock<IUnitOfWork> unitOfWork;
-        private Mock<IApplicationUserManager<User, int>> userManager;
+        private Mock<IApplicationUserManager<User, int>> userManeger;
 
         /// <summary>
         /// Method which is called immediately in each test run
@@ -30,8 +29,7 @@ namespace GtdTimerDalTests
         {
             mockContext = new Mock<TimerContext>();
             unitOfWork = new Mock<IUnitOfWork>();
-            userRepository = new Mock<IUserStore<User, int>>();
-            userManager = new Mock<IApplicationUserManager<User, int>>();
+            userManeger = new Mock<IApplicationUserManager<User, int>>();
         }
 
         /// <summary>
@@ -49,11 +47,11 @@ namespace GtdTimerDalTests
                 PasswordHash = "qwertyQWERTY@@22"
             };
 
-            unitOfWork.Setup(obj => obj.UserManager).Returns(new ApplicationUserManager(userRepository.Object));
-            userManager.Setup(obj => obj.FindByEmailAsync(user.Email)).ReturnsAsync((User)null);
+            unitOfWork.Setup(obj => obj.UserManager).Returns(userManeger.Object);
+            unitOfWork.Setup(obj => obj.UserManager.FindByEmailAsync(user.Email)).ReturnsAsync((User)null);
 
             unitOfWork.Object.UserManager.CreateAsync(user);
-            userRepository.Verify(obj => obj.CreateAsync(user), Times.Once);
+            unitOfWork.Verify(obj => obj.UserManager.CreateAsync(user), Times.Once);
         }
 
         /// <summary>
@@ -71,10 +69,11 @@ namespace GtdTimerDalTests
                 PasswordHash = "qwertyQWERTY@@22"
             };
 
-            unitOfWork.Setup(obj => obj.UserManager).Returns(new ApplicationUserManager(userRepository.Object));
+            unitOfWork.Setup(obj => obj.UserManager).Returns(userManeger.Object);
+            unitOfWork.Setup(obj => obj.UserManager.DeleteAsync(user));
 
             unitOfWork.Object.UserManager.DeleteAsync(user);
-            userRepository.Verify(obj => obj.DeleteAsync(user), Times.Once);
+            unitOfWork.Verify(obj => obj.UserManager.DeleteAsync(user), Times.Once);
         }
 
         /// <summary>
@@ -92,10 +91,11 @@ namespace GtdTimerDalTests
                 PasswordHash = "qwertyQWERTY@@22"
             };
 
-            unitOfWork.Setup(obj => obj.UserManager).Returns(new ApplicationUserManager(userRepository.Object));
+            unitOfWork.Setup(obj => obj.UserManager).Returns(userManeger.Object);
+            unitOfWork.Setup(obj => obj.UserManager.UpdateAsync(user));
 
             unitOfWork.Object.UserManager.UpdateAsync(user);
-            userRepository.Verify(obj => obj.UpdateAsync(user), Times.Once);
+            unitOfWork.Verify(obj => obj.UserManager.UpdateAsync(user), Times.Once);
         }
     }
 }

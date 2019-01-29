@@ -22,14 +22,14 @@ namespace GtdTimerDAL.Entities
         public string CronExpression { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether it is IsTurnOn or of
+        /// Gets or sets a value indicating whether it is IsTOn or of
         /// </summary>
-        public bool IsTurnOn { get; set; }
+        public bool IsOn { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether IsSound on or of
+        /// Gets or sets a value indicating whether SoundOn on or of
         /// </summary>
-        public bool IsSound { get; set; }
+        public bool SoundOn { get; set; }
 
         /// <summary>
         /// Gets or sets Message column

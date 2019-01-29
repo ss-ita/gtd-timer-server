@@ -18,6 +18,7 @@ using GtdTimerDAL.Entities;
 using GtdTimerDAL.UnitOfWork;
 using ServiceStack.Text;
 using GtdCommon.Constant;
+using System;
 
 namespace GtdServiceTier.Services
 {
@@ -110,16 +111,6 @@ namespace GtdServiceTier.Services
             UnitOfWork.Save();
         }
 
-        public void SwitchArchivedStatus(TaskDto model)
-        {
-            model.IsActive = !model.IsActive;
-
-            var task = model.ToTask();
-
-            UnitOfWork.Tasks.Update(task);
-            UnitOfWork.Save();
-        }
-
         public void ResetTask(TaskDto model)
         {
             model.ElapsedTime = 0;
@@ -151,38 +142,13 @@ namespace GtdServiceTier.Services
             UnitOfWork.Save();
         }
 
-        public IEnumerable<TaskDto> GetAllActiveTasks()
+        public IEnumerable<TaskDto> GetAllTasksByDate(int userId, DateTime start, DateTime end)
         {
-            var listOfTasksDto = UnitOfWork.Tasks.GetAllEntitiesByFilter(task => task.IsActive == true)
-                .Select(task => task.ToTaskDto())
-                .ToList();
-
-            return listOfTasksDto;
-        }
-
-        public IEnumerable<TaskDto> GetAllActiveTasksByUserId(int userId)
-        {
-            var listOfTasksDto = UnitOfWork.Tasks.GetAllEntitiesByFilter((task) => (task.UserId == userId && task.IsActive == true))
-                .Select(task => task.ToTaskDto())
-                .ToList();
-
-            return listOfTasksDto;
-        }
-
-        public IEnumerable<TaskDto> GetAllArchivedTasks()
-        {
-            var listOfTasksDto = UnitOfWork.Tasks.GetAllEntitiesByFilter(task => task.IsActive == false)
-                .Select(task => task.ToTaskDto())
-                .ToList();
-
-            return listOfTasksDto;
-        }
-
-        public IEnumerable<TaskDto> GetAllArchivedTasksByUserId(int userId)
-        {
-            var listOfTasksDto = UnitOfWork.Tasks.GetAllEntitiesByFilter((task) => (task.UserId == userId && task.IsActive == false))
-                .Select(task => task.ToTaskDto())
-                .ToList();
+            var listOfTasksDto = UnitOfWork.Tasks.GetAllEntitiesByFilter((task) =>
+            ((task.UserId == userId) &&
+            (task.LastStartTime >= start && task.LastStartTime <= end)))
+            .Select(task => task.ToTaskDto())
+            .ToList();
 
             return listOfTasksDto;
         }
@@ -190,16 +156,17 @@ namespace GtdServiceTier.Services
         public IEnumerable<TaskDto> ImportTasksFromCsv(IFormFile uploadFile, int userId)
         {
             IEnumerable<TaskDto> listOfTasksDTO = new List<TaskDto>();
-            if (uploadFile.Length > 0)
+
+            try
             {
                 using (var stream = uploadFile.OpenReadStream())
                 {
                     listOfTasksDTO = CsvSerializer.DeserializeFromStream<IEnumerable<TaskDto>>(stream);
                 }
             }
-            else
+            catch (Exception e)
             {
-                throw new FileNotFoundException();
+                throw new ImportErrorException(e.Message);
             }
 
             return AddTaskToDatabase(listOfTasksDTO, userId);
@@ -209,16 +176,17 @@ namespace GtdServiceTier.Services
         {
             IEnumerable<TaskDto> listOfTasksDTO = new List<TaskDto>();
             DefaultXmlSerializer xmlSerializer = new DefaultXmlSerializer(listOfTasksDTO.GetType());
-            if (uploadFile.Length > 0)
+
+            try
             {
                 using (var stream = uploadFile.OpenReadStream())
                 {
                     listOfTasksDTO = (IEnumerable<TaskDto>)xmlSerializer.Deserialize(stream);
                 }
             }
-            else
+            catch (Exception e)
             {
-                throw new FileNotFoundException();
+                throw new ImportErrorException(e.Message);
             }
 
             return AddTaskToDatabase(listOfTasksDTO, userId);
