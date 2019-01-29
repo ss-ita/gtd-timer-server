@@ -26,19 +26,9 @@ namespace GtdTimerDAL.UnitOfWork
         private Lazy<IApplicationUserManager<User, int>> userManager;
 
         /// <summary>
-        /// Roles table
-        /// </summary>
-        private Lazy<IRepository<Role>> roles;
-
-        /// <summary>
         /// Tasks table
         /// </summary>
         private Lazy<IRepository<Tasks>> tasks;
-
-        /// <summary>
-        /// User roles table
-        /// </summary>
-        private Lazy<IRepository<UserRole>> userRoles;
 
         /// <summary>
         /// Presets table
@@ -82,11 +72,9 @@ namespace GtdTimerDAL.UnitOfWork
         /// <param name="userRole">user role repository</param>
         public UnitOfWork(TimerContext context,
             IApplicationUserManager<User, int> applicationUserManager,
-            IRepository<Role> role,
             IRepository<Preset> preset,
             IRepository<PresetTasks> presetTasks,
             IRepository<Tasks> tasks,
-            IRepository<UserRole> userRole,
             IRepository<Record> record,
             IRepository<Alarm> alarm,
             IRepository<User> users)
@@ -94,11 +82,9 @@ namespace GtdTimerDAL.UnitOfWork
             this.context = context;
             disposed = false;
             UserManager = applicationUserManager;
-            Roles = role;
             Tasks = tasks;
             Presets = preset;
             PresetTasks = presetTasks;
-            UserRoles = userRole;
             Records = record;
             Alarms = alarm;
             Users = users;
@@ -113,18 +99,6 @@ namespace GtdTimerDAL.UnitOfWork
             set
             {
                 userManager = new Lazy<IApplicationUserManager<User, int>>(() => value);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets roles table
-        /// </summary>
-        public IRepository<Role> Roles
-        {
-            get => roles.Value;
-            set
-            {
-                roles = new Lazy<IRepository<Role>>(() => value);
             }
         }
 
@@ -161,18 +135,6 @@ namespace GtdTimerDAL.UnitOfWork
             set
             {
                 presetTasks = new Lazy<IRepository<PresetTasks>>(() => value);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets user roles table
-        /// </summary>
-        public IRepository<UserRole> UserRoles
-        {
-            get => userRoles.Value;
-            set
-            {
-                userRoles = new Lazy<IRepository<UserRole>>(() => value);
             }
         }
 

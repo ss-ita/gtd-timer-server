@@ -103,15 +103,16 @@ namespace GtdServiceTier.Services
             UnitOfWork.UserManager.RemoveFromRoleAsync(user.Id, role).GetAwaiter();
         }
 
-        public IList<string> GetUsersEmails(string roleName)
+        public IList<string> GetUsersEmails(string roleName, int userId)
         {
-            Role role = UnitOfWork.Roles.GetAllEntities().Select(userRole => userRole).Where(userRole => userRole.Name == roleName).FirstOrDefault();
+            Role role = UnitOfWork.UserManager.Roles.GetAllEntities().Select(userRole => userRole).Where(userRole => userRole.Name == roleName).FirstOrDefault();
             IList<string> emails = new List<string>();
+            var userEmail = UnitOfWork.UserManager.FindByIdAsync(userId).GetAwaiter().GetResult().Email;
 
             if (role.Name == Constants.UserRole)
             {
-                var userList = UnitOfWork.Users.GetAllEntities().Select(user => user).ToList();
-                var userRoleList = UnitOfWork.UserRoles.GetAllEntities().Select(userRole => userRole).ToList();
+                var userList = UnitOfWork.UserManager.Users.GetAllEntities().Select(user => user).ToList();
+                var userRoleList = UnitOfWork.UserManager.UserRoles.GetAllEntities().Select(userRole => userRole).ToList();
                 emails = (from user in userList
                           join userRole in userRoleList
                           on user.Id equals userRole.UserId
@@ -126,14 +127,16 @@ namespace GtdServiceTier.Services
 
             if (role.Name == GtdCommon.Constant.Constants.AdminRole)
             {
-                var userList = UnitOfWork.Users.GetAllEntities().Select(user => user).ToList();
-                var userRoleList = UnitOfWork.UserRoles.GetAllEntities().Select(userRole => userRole).ToList();
+                var userList = UnitOfWork.UserManager.Users.GetAllEntities().Select(user => user).ToList();
+                var userRoleList = UnitOfWork.UserManager.UserRoles.GetAllEntities().Select(userRole => userRole).ToList();
                 emails = (from user in userList
                           join userRole in userRoleList
                           on user.Id equals userRole.UserId
                           where userRole.RoleId == role.Id
                           select user.Email).ToList<string>();
             }
+
+            emails.Remove(userEmail);
 
             return emails;
         }
