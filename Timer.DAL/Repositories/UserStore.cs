@@ -25,7 +25,7 @@ namespace GtdTimerDAL.Repositories
         public TimerContext TimerContext { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UserRepository" /> class.
+        /// Initializes a new instance of the <see cref="UserStore" /> class.
         /// </summary>
         /// <param name="context"> timer context instance </param>
         public UserStore(TimerContext context)
@@ -63,7 +63,7 @@ namespace GtdTimerDAL.Repositories
                 TimerContext.Users.Attach(user);
             }
 
-           TimerContext.Users.Remove(user);
+            TimerContext.Users.Remove(user);
             await TimerContext.SaveChangesAsync();
         }
 

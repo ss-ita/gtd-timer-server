@@ -59,8 +59,9 @@ namespace GtdServiceTier.Services
         /// Get users emails
         /// </summary>
         /// <param name="roleName">user role name</param>
+        /// <param name="userId">user id</param>
         /// <returns>emails of all users</returns>
-        IList<string> GetUsersEmails(string roleName);
+        IList<string> GetUsersEmails(string roleName, int userId);
 
         /// <summary>
         /// Delete user by email

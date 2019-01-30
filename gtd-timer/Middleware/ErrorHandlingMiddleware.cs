@@ -101,6 +101,7 @@ namespace GtdTimer.Middleware
                 case PasswordMismatchException _:
                 case LoginFailedException _:
                 case AccessDeniedException _:
+                case ImportErrorException _:
                     exceptionCode = HttpStatusCode.BadRequest;
                     break;
                 default:

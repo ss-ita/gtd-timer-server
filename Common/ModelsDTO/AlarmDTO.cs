@@ -25,14 +25,14 @@ namespace GtdCommon.ModelsDto
         public string CronExpression { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether property IsTurnOn
+        /// Gets or sets a value indicating whether property IsOn
         /// </summary>
-        public bool IsTurnOn { get; set; }
+        public bool IsOn { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether property IsSound
+        /// Gets or sets a value indicating whether property SoundOn
         /// </summary>
-        public bool IsSound { get; set; }
+        public bool SoundOn { get; set; }
 
         /// <summary>
         /// Gets or sets a value of Message property

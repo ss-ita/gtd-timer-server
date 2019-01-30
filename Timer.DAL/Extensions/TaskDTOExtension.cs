@@ -31,7 +31,6 @@ namespace GtdTimerDAL.Extensions
                 ElapsedTime = TimeSpan.FromMilliseconds(taskDto.ElapsedTime),
                 Goal = taskDto.Goal,
                 LastStartTime = taskDto.LastStartTime,
-                IsActive = taskDto.IsActive,
                 IsRunning = taskDto.IsRunning,
                 UserId = taskDto.UserId,
                 WatchType = taskDto.WatchType
@@ -53,7 +52,6 @@ namespace GtdTimerDAL.Extensions
                 ElapsedTime = (int)task.ElapsedTime.TotalMilliseconds,
                 Goal = task.Goal,
                 LastStartTime = task.LastStartTime,
-                IsActive = task.IsActive,
                 IsRunning = task.IsRunning,
                 UserId = task.UserId,
                 WatchType = task.WatchType

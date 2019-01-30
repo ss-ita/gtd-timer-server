@@ -21,11 +21,6 @@ namespace GtdTimerDAL.UnitOfWork
         IApplicationUserManager<User, int> UserManager { get; set; }
 
         /// <summary>
-        /// Gets or sets roles table
-        /// </summary>
-        IRepository<Role> Roles { get; set; }
-
-        /// <summary>
         /// Gets or sets tasks table
         /// </summary>
         IRepository<Tasks> Tasks { get; set; }
@@ -34,16 +29,6 @@ namespace GtdTimerDAL.UnitOfWork
         /// Gets or sets presets table
         /// </summary>
         IRepository<Preset> Presets { get; set; }
-
-        /// <summary>
-        /// Gets or sets user roles table
-        /// </summary>
-        IRepository<UserRole> UserRoles { get; set; }
-
-        /// <summary>
-        /// Gets or sets users table
-        /// </summary>
-        IRepository<User> Users { get; set; }
 
         /// <summary>
         /// Gets or sets preset tasks table

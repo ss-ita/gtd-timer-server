@@ -4,14 +4,16 @@ using GtdTimerDAL.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GtdTimerDAL.Migrations
 {
     [DbContext(typeof(TimerContext))]
-    partial class TimerContextModelSnapshot : ModelSnapshot
+    [Migration("20190128105237_AddElapsedTimeToRecord")]
+    partial class AddElapsedTimeToRecord
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -27,11 +29,11 @@ namespace GtdTimerDAL.Migrations
 
                     b.Property<string>("CronExpression");
 
-                    b.Property<bool>("IsOn");
+                    b.Property<bool>("IsSound");
+
+                    b.Property<bool>("IsTurnOn");
 
                     b.Property<string>("Message");
-
-                    b.Property<bool>("SoundOn");
 
                     b.Property<int>("UserId");
 
@@ -154,6 +156,8 @@ namespace GtdTimerDAL.Migrations
                     b.Property<TimeSpan>("ElapsedTime");
 
                     b.Property<TimeSpan?>("Goal");
+
+                    b.Property<bool>("IsActive");
 
                     b.Property<bool>("IsRunning");
 
