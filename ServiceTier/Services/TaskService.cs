@@ -5,7 +5,6 @@
 //-----------------------------------------------------------------------
 
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 
@@ -34,12 +33,12 @@ namespace GtdServiceTier.Services
         {
         }
 
-        public void CreateTask(TaskDto taskDto)
+        public void CreateTask(TaskDto model)
         {
-            var task = taskDto.ToTask();
+            var task = model.ToTask();
             UnitOfWork.Tasks.Create(task);
             UnitOfWork.Save();
-            taskDto.Id = task.Id;
+            model.Id = task.Id;
         }
 
         public IEnumerable<TaskDto> AddTaskToDatabase(IEnumerable<TaskDto> listOfTasksDto, int userId)
@@ -102,9 +101,9 @@ namespace GtdServiceTier.Services
             return task.ToTaskDto();
         }
 
-        public void UpdateTask(TaskDto taskDto)
+        public void UpdateTask(TaskDto model)
         {
-            var task = taskDto.ToTask();
+            var task = model.ToTask();
 
             UnitOfWork.Tasks.Update(task);
             UnitOfWork.Save();

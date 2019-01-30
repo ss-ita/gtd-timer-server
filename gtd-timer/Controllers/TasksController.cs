@@ -199,6 +199,32 @@ namespace GtdTimer.Controllers
         }
 
         /// <summary>
+        /// Converts all user's stopwatches to xml format. 
+        /// </summary>
+        /// <returns>returns a text file</returns>
+        [HttpGet("[action]")]
+        public IActionResult ExportAllStopwatchesAsXmlByUserId()
+        {
+            var userId = userIdentityService.GetUserId();
+            var listOfStopwatches = taskService.GetAllStopwatchesByUserId(userId);
+
+            return new XmlResult(listOfStopwatches);
+        }
+
+        /// <summary>
+        /// Converts all user's timers to xml format. 
+        /// </summary>
+        /// <returns>returns a text file</returns>
+        [HttpGet("[action]")]
+        public IActionResult ExportAllTimersAsXmlByUserId()
+        {
+            var userId = userIdentityService.GetUserId();
+            var listOfTimers = taskService.GetAllTimersByUserId(userId);
+
+            return new XmlResult(listOfTimers);
+        }
+
+        /// <summary>
         /// Converts  user's task by id to xml format.
         /// </summary>
         /// <param name="taskId">id of chosen task</param>
@@ -222,6 +248,32 @@ namespace GtdTimer.Controllers
             var listOfTasks = taskService.GetAllTasksByUserId(userId);
 
             return new CsvResult(listOfTasks);
+        }
+
+        /// <summary>
+        /// Converts all user's stopwatches to csv format.
+        /// </summary>
+        /// <returns>return text file</returns>
+        [HttpGet("[action]")]
+        public IActionResult ExportAllStopwatchesAsCsvByUserId()
+        {
+            var userId = userIdentityService.GetUserId();
+            var listOfStopwatches = taskService.GetAllStopwatchesByUserId(userId);
+
+            return new CsvResult(listOfStopwatches);
+        }
+
+        /// <summary>
+        /// Converts all user's stopwatches to csv format.
+        /// </summary>
+        /// <returns>return text file</returns>
+        [HttpGet("[action]")]
+        public IActionResult ExportAllTimersAsCsvByUserId()
+        {
+            var userId = userIdentityService.GetUserId();
+            var listOfTimers = taskService.GetAllTimersByUserId(userId);
+
+            return new CsvResult(listOfTimers);
         }
 
         /// <summary>
