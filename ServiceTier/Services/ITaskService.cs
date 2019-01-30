@@ -156,6 +156,13 @@ namespace GtdServiceTier.Services
         void DeleteRecordById(int taskId);
 
         /// <summary>
+        /// Method to reset and start task from history
+        /// </summary>
+        /// <param name="taskId">Id of task to reset</param>
+        /// <returns>Returns taskRecordDto if task was stopped</returns>
+        TaskRecordDto ResetTaskFromHistory(int taskId);
+
+        /// <summary>
         /// Method for getting all timers by preset id
         /// </summary>
         /// <param name="presetid">id of chosen preset</param>

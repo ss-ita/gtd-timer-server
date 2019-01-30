@@ -278,7 +278,7 @@ namespace GtdServiceTier.Services
             }
         }
 
-        public void ResetTaskFromHistory(int taskId)
+        public TaskRecordDto ResetTaskFromHistory(int taskId)
         {
             var taskToUpdate = UnitOfWork.Tasks.GetByID(taskId);
             if (taskToUpdate.IsRunning)
@@ -292,12 +292,25 @@ namespace GtdServiceTier.Services
                     TaskId = taskId,
                     StartTime = taskToUpdate.LastStartTime,
                     StopTime = timeNow,
-
+                    WatchType = taskToUpdate.WatchType,
+                    ElapsedTime = ellapsedTime
                 };
+                UnitOfWork.Records.Create(recordToCreate);
+                taskToUpdate.ElapsedTime = TimeSpan.FromMilliseconds(0);
+                taskToUpdate.LastStartTime = timeNow;
+                UnitOfWork.Tasks.Update(taskToUpdate);
+                UnitOfWork.Save();
+                return recordToCreate.ToTaskRecord(taskToUpdate);
             }
             else
             {
-
+                var timeNow = DateTime.Now;
+                taskToUpdate.ElapsedTime = TimeSpan.FromMilliseconds(0);
+                taskToUpdate.LastStartTime = timeNow;
+                taskToUpdate.IsRunning = true;
+                UnitOfWork.Tasks.Update(taskToUpdate);
+                UnitOfWork.Save();
+                return null;
             }
         }
 
