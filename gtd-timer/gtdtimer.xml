@@ -241,18 +241,6 @@
             </summary>
             <returns>result of getting all users tasks.</returns>
         </member>
-        <member name="M:GtdTimer.Controllers.TasksController.GetAllActiveTasks">
-            <summary>
-            Returns all users' active tasks.
-            </summary>
-            <returns>result of getting all users' active tasks.</returns>
-        </member>
-        <member name="M:GtdTimer.Controllers.TasksController.GetAllArchivedTasks">
-            <summary>
-            Returns all users' archived tasks.
-            </summary>
-            <returns>result of getting all users' archived tasks.</returns>
-        </member>
         <member name="M:GtdTimer.Controllers.TasksController.GetTaskById(System.Int32)">
             <summary>
             Returns user's task by id.
@@ -266,17 +254,11 @@
             </summary>
             <returns>result of getting all user's tasks.</returns>
         </member>
-        <member name="M:GtdTimer.Controllers.TasksController.GetAllActiveTasksByUserId">
+        <member name="M:GtdTimer.Controllers.TasksController.GetAllTasksByDate(System.DateTime,System.DateTime)">
             <summary>
-            Returns all user's active tasks.
+            Returns all user's tasks within specified date range.
             </summary>
-            <returns>result of getting all user's active tasks.</returns>
-        </member>
-        <member name="M:GtdTimer.Controllers.TasksController.GetAllArchivedTasksByUserId">
-            <summary>
-            Returns all user's archived tasks.
-            </summary>
-            <returns>result of getting all user's archived tasks.</returns>
+            <returns>result of getting all user's tasks within date range.</returns>
         </member>
         <member name="M:GtdTimer.Controllers.TasksController.CreateTask(GtdCommon.ModelsDto.TaskDto)">
             <summary>
@@ -298,13 +280,6 @@
             </summary>
             <param name="taskId">id of chosen task</param>
             <returns>result of deleting the task by id.</returns>
-        </member>
-        <member name="M:GtdTimer.Controllers.TasksController.SwitchArchivedStatus(GtdCommon.ModelsDto.TaskDto)">
-            <summary>
-            Changes IsActive status of the task.
-            </summary>
-            <param name="model">task model</param>
-            <returns>result of changing IsActive status of the task.</returns>
         </member>
         <member name="M:GtdTimer.Controllers.TasksController.StartTask(GtdCommon.ModelsDto.TaskDto)">
             <summary>
@@ -333,17 +308,17 @@
             </summary>
             <returns>returns a text file</returns>
         </member>
-        <member name="M:GtdTimer.Controllers.TasksController.ExportAllActiveTasksAsXmlByUserId">
+        <member name="M:GtdTimer.Controllers.TasksController.ExportAllStopwatchesAsXmlByUserId">
             <summary>
-            Converts all user's active tasks to xml format.
+            Converts all user's stopwatches to xml format. 
             </summary>
             <returns>returns a text file</returns>
         </member>
-        <member name="M:GtdTimer.Controllers.TasksController.ExportAllArchivedTasksAsXmlByUserId">
+        <member name="M:GtdTimer.Controllers.TasksController.ExportAllTimersAsXmlByUserId">
             <summary>
-            Converts all user's archived tasks to xml format.
+            Converts all user's timers to xml format. 
             </summary>
-            <returns>returns text file</returns>
+            <returns>returns a text file</returns>
         </member>
         <member name="M:GtdTimer.Controllers.TasksController.ExportTaskAsXmlById(System.Int32)">
             <summary>
@@ -358,17 +333,17 @@
             </summary>
             <returns>return text file</returns>
         </member>
-        <member name="M:GtdTimer.Controllers.TasksController.ExportAllActiveTasksAsCsvByUserId">
+        <member name="M:GtdTimer.Controllers.TasksController.ExportAllStopwatchesAsCsvByUserId">
             <summary>
-            Converts all user's active tasks to csv format.
+            Converts all user's stopwatches to csv format.
             </summary>
-            <returns>returns text file</returns>
+            <returns>return text file</returns>
         </member>
-        <member name="M:GtdTimer.Controllers.TasksController.ExportAllArchivedTasksAsCsvByUserId">
+        <member name="M:GtdTimer.Controllers.TasksController.ExportAllTimersAsCsvByUserId">
             <summary>
-            Converts all user's archived tasks to csv format.
+            Converts all user's stopwatches to csv format.
             </summary>
-            <returns>returns text file</returns>
+            <returns>return text file</returns>
         </member>
         <member name="M:GtdTimer.Controllers.TasksController.ExportTaskAsCsvById(System.Int32)">
             <summary>

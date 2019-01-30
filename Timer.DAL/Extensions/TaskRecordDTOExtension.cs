@@ -43,6 +43,7 @@ namespace GtdTimerDAL.Extensions
         /// </summary>
         /// <param name="record">TaskRecordDto model</param>
         /// <returns>Returns Record model</returns>
+
         public static Record ToRecord(this TaskRecordDto record)
         {
             Record recordToReturn = new Record
@@ -54,7 +55,7 @@ namespace GtdTimerDAL.Extensions
                 StopTime = record.StopTime,
                 TaskId = record.TaskId,
                 ElapsedTime = record.ElapsedTime,
-                WatchType = record.WatchType
+                WatchType = record.WatchType,
             };
            
             return recordToReturn;

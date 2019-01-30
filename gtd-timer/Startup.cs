@@ -37,6 +37,7 @@ namespace GtdTimer
     {
         public string Cors { get; set; }
 
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Startup" /> class.
         /// </summary>
@@ -61,6 +62,7 @@ namespace GtdTimer
             Cors = Environment.GetEnvironmentVariable("AzureCors") ?? IoCContainer.Configuration["Origins"];
 
 
+
         }
 
         /// <summary>
@@ -74,6 +76,7 @@ namespace GtdTimer
                 options.AddPolicy(
                     "AllowSpecificOrigin",
                     builder => builder.WithOrigins(Cors).AllowAnyHeader().AllowAnyMethod());
+
             });
             services.AddDbContext<TimerContext>(opts => opts.UseSqlServer(IoCContainer.Configuration["AzureConnection"]));
             services.AddIdentity<User, Role>().AddEntityFrameworkStores<TimerContext>().AddDefaultTokenProviders();

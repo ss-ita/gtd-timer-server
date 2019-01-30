@@ -156,7 +156,8 @@ namespace GtdTimer.Controllers
         [HttpGet("GetUsersEmails/{roleName}")]
         public IActionResult GetUsersEmails(string roleName)
         {
-            var emailsList = usersService.GetUsersEmails(roleName);
+            var userId = userIdentityService.GetUserId();
+            var emailsList = usersService.GetUsersEmails(roleName, userId);
 
             return this.Ok(emailsList);
         }

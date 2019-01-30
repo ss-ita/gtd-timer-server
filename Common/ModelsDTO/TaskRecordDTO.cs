@@ -43,7 +43,9 @@ namespace GtdCommon.ModelsDto
         /// </summary>
         public int ElapsedTime { get; set; }
 
-
+        /// <summary>
+        /// Gets or sets of type of record
+        /// </summary>
         public WatchType WatchType { get; set; }
 
         /// <summary>

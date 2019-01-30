@@ -17,6 +17,8 @@ using GtdTimerDAL.Entities;
 using GtdTimerDAL.Repositories;
 using GtdTimerDAL.UnitOfWork;
 using GtdTimerDAL.Extensions;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace GtdServiceTierTests
 {
@@ -27,6 +29,23 @@ namespace GtdServiceTierTests
         private List<Tasks> tasks = new List<Tasks>();
         private Mock<IUnitOfWork> unitOfWork;
         private TaskService subject;
+        string contentCsv = "testData";
+        string contentXml = @"<?xml version = ""1.0"" encoding=""utf-8""?>
+                              <ArrayOfTaskDto xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+                                <TaskDto>
+                                    <Name>Test</Name>
+                                    <Description />
+                                    <ElapsedTime>0</ElapsedTime>
+                                    <LastStartTime>0001-01-01T00:00:00</LastStartTime>
+                                    <Goal xsi:nil=""true"" />
+                                    <IsActive>true</IsActive>
+                                    <IsRunning>true</IsRunning>
+                                </TaskDto>
+                              </ArrayOfTaskDto>";
+        string fileNameCsv = "test.csv";
+        string fileNameXml = "test.xml";
+        private DateTime start = DateTime.Now;
+        private DateTime end = DateTime.Now;
 
         /// <summary>
         /// Method which is called immediately in each test run
@@ -101,21 +120,6 @@ namespace GtdServiceTierTests
             unitOfWork.Setup(_ => _.Tasks.GetByID(taskId)).Returns(task);
 
             Assert.AreEqual(subject.GetTaskById(taskId).Name, task.Name);
-        }
-
-        /// <summary>
-        /// Switch Task Status test
-        /// </summary>
-        [Test]
-        public void UpdateTaskStatus()
-        {
-            TaskDto task = new TaskDto();
-            var taskRepository = new Mock<IRepository<Tasks>>();
-
-            unitOfWork.Setup(_ => _.Tasks).Returns(taskRepository.Object);
-            subject.SwitchArchivedStatus(task);
-
-            unitOfWork.Verify(_ => _.Save(), Times.Once);
         }
 
         /// <summary>
@@ -208,59 +212,17 @@ namespace GtdServiceTierTests
         }
 
         /// <summary>
-        /// Get All Active Tasks test
+        /// Get All Tasks By Date test
         /// </summary>
         [Test]
-        public void GetAllActiveTasks()
+        public void GetAllTasksByDate()
         {
             var taskRepository = new Mock<IRepository<Tasks>>();
 
             unitOfWork.Setup(_ => _.Tasks).Returns(taskRepository.Object);
             unitOfWork.Setup(_ => _.Tasks.GetAllEntitiesByFilter(It.IsAny<Func<Tasks, bool>>())).Returns(tasks);
 
-            Assert.AreEqual(subject.GetAllActiveTasks().ToList()[0].Name, task.Name);
-        }
-
-        /// <summary>
-        /// Get All Active Tasks By User Id test
-        /// </summary>
-        [Test]
-        public void GetAllActiveTasksByUserId()
-        {
-            var taskRepository = new Mock<IRepository<Tasks>>();
-
-            unitOfWork.Setup(_ => _.Tasks).Returns(taskRepository.Object);
-            unitOfWork.Setup(_ => _.Tasks.GetAllEntitiesByFilter(It.IsAny<Func<Tasks, bool>>())).Returns(tasks);
-
-            Assert.AreEqual(subject.GetAllActiveTasksByUserId(userId).ToList()[0].Name, task.Name);
-        }
-
-        /// <summary>
-        /// Get All Archived Tasks test
-        /// </summary>
-        [Test]
-        public void GetAllArchivedTasks()
-        {
-            var taskRepository = new Mock<IRepository<Tasks>>();
-
-            unitOfWork.Setup(_ => _.Tasks).Returns(taskRepository.Object);
-            unitOfWork.Setup(_ => _.Tasks.GetAllEntitiesByFilter(It.IsAny<Func<Tasks, bool>>())).Returns(tasks);
-
-            Assert.AreEqual(subject.GetAllArchivedTasks().ToList()[0].Name, task.Name);
-        }
-
-        /// <summary>
-        /// Get All Archived Tasks By User Id test
-        /// </summary>
-        [Test]
-        public void GetAllArchivedTasksByUserId()
-        {
-            var taskRepository = new Mock<IRepository<Tasks>>();
-
-            unitOfWork.Setup(_ => _.Tasks).Returns(taskRepository.Object);
-            unitOfWork.Setup(_ => _.Tasks.GetAllEntitiesByFilter(It.IsAny<Func<Tasks, bool>>())).Returns(tasks);
-
-            Assert.AreEqual(subject.GetAllArchivedTasksByUserId(userId).ToList()[0].Name, task.Name);
+            Assert.AreEqual(subject.GetAllTasksByDate(userId, start, end).ToList()[0].Name, task.Name);
         }
 
         /// <summary>
@@ -270,7 +232,7 @@ namespace GtdServiceTierTests
         public void GetAllTasksByPresetId()
         {
             int presetid = 12;
-            Tasks task = new Tasks { Name = "task", Id = 1, IsActive = true };
+            Tasks task = new Tasks { Name = "task", Id = 1 };
             List<Tasks> tasks = new List<Tasks>
             {
                 task
@@ -291,7 +253,7 @@ namespace GtdServiceTierTests
             unitOfWork.Setup(_ => _.PresetTasks.GetAllEntitiesByFilter(It.IsAny<Func<PresetTasks, bool>>())).Returns(presetsTasks);
             unitOfWork.Setup(_ => _.Tasks.GetByID(task.Id)).Returns(task);
 
-            Assert.AreEqual(subject.GetAllTasksByPresetId(presetid)[0].IsActive, taskDtos[0].IsActive);
+            Assert.AreEqual(subject.GetAllTasksByPresetId(presetid)[0].Name, taskDtos[0].Name);
         }
 
         /// <summary>
@@ -320,6 +282,72 @@ namespace GtdServiceTierTests
             unitOfWork.Setup(_ => _.Tasks.GetAllEntitiesByFilter(It.IsAny<Func<Tasks, bool>>())).Returns(tasks);
 
             Assert.AreEqual(subject.GetAllStopwatchesByUserId(userId).ToList()[0].Name, task.Name);
+        }
+
+        /// <summary>
+        /// AddTasksToDatabase method's unit test.
+        /// </summary>
+        [Test]
+        public void AddTasksToDatabase()
+        {
+            List<TaskDto> listOfTasksDto = new List<TaskDto>();
+            var taskRepository = new Mock<IRepository<Tasks>>();
+
+            unitOfWork.Setup(_ => _.Tasks).Returns(taskRepository.Object);
+            var result = subject.AddTaskToDatabase(listOfTasksDto, userId);
+
+            Assert.IsInstanceOf(typeof(IEnumerable<TaskDto>), result);
+            unitOfWork.Verify(_ => _.Save(), Times.Once);
+        }
+
+        /// <summary>
+        /// ImportTasksFromCsv method's unit test.
+        /// </summary>
+        [Test]
+        public void ImportTasksFromCsv()
+        {
+            var fileMock = new Mock<IFormFile>();
+            List<TaskDto> listOfTasksDto = new List<TaskDto>();
+
+            var taskRepository = new Mock<IRepository<Tasks>>();
+            var memoryStream = new MemoryStream();
+            var writer = new StreamWriter(memoryStream);
+            writer.Write(contentCsv);
+            writer.Flush();
+            memoryStream.Position = 0;
+            fileMock.Setup(_ => _.OpenReadStream()).Returns(memoryStream);
+            fileMock.Setup(_ => _.FileName).Returns(fileNameCsv);
+            fileMock.Setup(_ => _.Length).Returns(memoryStream.Length);
+            unitOfWork.Setup(_ => _.Tasks).Returns(taskRepository.Object);
+            var result = subject.ImportTasksFromCsv(fileMock.Object, userId);
+
+            Assert.IsInstanceOf(typeof(IEnumerable<TaskDto>), result);
+            unitOfWork.Verify(_ => _.Save(), Times.Once);
+        }
+
+        /// <summary>
+        /// ImportTasksFromXml method's unit test.
+        /// </summary>
+        [Test]
+        public void ImportTasksFromXml()
+        {
+            var fileMock = new Mock<IFormFile>();
+            List<TaskDto> listOfTasksDto = new List<TaskDto>();
+
+            var taskRepository = new Mock<IRepository<Tasks>>();
+            var memoryStream = new MemoryStream();
+            var writer = new StreamWriter(memoryStream);
+            writer.Write(contentXml);
+            writer.Flush();
+            memoryStream.Position = 0;
+            fileMock.Setup(_ => _.OpenReadStream()).Returns(memoryStream);
+            fileMock.Setup(_ => _.FileName).Returns(fileNameXml);
+            fileMock.Setup(_ => _.Length).Returns(memoryStream.Length);
+            unitOfWork.Setup(_ => _.Tasks).Returns(taskRepository.Object);
+            var result = subject.ImportTasksFromXml(fileMock.Object, userId);
+
+            Assert.IsInstanceOf(typeof(IEnumerable<TaskDto>), result);
+            unitOfWork.Verify(_ => _.Save(), Times.Once);
         }
     }
 }

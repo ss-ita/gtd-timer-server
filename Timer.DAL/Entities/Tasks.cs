@@ -45,11 +45,6 @@ namespace GtdTimerDAL.Entities
         public TimeSpan? Goal { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether task IsActive
-        /// </summary>
-        public bool IsActive { get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether task IsRunning
         /// </summary>
         public bool IsRunning { get; set; }
