@@ -93,6 +93,7 @@ namespace GtdTimer
             services.AddScoped<IRepository<Record>, Repository<Record>>();
             services.AddScoped<IRepository<Alarm>, Repository<Alarm>>();
             services.AddScoped<IRepository<User>, Repository<User>>();
+            services.AddScoped<IRepository<Token>, Repository<Token>>();
             services.AddScoped<IApplicationUserManager<User, int>, ApplicationUserManager>();
             services.AddScoped<IUserStore<User, int>, UserStore>();
 

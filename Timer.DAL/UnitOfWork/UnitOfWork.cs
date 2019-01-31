@@ -56,6 +56,11 @@ namespace GtdTimerDAL.UnitOfWork
         private Lazy<IRepository<User>> users;
 
         /// <summary>
+        /// Tokens table
+        /// </summary>
+        private Lazy<IRepository<Token>> tokens;
+
+        /// <summary>
         /// Value indicating whether it is disposed 
         /// </summary>
         private bool disposed;
@@ -65,19 +70,21 @@ namespace GtdTimerDAL.UnitOfWork
         /// </summary>
         /// <param name="context">context instance</param>
         /// <param name="applicationUserManager"> application user manager repository</param>
-        /// <param name="role">role  repository</param>
-        /// <param name="preset">preset  repository</param>
+        /// <param name="role">role repository</param>
+        /// <param name="preset">preset repository</param>
         /// <param name="timer">timer repository</param>
         /// <param name="tasks">tasks repository</param>
         /// <param name="userRole">user role repository</param>
+        /// <param name="token">token repository</param>
         public UnitOfWork(TimerContext context,
-            IApplicationUserManager<User, int> applicationUserManager,
-            IRepository<Preset> preset,
-            IRepository<PresetTasks> presetTasks,
-            IRepository<Tasks> tasks,
-            IRepository<Record> record,
-            IRepository<Alarm> alarm,
-            IRepository<User> users)
+        IApplicationUserManager<User, int> applicationUserManager,
+        IRepository<Preset> preset,
+        IRepository<PresetTasks> presetTasks,
+        IRepository<Tasks> tasks,
+        IRepository<Record> record,
+        IRepository<Alarm> alarm,
+        IRepository<Token> token,
+        IRepository<User> users)
         {
             this.context = context;
             disposed = false;
@@ -87,6 +94,7 @@ namespace GtdTimerDAL.UnitOfWork
             PresetTasks = presetTasks;
             Records = record;
             Alarms = alarm;
+            Tokens = token;
             Users = users;
         }
 
@@ -172,7 +180,19 @@ namespace GtdTimerDAL.UnitOfWork
                 users = new Lazy<IRepository<User>>(() => value);
             }  
         }
-        
+
+        /// <summary>
+        /// Gets or sets tokens table
+        /// </summary>
+        public IRepository<Token> Tokens
+        {
+            get => tokens.Value;
+            set
+            {
+                tokens = new Lazy<IRepository<Token>>(() => value);
+            }
+        }
+
         public void Save()
         {
             context.SaveChanges();

@@ -79,26 +79,31 @@ namespace GtdTimerDAL.Entities
         public virtual DbSet<Alarm> Alarms { get; set; }
 
         /// <summary>
+        /// Gets or sets set of tokens
+        /// </summary>
+        public virtual DbSet<Token> Tokens { get; set; }
+
+        /// <summary>
         /// method used when creating database models
         /// </summary>
         /// <param name="builder"> model builder instance </param>
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            builder.Entity<UserRole>(userRole =>
-            {
-                userRole.HasKey(ur => new { ur.UserId, ur.RoleId });
+            //builder.Entity<UserRole>(userRole =>
+            //{
+            //    userRole.HasKey(ur => new { ur.UserId, ur.RoleId });
 
-                userRole.HasOne(ur => ur.Role)
-                    .WithMany(r => r.UserRoles)
-                    .HasForeignKey(ur => ur.RoleId)
-                    .IsRequired();
+            //    userRole.HasOne(ur => ur.Role)
+            //        .WithMany(r => r.UserRoles)
+            //        .HasForeignKey(ur => ur.RoleId)
+            //        .IsRequired();
 
-                userRole.HasOne(ur => ur.User)
-                    .WithMany(r => r.UserRoles)
-                    .HasForeignKey(ur => ur.UserId)
-                    .IsRequired();
-            });
+            //    userRole.HasOne(ur => ur.User)
+            //        .WithMany(r => r.UserRoles)
+            //        .HasForeignKey(ur => ur.UserId)
+            //        .IsRequired();
+            //});
         }
     }
 }

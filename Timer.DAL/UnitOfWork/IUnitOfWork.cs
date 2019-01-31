@@ -46,6 +46,11 @@ namespace GtdTimerDAL.UnitOfWork
         IRepository<Alarm> Alarms { get; set; }
 
         /// <summary>
+        /// Gets or sets tokens table
+        /// </summary>
+        IRepository<Token> Tokens { get; set; }
+
+        /// <summary>
         /// Method for saving changes
         /// </summary>
         void Save();
