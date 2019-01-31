@@ -70,21 +70,21 @@ namespace GtdTimerDAL.UnitOfWork
         /// </summary>
         /// <param name="context">context instance</param>
         /// <param name="applicationUserManager"> application user manager repository</param>
-        /// <param name="role">role  repository</param>
-        /// <param name="preset">preset  repository</param>
+        /// <param name="role">role repository</param>
+        /// <param name="preset">preset repository</param>
         /// <param name="timer">timer repository</param>
         /// <param name="tasks">tasks repository</param>
         /// <param name="userRole">user role repository</param>
         /// <param name="token">token repository</param>
         public UnitOfWork(TimerContext context,
-            IApplicationUserManager<User, int> applicationUserManager,
-            IRepository<Preset> preset,
-            IRepository<PresetTasks> presetTasks,
-            IRepository<Tasks> tasks,
-            IRepository<Record> record,
-            IRepository<Alarm> alarm,
-            IRepository<Token> token,
-            IRepository<User> users)
+        IApplicationUserManager<User, int> applicationUserManager,
+        IRepository<Preset> preset,
+        IRepository<PresetTasks> presetTasks,
+        IRepository<Tasks> tasks,
+        IRepository<Record> record,
+        IRepository<Alarm> alarm,
+        IRepository<Token> token,
+        IRepository<User> users)
         {
             this.context = context;
             disposed = false;
@@ -185,14 +185,15 @@ namespace GtdTimerDAL.UnitOfWork
         /// <summary>
         /// Gets or sets users table
         /// </summary>
-        public IRepository<User> Users {
+        public IRepository<User> Users
+        {
             get => users.Value;
             set
             {
                 users = new Lazy<IRepository<User>>(() => value);
-            }  
+            }
         }
-        
+
         public void Save()
         {
             context.SaveChanges();
