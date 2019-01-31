@@ -28,7 +28,7 @@ namespace GtdCommon.Email.Templates
         {
             var templateText = default(string);
           
-            using (var reader = new StreamReader(Assembly.GetEntryAssembly().GetManifestResourceStream("GtdTimer.EmailTemplate.htm"), Encoding.UTF8))
+            using (var reader = new StreamReader(Assembly.GetEntryAssembly().GetManifestResourceStream("GtdTimer.EmailTemplate.html"), Encoding.UTF8))
             {
                 templateText = await reader.ReadToEndAsync();
             }

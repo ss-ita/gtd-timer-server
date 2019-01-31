@@ -22,7 +22,6 @@ using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
 
 using GtdCommon.IoC;
-using GtdCommon.Email;
 using GtdCommon.Email.SendGrid;
 using GtdCommon.Email.Templates;
 using GtdTimer.Middleware;
@@ -170,7 +169,7 @@ namespace GtdTimer
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
-            loggerFactory.AddLog4Net(configuration.GetValue<string>("Log4NetConfigFile:Name"));
+            //loggerFactory.AddLog4Net(configuration.GetValue<string>("Log4NetConfigFile:Name"));
             app.UseMvc();
         }
     }

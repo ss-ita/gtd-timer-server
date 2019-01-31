@@ -4,9 +4,14 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System;
+using System.Linq;
+using System.Web;
+
+using GtdCommon.Email;
+using GtdCommon.IoC;
 using GtdTimerDAL.Entities;
 using GtdTimerDAL.UnitOfWork;
-using System.Linq;
 
 namespace GtdServiceTier.Services
 {
@@ -36,6 +41,21 @@ namespace GtdServiceTier.Services
                 .Select(token => token);
 
             return userToken.FirstOrDefault();
+        }
+
+        public void SendUserVerificationToken(User user)
+        {
+            var emailVerificationCode = UnitOfWork.UserManager.GenerateEmailConfirmationTokenAsync(user.Id).GetAwaiter().GetResult();
+
+            Token token = new Token() { UserId = user.Id, TokenValue = emailVerificationCode, TokenCreationTime = DateTime.Now };
+
+            CreateToken(token);
+
+            var host = Environment.GetEnvironmentVariable("AzureCors") ?? IoCContainer.Configuration["Origins"];
+
+            var confirmationUrl = $"{host}/confirm-email/{user.Id}/{HttpUtility.UrlEncode(emailVerificationCode)}";
+
+            GtdTimerEmailSender.SendUserVerificationEmailAsync(user.UserName, user.Email, confirmationUrl).GetAwaiter().GetResult();
         }
     }
 }

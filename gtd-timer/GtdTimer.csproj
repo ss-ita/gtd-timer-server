@@ -21,13 +21,12 @@
 
   <ItemGroup>
     <None Remove="clock1.jpg" />
-    <None Remove="EmailTemplate.htm" />
+    <None Remove="EmailTemplate.html" />
   </ItemGroup>
 
 
   <ItemGroup>
-    <EmbeddedResource Include="clock1.jpg" />
-    <EmbeddedResource Include="EmailTemplate.htm" />
+    <EmbeddedResource Include="EmailTemplate.html" />
   </ItemGroup>
 
 

@@ -12,8 +12,6 @@ using System.Collections.Generic;
 using GtdCommon.Constant;
 using GtdCommon.Exceptions;
 using GtdCommon.ModelsDto;
-using GtdCommon.Email;
-using GtdCommon.IoC;
 using GtdTimerDAL.Extensions;
 using GtdTimerDAL.Entities;
 using GtdTimerDAL.UnitOfWork;
@@ -55,14 +53,10 @@ namespace GtdServiceTier.Services
             }
 
             User user = model.ToUser();
-            var result = UnitOfWork.UserManager.CreateAsync(user, model.Password).GetAwaiter().GetResult();
+            UnitOfWork.UserManager.CreateAsync(user, model.Password).GetAwaiter().GetResult();
             UnitOfWork.UserManager.AddToRoleAsync(user.Id, Constants.UserRole).GetAwaiter().GetResult();
             UnitOfWork.Save();
-
-            if (result.Succeeded)
-            {
-                 SendUserVerificationEmail(user);
-            }
+            tokenService.SendUserVerificationToken(user);
         }
 
         public void VerifyToken(string userId, string emailToken)
@@ -70,7 +64,7 @@ namespace GtdServiceTier.Services
             var token = tokenService.GetTokenByUserId(Convert.ToInt32(userId));
             if (token == null)
             {
-                throw new InvalidTokenException();
+                throw new InvalidTokenException("Token has expired");
             }
             
             var user = UnitOfWork.UserManager.FindByIdAsync(Convert.ToInt32(userId)).GetAwaiter().GetResult();
@@ -83,22 +77,7 @@ namespace GtdServiceTier.Services
                 UnitOfWork.UserManager.UpdateAsync(user).GetAwaiter().GetResult();
                 UnitOfWork.Save();
             }
-            else throw new InvalidTokenException();
-        }
-
-        public void SendUserVerificationEmail(User user)
-        {
-            var emailVerificationCode = UnitOfWork.UserManager.GenerateEmailConfirmationTokenAsync(user.Id).GetAwaiter().GetResult();
-
-            Token token = new Token() { UserId = user.Id , TokenValue = emailVerificationCode, TokenCreationTime = DateTime.Now };
-
-            tokenService.CreateToken(token);
-          
-            var host = Environment.GetEnvironmentVariable("AzureCors") ?? IoCContainer.Configuration["Origins"];
-
-            var confirmationUrl = $"{host}/confirm-email/{user.Id}/{HttpUtility.UrlEncode(emailVerificationCode)}";
-
-            GtdTimerEmailSender.SendUserVerificationEmailAsync(user.UserName, user.Email, confirmationUrl).GetAwaiter().GetResult();
+            else throw new InvalidTokenException("Token has expired");
         }
   
         public void UpdatePassword(int id, UpdatePasswordDto model)
@@ -106,7 +85,7 @@ namespace GtdServiceTier.Services
             User user = Get(id);
             if (user.EmailConfirmed == false)
             {
-                throw new AccessDeniedException("Please confirm your email address!");
+                throw new AccessDeniedException("First confirm your email address!");
             }
             if (!UnitOfWork.UserManager.CheckPasswordAsync(user, model.PasswordOld).Result)
             {
@@ -122,7 +101,7 @@ namespace GtdServiceTier.Services
             User user = Get(id);
             if (user.EmailConfirmed == false)
             {
-                throw new AccessDeniedException("Please confirm your email address!");
+                throw new AccessDeniedException("First confirm your email address!");
             }
             UnitOfWork.UserManager.DeleteAsync(user).GetAwaiter().GetResult();
             UnitOfWork.Save();
