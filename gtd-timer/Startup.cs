@@ -170,7 +170,7 @@ namespace GtdTimer
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
-            loggerFactory.AddLog4Net(configuration.GetValue<string>("Log4NetConfigFile:Name"));
+            loggerFactory.AddLog4Net(env.ContentRootPath + configuration.GetValue<string>("Log4NetConfigFile:Name"));
             app.UseMvc();
         }
     }
