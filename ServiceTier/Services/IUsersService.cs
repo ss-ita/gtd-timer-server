@@ -30,6 +30,19 @@ namespace GtdServiceTier.Services
         void Create(UserDto model);
 
         /// <summary>
+        /// Method for verification email confirmation token
+        /// </summary>
+        /// <param name="userId">user id</param>
+        /// <param name="emailToken">user confirmation token</param>
+        void VerifyToken(string userId, string emailToken);
+
+        /// <summary>
+        /// Method for sending user verification email
+        /// </summary>
+        /// <param name="user">user</param>
+        void SendUserVerificationEmail(User user);
+
+        /// <summary>
         /// Method for updating user password
         /// </summary>
         /// <param name="id">id of chosen user</param>

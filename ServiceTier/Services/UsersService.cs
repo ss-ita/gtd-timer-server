@@ -5,15 +5,18 @@
 //-----------------------------------------------------------------------
 
 using System;
+using System.Web;
+using System.Linq;
 using System.Collections.Generic;
 
 using GtdCommon.Constant;
 using GtdCommon.Exceptions;
 using GtdCommon.ModelsDto;
+using GtdCommon.Email;
+using GtdCommon.IoC;
 using GtdTimerDAL.Extensions;
 using GtdTimerDAL.Entities;
 using GtdTimerDAL.UnitOfWork;
-using System.Linq;
 
 namespace GtdServiceTier.Services
 {
@@ -23,11 +26,18 @@ namespace GtdServiceTier.Services
     public class UsersService : BaseService, IUsersService
     {
         /// <summary>
+        /// Instance of token service
+        /// </summary>
+        private readonly ITokenService tokenService;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="UsersService" /> class.
         /// </summary>
         /// <param name="unitOfWork">instance of unit of work</param>
-        public UsersService(IUnitOfWork unitOfWork) : base(unitOfWork)
+        /// <param name="tokenService">instance of token service</param>
+        public UsersService(IUnitOfWork unitOfWork , ITokenService tokenService) : base(unitOfWork)
         {
+            this.tokenService = tokenService;
         }
 
         public User Get(int id)
@@ -45,14 +55,59 @@ namespace GtdServiceTier.Services
             }
 
             User user = model.ToUser();
-            UnitOfWork.UserManager.CreateAsync(user, model.Password).GetAwaiter().GetResult();
+            var result = UnitOfWork.UserManager.CreateAsync(user, model.Password).GetAwaiter().GetResult();
             UnitOfWork.UserManager.AddToRoleAsync(user.Id, Constants.UserRole).GetAwaiter().GetResult();
             UnitOfWork.Save();
+
+            if (result.Succeeded)
+            {
+                 SendUserVerificationEmail(user);
+            }
         }
 
+        public void VerifyToken(string userId, string emailToken)
+        {
+            var token = tokenService.GetTokenByUserId(Convert.ToInt32(userId));
+            if (token == null)
+            {
+                throw new InvalidTokenException();
+            }
+            
+            var user = UnitOfWork.UserManager.FindByIdAsync(Convert.ToInt32(userId)).GetAwaiter().GetResult();
+
+            var result = token.TokenValue == emailToken ? true : false;
+
+            if (result)
+            {
+                user.EmailConfirmed = true;
+                UnitOfWork.UserManager.UpdateAsync(user).GetAwaiter().GetResult();
+                UnitOfWork.Save();
+            }
+            else throw new InvalidTokenException();
+        }
+
+        public void SendUserVerificationEmail(User user)
+        {
+            var emailVerificationCode = UnitOfWork.UserManager.GenerateEmailConfirmationTokenAsync(user.Id).GetAwaiter().GetResult();
+
+            Token token = new Token() { UserId = user.Id , TokenValue = emailVerificationCode, TokenCreationTime = DateTime.Now };
+
+            tokenService.CreateToken(token);
+          
+            var host = Environment.GetEnvironmentVariable("AzureCors") ?? IoCContainer.Configuration["Origins"];
+
+            var confirmationUrl = $"{host}/confirm-email/{user.Id}/{HttpUtility.UrlEncode(emailVerificationCode)}";
+
+            GtdTimerEmailSender.SendUserVerificationEmailAsync(user.UserName, user.Email, confirmationUrl).GetAwaiter().GetResult();
+        }
+  
         public void UpdatePassword(int id, UpdatePasswordDto model)
         {
             User user = Get(id);
+            if (user.EmailConfirmed == false)
+            {
+                throw new AccessDeniedException("Please confirm your email address!");
+            }
             if (!UnitOfWork.UserManager.CheckPasswordAsync(user, model.PasswordOld).Result)
             {
                 throw new PasswordMismatchException();
@@ -65,6 +120,10 @@ namespace GtdServiceTier.Services
         public void Delete(int id)
         {
             User user = Get(id);
+            if (user.EmailConfirmed == false)
+            {
+                throw new AccessDeniedException("Please confirm your email address!");
+            }
             UnitOfWork.UserManager.DeleteAsync(user).GetAwaiter().GetResult();
             UnitOfWork.Save();
         }

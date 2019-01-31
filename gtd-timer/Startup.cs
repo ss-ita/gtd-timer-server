@@ -22,6 +22,9 @@ using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
 
 using GtdCommon.IoC;
+using GtdCommon.Email;
+using GtdCommon.Email.SendGrid;
+using GtdCommon.Email.Templates;
 using GtdTimer.Middleware;
 using GtdServiceTier.Services;
 using GtdTimerDAL.Entities;
@@ -61,8 +64,6 @@ namespace GtdTimer
 
             Cors = Environment.GetEnvironmentVariable("AzureCors") ?? IoCContainer.Configuration["Origins"];
 
-
-
         }
 
         /// <summary>
@@ -71,6 +72,8 @@ namespace GtdTimer
         /// <param name="services">list of services</param>
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSendGridEmailSender();
+            services.AddEmailTemplateSender();
             services.AddCors(options =>
             {
                 options.AddPolicy(
@@ -86,6 +89,7 @@ namespace GtdTimer
             services.AddScoped<IUsersService, UsersService>();
             services.AddScoped<ITaskService, TaskService>();
             services.AddScoped<IAlarmService, AlarmService>();
+            services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IUserIdentityService, UserIdentityService>();
 
             services.AddScoped<IRepository<PresetTasks>, Repository<PresetTasks>>();
@@ -95,6 +99,7 @@ namespace GtdTimer
             services.AddScoped<IRepository<UserRole>, Repository<UserRole>>();
             services.AddScoped<IRepository<Record>, Repository<Record>>();
             services.AddScoped<IRepository<Alarm>, Repository<Alarm>>();
+            services.AddScoped<IRepository<Token>, Repository<Token>>();
             services.AddScoped<IRepository<User>, Repository<User>>();
             services.AddScoped<IApplicationUserManager<User, int>, ApplicationUserManager>();
             services.AddScoped<IUserStore<User, int>, UserStore>();
@@ -144,8 +149,10 @@ namespace GtdTimer
         /// <param name="env">hosting environment</param>
         /// <param name="loggerFactory">class which registers logger</param>
         /// <param name="configuration">class which helps configure project</param>
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IConfiguration configuration)
+        /// <param name="serviceProvider">service provider to our application</param>
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IConfiguration configuration, IServiceProvider serviceProvider)
         {
+            IoCContainer.AppBuilder = app;
             app.UseCors("AllowSpecificOrigin");
             if (env.IsDevelopment())
             {

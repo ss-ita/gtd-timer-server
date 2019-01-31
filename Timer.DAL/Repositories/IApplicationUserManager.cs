@@ -138,5 +138,12 @@ namespace GtdTimerDAL.Repositories
         /// <param name="newPassword"> new password of account </param>
         /// <returns> result of checking password </returns>
         Task<IdentityResult> ChangePasswordAsync(TKey userId, string currentPassword, string newPassword);
+
+        /// <summary>
+        /// Get the email confirmation token for the user
+        /// </summary>
+        /// <param name="userId">user id</param>
+        /// <returns>confirmation token</returns>
+        Task<string> GenerateEmailConfirmationTokenAsync(TKey userId);
     }
 }
