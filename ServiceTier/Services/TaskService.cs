@@ -196,7 +196,7 @@ namespace GtdServiceTier.Services
 
             var listOfTasks = this.UnitOfWork.Tasks.GetAllEntitiesByFilter(task => task.UserId == userId);
             var listOfTaskRecords = (from tasks in listOfTasks
-                                     from taskRecord in UnitOfWork.Records.GetAllEntitiesByFilter(record=>record.TaskId==tasks.Id)
+                                     from taskRecord in UnitOfWork.Records.GetAllEntitiesByFilter(record => record.TaskId == tasks.Id)
                                      select new TaskRecordDto
                                      {
                                          Id = taskRecord.Id,
@@ -206,12 +206,12 @@ namespace GtdServiceTier.Services
                                          Action = taskRecord.Action,
                                          StartTime = taskRecord.StartTime,
                                          StopTime = taskRecord.StopTime,
-                                         ElapsedTime =taskRecord.ElapsedTime,
+                                         ElapsedTime = taskRecord.ElapsedTime,
                                          WatchType = taskRecord.WatchType
 
                                      }).ToList();
 
-            return listOfTaskRecords;    
+            return listOfTaskRecords;
         }
 
         public void CreateRecord(TaskRecordDto taskRecord)
@@ -221,9 +221,9 @@ namespace GtdServiceTier.Services
             UnitOfWork.Save();
         }
 
-        public IEnumerable<TaskRecordDto> GetAllRecordsByTaskId(int userId,int taskId)
+        public IEnumerable<TaskRecordDto> GetAllRecordsByTaskId(int userId, int taskId)
         {
-            var listOfRecords = (UnitOfWork.Records.GetAllEntitiesByFilter(record=>record.TaskId == taskId)
+            var listOfRecords = (UnitOfWork.Records.GetAllEntitiesByFilter(record => record.TaskId == taskId)
                 .Where(record => record.TaskId == taskId)
                 .Select(record => record.ToTaskRecord(UnitOfWork.Tasks.GetByID(taskId))))
                 .ToList();
@@ -234,7 +234,7 @@ namespace GtdServiceTier.Services
 
         public void DeleteRecordById(int taskId)
         {
-            var toDelete =  UnitOfWork.Records.GetByID(taskId);
+            var toDelete = UnitOfWork.Records.GetByID(taskId);
             if (toDelete != null)
             {
                 UnitOfWork.Records.Delete(toDelete);
@@ -252,7 +252,7 @@ namespace GtdServiceTier.Services
             if (taskToUpdate.IsRunning)
             {
                 var timeNow = DateTime.Now;
-                var ellapsedTime = (timeNow - taskToUpdate.LastStartTime).Milliseconds;
+                var ellapsedTime = (timeNow - taskToUpdate.LastStartTime).TotalMilliseconds;
                 Record recordToCreate = new Record
                 {
                     Action = "Reset",

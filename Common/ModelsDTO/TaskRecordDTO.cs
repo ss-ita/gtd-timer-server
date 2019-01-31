@@ -41,7 +41,7 @@ namespace GtdCommon.ModelsDto
         /// <summary>
         /// Gets or sets a value of ElapsedTime value
         /// </summary>
-        public int ElapsedTime { get; set; }
+        public double ElapsedTime { get; set; }
 
         /// <summary>
         /// Gets or sets of type of record
