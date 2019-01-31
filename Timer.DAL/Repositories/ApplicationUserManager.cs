@@ -4,13 +4,11 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System;
 using Microsoft.AspNet.Identity;
 
 using GtdTimerDAL.Entities;
-using System;
+using GtdTimerDAL.TokensProvider;
 
 namespace GtdTimerDAL.Repositories
 {
@@ -32,6 +30,7 @@ namespace GtdTimerDAL.Repositories
             Roles = roles;
             UserRoles = userRoles;
             Users = users;
+            this.UserTokenProvider = new UserTokenProvider<IUser>();
         }
 
         /// <summary>

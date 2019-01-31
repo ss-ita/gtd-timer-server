@@ -98,6 +98,7 @@ namespace GtdTimer.Middleware
                 case UserAlreadyExistsException _:
                     exceptionCode = HttpStatusCode.Conflict;
                     break;
+                case InvalidTokenException _:
                 case PasswordMismatchException _:
                 case LoginFailedException _:
                 case AccessDeniedException _:

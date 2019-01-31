@@ -6,7 +6,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 
@@ -35,12 +34,12 @@ namespace GtdServiceTier.Services
         {
         }
 
-        public void CreateTask(TaskDto taskDto)
+        public void CreateTask(TaskDto model)
         {
-            var task = taskDto.ToTask();
+            var task = model.ToTask();
             UnitOfWork.Tasks.Create(task);
             UnitOfWork.Save();
-            taskDto.Id = task.Id;
+            model.Id = task.Id;
         }
 
         public IEnumerable<TaskDto> AddTaskToDatabase(IEnumerable<TaskDto> listOfTasksDto, int userId)
@@ -103,9 +102,9 @@ namespace GtdServiceTier.Services
             return task.ToTaskDto();
         }
 
-        public void UpdateTask(TaskDto taskDto)
+        public void UpdateTask(TaskDto model)
         {
-            var task = taskDto.ToTask();
+            var task = model.ToTask();
 
             UnitOfWork.Tasks.Update(task);
             UnitOfWork.Save();
@@ -197,7 +196,7 @@ namespace GtdServiceTier.Services
 
             var listOfTasks = this.UnitOfWork.Tasks.GetAllEntitiesByFilter(task => task.UserId == userId);
             var listOfTaskRecords = (from tasks in listOfTasks
-                                     from taskRecord in UnitOfWork.Records.GetAllEntitiesByFilter(record=>record.TaskId==tasks.Id)
+                                     from taskRecord in UnitOfWork.Records.GetAllEntitiesByFilter(record => record.TaskId == tasks.Id)
                                      select new TaskRecordDto
                                      {
                                          Id = taskRecord.Id,
@@ -207,11 +206,12 @@ namespace GtdServiceTier.Services
                                          Action = taskRecord.Action,
                                          StartTime = taskRecord.StartTime,
                                          StopTime = taskRecord.StopTime,
-                                         ElapsedTime =taskRecord.ElapsedTime,
+                                         ElapsedTime = taskRecord.ElapsedTime,
                                          WatchType = taskRecord.WatchType
+
                                      }).ToList();
 
-            return listOfTaskRecords;    
+            return listOfTaskRecords;
         }
 
         public void CreateRecord(TaskRecordDto taskRecord)
@@ -221,9 +221,9 @@ namespace GtdServiceTier.Services
             UnitOfWork.Save();
         }
 
-        public IEnumerable<TaskRecordDto> GetAllRecordsByTaskId(int userId,int taskId)
+        public IEnumerable<TaskRecordDto> GetAllRecordsByTaskId(int userId, int taskId)
         {
-            var listOfRecords = (UnitOfWork.Records.GetAllEntitiesByFilter(record=>record.TaskId == taskId)
+            var listOfRecords = (UnitOfWork.Records.GetAllEntitiesByFilter(record => record.TaskId == taskId)
                 .Where(record => record.TaskId == taskId)
                 .Select(record => record.ToTaskRecord(UnitOfWork.Tasks.GetByID(taskId))))
                 .ToList();
@@ -234,7 +234,7 @@ namespace GtdServiceTier.Services
 
         public void DeleteRecordById(int taskId)
         {
-            var toDelete =  UnitOfWork.Records.GetByID(taskId);
+            var toDelete = UnitOfWork.Records.GetByID(taskId);
             if (toDelete != null)
             {
                 UnitOfWork.Records.Delete(toDelete);
@@ -246,13 +246,13 @@ namespace GtdServiceTier.Services
             }
         }
 
-        public void ResetTaskFromHistory(int taskId)
+        public TaskRecordDto ResetTaskFromHistory(int taskId)
         {
             var taskToUpdate = UnitOfWork.Tasks.GetByID(taskId);
             if (taskToUpdate.IsRunning)
             {
                 var timeNow = DateTime.Now;
-                var ellapsedTime = (timeNow - taskToUpdate.LastStartTime).Milliseconds;
+                var ellapsedTime = (timeNow - taskToUpdate.LastStartTime).TotalMilliseconds;
                 Record recordToCreate = new Record
                 {
                     Action = "Reset",
@@ -260,12 +260,25 @@ namespace GtdServiceTier.Services
                     TaskId = taskId,
                     StartTime = taskToUpdate.LastStartTime,
                     StopTime = timeNow,
-
+                    WatchType = taskToUpdate.WatchType,
+                    ElapsedTime = ellapsedTime
                 };
+                UnitOfWork.Records.Create(recordToCreate);
+                taskToUpdate.ElapsedTime = TimeSpan.FromMilliseconds(0);
+                taskToUpdate.LastStartTime = timeNow;
+                UnitOfWork.Tasks.Update(taskToUpdate);
+                UnitOfWork.Save();
+                return recordToCreate.ToTaskRecord(taskToUpdate);
             }
             else
             {
-
+                var timeNow = DateTime.Now;
+                taskToUpdate.ElapsedTime = TimeSpan.FromMilliseconds(0);
+                taskToUpdate.LastStartTime = timeNow;
+                taskToUpdate.IsRunning = true;
+                UnitOfWork.Tasks.Update(taskToUpdate);
+                UnitOfWork.Save();
+                return null;
             }
         }
 

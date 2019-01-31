@@ -77,6 +77,21 @@ namespace GtdTimer.Controllers
         }
 
         /// <summary>
+        /// Verify user email
+        /// </summary>
+        /// <param name="userId">user id</param>
+        /// <param name="emailToken">user confirmation token</param>
+        /// <returns>result of token verification</returns>
+        [AllowAnonymous]
+        [HttpGet("Verify/{userId}/{emailToken}")]
+        public ActionResult VerifyEmailAsync(string userId, string emailToken)
+        {
+            this.usersService.VerifyToken(userId, emailToken);
+
+            return this.Ok();
+        }
+
+        /// <summary>
         /// Update current user password.
         /// </summary>
         /// <param name="model">The Dto model of Password entity</param>
