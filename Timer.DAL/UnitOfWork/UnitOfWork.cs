@@ -51,14 +51,14 @@ namespace GtdTimerDAL.UnitOfWork
         private Lazy<IRepository<Alarm>> alarms;
 
         /// <summary>
-        /// Users table
-        /// </summary>
-        private Lazy<IRepository<User>> users;
-
-        /// <summary>
         /// Tokens table
         /// </summary>
         private Lazy<IRepository<Token>> tokens;
+
+        /// <summary>
+        /// Users table
+        /// </summary>
+        private Lazy<IRepository<User>> users;
 
         /// <summary>
         /// Value indicating whether it is disposed 
@@ -171,17 +171,6 @@ namespace GtdTimerDAL.UnitOfWork
         }
 
         /// <summary>
-        /// Gets or sets users table
-        /// </summary>
-        public IRepository<User> Users {
-            get => users.Value;
-            set
-            {
-                users = new Lazy<IRepository<User>>(() => value);
-            }  
-        }
-
-        /// <summary>
         /// Gets or sets tokens table
         /// </summary>
         public IRepository<Token> Tokens
@@ -190,6 +179,18 @@ namespace GtdTimerDAL.UnitOfWork
             set
             {
                 tokens = new Lazy<IRepository<Token>>(() => value);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets users table
+        /// </summary>
+        public IRepository<User> Users
+        {
+            get => users.Value;
+            set
+            {
+                users = new Lazy<IRepository<User>>(() => value);
             }
         }
 

@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="Tokens.cs" company="SoftServe">
-// Company copyright tag.
+//     Company copyright tag.
 // </copyright>
 //-----------------------------------------------------------------------
 
