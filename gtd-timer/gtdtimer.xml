@@ -333,8 +333,6 @@
             </summary>
             <returns>return text file</returns>
         </member>
-<<<<<<< HEAD
-=======
         <member name="M:GtdTimer.Controllers.TasksController.ExportAllStopwatchesAsCsvByUserId">
             <summary>
             Converts all user's stopwatches to csv format.
@@ -347,7 +345,6 @@
             </summary>
             <returns>return text file</returns>
         </member>
->>>>>>> 6188059b771c8272af6b5038e79e5d16b31838a8
         <member name="M:GtdTimer.Controllers.TasksController.ExportTaskAsCsvById(System.Int32)">
             <summary>
             Converts  user's task by id to csv format.
