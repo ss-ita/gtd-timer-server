@@ -79,6 +79,11 @@ namespace GtdTimerDAL.Entities
         public virtual DbSet<Alarm> Alarms { get; set; }
 
         /// <summary>
+        /// Gets or sets set of tokens
+        /// </summary>
+        public virtual DbSet<Token> Tokens { get; set; }
+
+        /// <summary>
         /// method used when creating database models
         /// </summary>
         /// <param name="builder"> model builder instance </param>

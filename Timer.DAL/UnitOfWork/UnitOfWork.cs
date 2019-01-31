@@ -51,6 +51,11 @@ namespace GtdTimerDAL.UnitOfWork
         private Lazy<IRepository<Alarm>> alarms;
 
         /// <summary>
+        /// Tokens table
+        /// </summary>
+        private Lazy<IRepository<Token>> tokens;
+
+        /// <summary>
         /// Users table
         /// </summary>
         private Lazy<IRepository<User>> users;
@@ -70,6 +75,7 @@ namespace GtdTimerDAL.UnitOfWork
         /// <param name="timer">timer repository</param>
         /// <param name="tasks">tasks repository</param>
         /// <param name="userRole">user role repository</param>
+        /// <param name="token">token repository</param>
         public UnitOfWork(TimerContext context,
             IApplicationUserManager<User, int> applicationUserManager,
             IRepository<Preset> preset,
@@ -77,6 +83,7 @@ namespace GtdTimerDAL.UnitOfWork
             IRepository<Tasks> tasks,
             IRepository<Record> record,
             IRepository<Alarm> alarm,
+            IRepository<Token> token,
             IRepository<User> users)
         {
             this.context = context;
@@ -87,6 +94,7 @@ namespace GtdTimerDAL.UnitOfWork
             PresetTasks = presetTasks;
             Records = record;
             Alarms = alarm;
+            Tokens = token;
             Users = users;
         }
 
@@ -159,6 +167,18 @@ namespace GtdTimerDAL.UnitOfWork
             set
             {
                 alarms = new Lazy<IRepository<Alarm>>(() => value);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets tokens table
+        /// </summary>
+        public IRepository<Token> Tokens
+        {
+            get => tokens.Value;
+            set
+            {
+                tokens = new Lazy<IRepository<Token>>(() => value);
             }
         }
 

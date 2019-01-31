@@ -333,6 +333,8 @@
             </summary>
             <returns>return text file</returns>
         </member>
+<<<<<<< HEAD
+=======
         <member name="M:GtdTimer.Controllers.TasksController.ExportAllStopwatchesAsCsvByUserId">
             <summary>
             Converts all user's stopwatches to csv format.
@@ -345,6 +347,7 @@
             </summary>
             <returns>return text file</returns>
         </member>
+>>>>>>> 6188059b771c8272af6b5038e79e5d16b31838a8
         <member name="M:GtdTimer.Controllers.TasksController.ExportTaskAsCsvById(System.Int32)">
             <summary>
             Converts  user's task by id to csv format.
@@ -439,6 +442,14 @@
             </summary>
             <param name="model">The Dto model of User entity</param>
             <returns>result of creating user.</returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.UserController.VerifyEmailAsync(System.String,System.String)">
+            <summary>
+            Verify user email
+            </summary>
+            <param name="userId">user id</param>
+            <param name="emailToken">user confirmation token</param>
+            <returns>result of token verification</returns>
         </member>
         <member name="M:GtdTimer.Controllers.UserController.Put(GtdCommon.ModelsDto.UpdatePasswordDto)">
             <summary>
@@ -567,7 +578,7 @@
             </summary>
             <param name="services">list of services</param>
         </member>
-        <member name="M:GtdTimer.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IHostingEnvironment,Microsoft.Extensions.Logging.ILoggerFactory,Microsoft.Extensions.Configuration.IConfiguration)">
+        <member name="M:GtdTimer.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IHostingEnvironment,Microsoft.Extensions.Logging.ILoggerFactory,Microsoft.Extensions.Configuration.IConfiguration,System.IServiceProvider)">
             <summary>
             Method for configuring application
             </summary>
@@ -575,6 +586,7 @@
             <param name="env">hosting environment</param>
             <param name="loggerFactory">class which registers logger</param>
             <param name="configuration">class which helps configure project</param>
+            <param name="serviceProvider">service provider to our application</param>
         </member>
     </members>
 </doc>
