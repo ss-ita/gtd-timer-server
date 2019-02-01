@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using Newtonsoft.Json;
+using GtdCommon.IoC;
 
 namespace GtdCommon.Email.SendGrid
 {
