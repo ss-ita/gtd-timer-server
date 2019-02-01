@@ -393,6 +393,13 @@
             <param name="taskId">Id of record to delete</param>
             <returns>Results of deleting record</returns>
         </member>
+        <member name="M:GtdTimer.Controllers.TasksController.ResetTaskFromHistory(System.Int32)">
+            <summary>
+            Reset and run task 
+            </summary>
+            <param name="recordId">Id of task to reset</param>
+            <returns>If task is runned it returns the new record</returns>
+        </member>
         <member name="M:GtdTimer.Controllers.TasksController.GetAllTimersByUserId">
             <summary>
             Returns all user's timers.

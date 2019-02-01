@@ -371,6 +371,18 @@ namespace GtdTimer.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Reset and run task 
+        /// </summary>
+        /// <param name="recordId">Id of task to reset</param>
+        /// <returns>If task is runned it returns the new record</returns>
+        [HttpGet("[action]/{taskId}")]
+        public IActionResult ResetTaskFromHistory(int taskId)
+        {
+            var recordToReturn = taskService.ResetTaskFromHistory(taskId);
+
+            return Ok(recordToReturn);
+        }
 
         /// <summary>
         /// Returns all user's timers.

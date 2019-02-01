@@ -1,4 +1,5 @@
 ﻿using System;
+using GtdCommon.Constant;
 
 namespace GtdCommon.ModelsDto
 {
@@ -40,7 +41,12 @@ namespace GtdCommon.ModelsDto
         /// <summary>
         /// Gets or sets a value of ElapsedTime value
         /// </summary>
-        public int ElapsedTime { get; set; }
+        public double ElapsedTime { get; set; }
+
+        /// <summary>
+        /// Gets or sets of type of record
+        /// </summary>
+        public WatchType WatchType { get; set; }
 
         /// <summary>
         /// Gets or sets a value of TaskId value

@@ -5,6 +5,7 @@
 //-----------------------------------------------------------------------
 
 using System;
+using GtdCommon.Constant;
 
 namespace GtdTimerDAL.Entities
 {
@@ -37,7 +38,12 @@ namespace GtdTimerDAL.Entities
         /// <summary>
         /// Gets or sets how much time this record was runned
         /// </summary>
-        public int ElapsedTime { get; set; }
+        public double ElapsedTime { get; set; }
+
+        /// <summary>
+        /// Gets or sets watch type column
+        /// </summary>
+        public WatchType WatchType { get; set; }
 
         /// <summary>
         /// Gets or sets Foreign key that reference to Task

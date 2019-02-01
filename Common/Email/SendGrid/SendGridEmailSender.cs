@@ -28,7 +28,7 @@ namespace GtdCommon.Email.SendGrid
         /// <returns>return result of sending email</returns>
         public async Task<SendEmailResponse> SendEmailAsync(SendEmailDetails details)
         {
-            var client = new SendGridClient();
+            var client = new SendGridClient("");
             var from = new EmailAddress(details.FromEmail, details.FromName);
             var to = new EmailAddress(details.ToEmail, details.ToName);
             var subject = details.Subject;
