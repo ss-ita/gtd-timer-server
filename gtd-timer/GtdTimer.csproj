@@ -20,7 +20,6 @@
 
 
   <ItemGroup>
-    <None Remove="clock1.jpg" />
     <None Remove="EmailTemplate.html" />
   </ItemGroup>
 

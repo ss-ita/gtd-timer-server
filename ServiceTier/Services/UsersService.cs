@@ -15,6 +15,8 @@ using GtdCommon.ModelsDto;
 using GtdTimerDAL.Extensions;
 using GtdTimerDAL.Entities;
 using GtdTimerDAL.UnitOfWork;
+using GtdCommon.IoC;
+using GtdCommon.Email;
 
 namespace GtdServiceTier.Services
 {
