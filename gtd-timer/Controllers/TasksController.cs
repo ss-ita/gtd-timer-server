@@ -312,9 +312,9 @@ namespace GtdTimer.Controllers
         {
             var userId = userIdentityService.GetUserId();
             var listOfRecords = taskService.GetAllRecordsByUserId(userId);
-            var listOfStopwatchesRecords = from record in listOfRecords
+            var listOfStopwatchesRecords = (from record in listOfRecords
                                            where record.WatchType == WatchType.Stopwatch
-                                           select record;
+                                           select record).ToList();
 
             return new CsvResult(listOfStopwatchesRecords);
         }
@@ -328,11 +328,11 @@ namespace GtdTimer.Controllers
         {
             var userId = userIdentityService.GetUserId();
             var listOfRecords = taskService.GetAllRecordsByUserId(userId);
-            var listOfStopwatchesRecords = from record in listOfRecords
+            var listOfStopwatchesRecords = (from record in listOfRecords
                                            where record.WatchType == WatchType.Stopwatch
-                                           select record;
+                                           select record).ToList();
 
-            return new XmlResult(listOfRecords);
+            return new XmlResult(listOfStopwatchesRecords);
         }
 
         /// <summary>
@@ -344,9 +344,9 @@ namespace GtdTimer.Controllers
         {
             var userId = userIdentityService.GetUserId();
             var listOfRecords = taskService.GetAllRecordsByUserId(userId);
-            var listOfTimersRecords = from record in listOfRecords
+            var listOfTimersRecords = (from record in listOfRecords
                                       where record.WatchType == WatchType.Timer
-                                      select record;
+                                      select record).ToList();
 
             return new CsvResult(listOfTimersRecords);
         }
@@ -360,9 +360,9 @@ namespace GtdTimer.Controllers
         {
             var userId = userIdentityService.GetUserId();
             var listOfRecords = taskService.GetAllRecordsByUserId(userId);
-            var listOfTimersRecords = from record in listOfRecords
+            var listOfTimersRecords = (from record in listOfRecords
                                       where record.WatchType == WatchType.Timer
-                                      select record;
+                                      select record).ToList();
 
             return new XmlResult(listOfTimersRecords);
         }
