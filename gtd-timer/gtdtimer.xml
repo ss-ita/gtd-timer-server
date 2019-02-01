@@ -487,7 +487,7 @@
             <summary>
             Verify user email
             </summary>
-            <param name="userId">user id</param>
+            <param name="userEmail">user email</param>
             <param name="emailToken">user confirmation token</param>
             <returns>result of token verification</returns>
         </member>

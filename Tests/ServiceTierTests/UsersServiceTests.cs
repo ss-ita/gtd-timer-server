@@ -22,7 +22,7 @@ namespace GtdServiceTierTests
     [TestFixture]
     public class UsersServiceTests
     {
-        private const int userId = 0;
+        private const string userEmail = "User email";
         private const string userToken = "User Token";
         private Mock<IUnitOfWork> unitOfWork;
         private Mock<ITokenService> tokenService;
@@ -85,21 +85,21 @@ namespace GtdServiceTierTests
         /// <summary>
         /// Verify token test
         /// </summary>
-        //[Test]
-        //public void VerifyToken()
-        //{
-        //    Token token = new Token();
-        //    User user = new User();
+        [Test]
+        public void VerifyToken()
+        {
+            Token token = new Token();
+            User user = new User();
 
-        //    tokenService.Setup(_ => _.GetTokenByUserId(userId)).Returns(token);
-        //    unitOfWork.Setup(_ => _.UserManager.FindByIdAsync(userId)).ReturnsAsync(user);
-        //    unitOfWork.Setup(_ => _.UserManager.UpdateAsync(user));
+            tokenService.Setup(_ => _.GetTokenByUserEmail(userEmail)).Returns(token);
+            unitOfWork.Setup(_ => _.UserManager.FindByEmailAsync(userEmail)).ReturnsAsync(user);
+            unitOfWork.Setup(_ => _.UserManager.UpdateAsync(user));
 
-        //    unitOfWork.Verify(_ => _.Save(), Times.Never);
-        //    var exception = Assert.Throws<InvalidTokenException>(() => subject.VerifyToken(userId.ToString(), userToken));
+            unitOfWork.Verify(_ => _.Save(), Times.Never);
+            var exception = Assert.Throws<InvalidTokenException>(() => subject.VerifyToken(userEmail, userToken));
 
-        //    Assert.That(exception.Message, Is.EqualTo("Token has expired"));
-        //}
+            Assert.That(exception.Message, Is.EqualTo("Token has expired"));
+        }
 
         /// <summary>
         /// User Already Exists Exception test

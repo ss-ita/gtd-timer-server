@@ -78,14 +78,14 @@ namespace GtdTimer.Controllers
         /// <summary>
         /// Verify user email
         /// </summary>
-        /// <param name="userId">user id</param>
+        /// <param name="userEmail">user email</param>
         /// <param name="emailToken">user confirmation token</param>
         /// <returns>result of token verification</returns>
         [AllowAnonymous]
-        [HttpGet("Verify/{userId}/{emailToken}")]
-        public ActionResult VerifyEmail(string userId, string emailToken)
+        [HttpGet("Verify/{userEmail}/{emailToken}")]
+        public ActionResult VerifyEmail(string userEmail, string emailToken)
         {
-            this.usersService.VerifyToken(userId, emailToken);
+            this.usersService.VerifyToken(userEmail, emailToken);
 
             return this.Ok();
         }

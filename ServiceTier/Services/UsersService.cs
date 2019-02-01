@@ -84,7 +84,7 @@ namespace GtdServiceTier.Services
             User user = Get(id);
             if (user.EmailConfirmed == false)
             {
-                throw new AccessDeniedException("First confirm your email address!");
+                throw new AccessDeniedException("Forbidden! Confirm your email address first!");
             }
             if (!UnitOfWork.UserManager.CheckPasswordAsync(user, model.PasswordOld).Result)
             {
@@ -100,7 +100,7 @@ namespace GtdServiceTier.Services
             User user = Get(id);
             if (user.EmailConfirmed == false)
             {
-                throw new AccessDeniedException("First confirm your email address!");
+                throw new AccessDeniedException("Forbidden! Confirm your email address first!");
             }
             UnitOfWork.UserManager.DeleteAsync(user).GetAwaiter().GetResult();
             UnitOfWork.Save();

@@ -53,7 +53,7 @@ namespace GtdServiceTier.Services
 
             var host = Environment.GetEnvironmentVariable("AzureCors") ?? IoCContainer.Configuration["Origins"];
 
-            var confirmationUrl = $"{host}/confirm-email/{user.Id}/{HttpUtility.UrlEncode(emailVerificationCode)}";
+            var confirmationUrl = $"{host}/confirm-email/{user.Email}/{HttpUtility.UrlEncode(emailVerificationCode)}";
 
             GtdTimerEmailSender.SendUserVerificationEmailAsync(user.UserName, user.Email, confirmationUrl).GetAwaiter().GetResult();
         }
