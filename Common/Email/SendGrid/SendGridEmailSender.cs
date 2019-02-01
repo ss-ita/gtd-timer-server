@@ -10,10 +10,11 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
-using SendGrid;
+
 using GtdCommon.IoC;
-using SendGrid.Helpers.Mail;
 using Newtonsoft.Json;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 
 namespace GtdCommon.Email.SendGrid
 {
