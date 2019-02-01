@@ -277,6 +277,32 @@ namespace GtdTimer.Controllers
         }
 
         /// <summary>
+        /// Converts all user's records to csv format.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("[action]")]
+        public IActionResult ExportAllRecordsAsCsvByUserId()
+        {
+            var userId = userIdentityService.GetUserId();
+            var listOfRecords = taskService.GetAllRecordsByUserId(userId);
+
+            return new CsvResult(listOfRecords);
+        }
+
+        /// <summary>
+        /// Converts all user's records to xml format.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("[action]")]
+        public IActionResult ExportAllRecordsAsXmlByUserId()
+        {
+            var userId = userIdentityService.GetUserId();
+            var listOfRecords = taskService.GetAllRecordsByUserId(userId);
+
+            return new XmlResult(listOfRecords);
+        }
+
+        /// <summary>
         /// Converts  user's task by id to csv format.
         /// </summary>
         /// <param name="taskId">id of chosen task</param>
@@ -371,6 +397,18 @@ namespace GtdTimer.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Reset and run task 
+        /// </summary>
+        /// <param name="recordId">Id of task to reset</param>
+        /// <returns>If task is runned it returns the new record</returns>
+        [HttpGet("[action]/{taskId}")]
+        public IActionResult ResetTaskFromHistory(int taskId)
+        {
+            var recordToReturn = taskService.ResetTaskFromHistory(taskId);
+
+            return Ok(recordToReturn);
+        }
 
         /// <summary>
         /// Returns all user's timers.

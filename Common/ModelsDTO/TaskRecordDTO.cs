@@ -1,15 +1,20 @@
 ﻿using System;
+using System.Xml.Serialization;
+
+using GtdCommon.Constant;
 
 namespace GtdCommon.ModelsDto
 {
     /// <summary>
     /// class for TaskRecord model
     /// </summary>
+    [Serializable, XmlRoot("TaskRecordDto")]
     public class TaskRecordDto
     {
         /// <summary>
         /// Gets or sets a value of Id property
         /// </summary>
+        [XmlIgnore]
         public int Id { get; set; }
 
         /// <summary>
@@ -40,7 +45,12 @@ namespace GtdCommon.ModelsDto
         /// <summary>
         /// Gets or sets a value of ElapsedTime value
         /// </summary>
-        public int ElapsedTime { get; set; }
+        public double ElapsedTime { get; set; }
+
+        /// <summary>
+        /// Gets or sets of type of record
+        /// </summary>
+        public WatchType WatchType { get; set; }
 
         /// <summary>
         /// Gets or sets a value of TaskId value

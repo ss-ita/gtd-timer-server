@@ -345,6 +345,18 @@
             </summary>
             <returns>return text file</returns>
         </member>
+        <member name="M:GtdTimer.Controllers.TasksController.ExportAllRecordsAsCsvByUserId">
+            <summary>
+            Converts all user's records to csv format.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.TasksController.ExportAllRecordsAsXmlByUserId">
+            <summary>
+            Converts all user's records to xml format.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:GtdTimer.Controllers.TasksController.ExportTaskAsCsvById(System.Int32)">
             <summary>
             Converts  user's task by id to csv format.
@@ -393,6 +405,13 @@
             <param name="taskId">Id of record to delete</param>
             <returns>Results of deleting record</returns>
         </member>
+        <member name="M:GtdTimer.Controllers.TasksController.ResetTaskFromHistory(System.Int32)">
+            <summary>
+            Reset and run task 
+            </summary>
+            <param name="recordId">Id of task to reset</param>
+            <returns>If task is runned it returns the new record</returns>
+        </member>
         <member name="M:GtdTimer.Controllers.TasksController.GetAllTimersByUserId">
             <summary>
             Returns all user's timers.
@@ -440,7 +459,7 @@
             <param name="model">The Dto model of User entity</param>
             <returns>result of creating user.</returns>
         </member>
-        <member name="M:GtdTimer.Controllers.UserController.VerifyEmailAsync(System.String,System.String)">
+        <member name="M:GtdTimer.Controllers.UserController.VerifyEmail(System.String,System.String)">
             <summary>
             Verify user email
             </summary>

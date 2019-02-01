@@ -19,7 +19,7 @@ namespace GtdTimerDAL.Extensions
         /// </summary>
         /// <param name="record">Record variable</param>
         /// <param name="task">Task variable</param>
-        /// <returns></returns>
+        /// <returns>Returns TaskRecordDto model</returns>
         public static TaskRecordDto ToTaskRecord(this Record record, Tasks task)
         {
             TaskRecordDto recordToReturn = new TaskRecordDto
@@ -31,7 +31,8 @@ namespace GtdTimerDAL.Extensions
                 StartTime = record.StartTime,
                 StopTime = record.StopTime,
                 TaskId = task.Id,
-                ElapsedTime = record.ElapsedTime
+                ElapsedTime = record.ElapsedTime,
+                WatchType = record.WatchType
             };
 
             return recordToReturn;
@@ -41,7 +42,8 @@ namespace GtdTimerDAL.Extensions
         /// Convert to record method
         /// </summary>
         /// <param name="record">TaskRecordDto model</param>
-        /// <returns></returns>
+        /// <returns>Returns Record model</returns>
+
         public static Record ToRecord(this TaskRecordDto record)
         {
             Record recordToReturn = new Record
@@ -52,8 +54,8 @@ namespace GtdTimerDAL.Extensions
                 StartTime = record.StartTime,
                 StopTime = record.StopTime,
                 TaskId = record.TaskId,
-                ElapsedTime = record.ElapsedTime
-                
+                ElapsedTime = record.ElapsedTime,
+                WatchType = record.WatchType,
             };
            
             return recordToReturn;

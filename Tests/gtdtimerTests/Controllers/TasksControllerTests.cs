@@ -243,7 +243,7 @@ namespace GtdTimerTests.Controllers
         }
 
         /// <summary>
-        /// ExportAllStopwatchesAsXmlByUserId method's unit test.
+        /// ExportAllTimersAsXmlByUserId method's unit test.
         /// </summary>
         [Test]
         public void ExportAllTimersAsXmlByUserId()
@@ -300,6 +300,36 @@ namespace GtdTimerTests.Controllers
 
             Assert.IsInstanceOf(typeof(CsvResult), actual);
             Assert.AreSame(tasks, (actual as CsvResult).ObjectToSerialize);
+        }
+
+        /// <summary>
+        /// ExportAllRecordsAsCsvByUserId method's unit test.
+        /// </summary>
+        [Test]
+        public void ExportAllRecordsAsCsvByUserId()
+        {
+            List<TaskRecordDto> records = new List<TaskRecordDto>();
+            userIdentityService.Setup(_ => _.GetUserId()).Returns(userId);
+            taskService.Setup(_ => _.GetAllRecordsByUserId(userId)).Returns(records);
+            var actual = subject.ExportAllRecordsAsCsvByUserId();
+
+            Assert.IsInstanceOf(typeof(CsvResult), actual);
+            Assert.AreSame(records, (actual as CsvResult).ObjectToSerialize);
+        }
+
+        /// <summary>
+        /// ExportAllRecordsAsXmlByUserId method's unit test.
+        /// </summary>
+        [Test]
+        public void ExportAllRecordsAsXmlByUserId()
+        {
+            List<TaskRecordDto> records = new List<TaskRecordDto>();
+            userIdentityService.Setup(_ => _.GetUserId()).Returns(userId);
+            taskService.Setup(_ => _.GetAllRecordsByUserId(userId)).Returns(records);
+            var actual = subject.ExportAllRecordsAsXmlByUserId();
+
+            Assert.IsInstanceOf(typeof(XmlResult), actual);
+            Assert.AreSame(records, (actual as XmlResult).ObjectToSerialize);
         }
 
         /// <summary>

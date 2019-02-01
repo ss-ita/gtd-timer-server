@@ -4,14 +4,16 @@ using GtdTimerDAL.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GtdTimerDAL.Migrations
 {
     [DbContext(typeof(TimerContext))]
-    partial class TimerContextModelSnapshot : ModelSnapshot
+    [Migration("20190129105635_AddWatchtypeToRecord")]
+    partial class AddWatchtypeToRecord
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -27,11 +29,11 @@ namespace GtdTimerDAL.Migrations
 
                     b.Property<string>("CronExpression");
 
-                    b.Property<bool>("IsOn");
+                    b.Property<bool>("IsSound");
+
+                    b.Property<bool>("IsTurnOn");
 
                     b.Property<string>("Message");
-
-                    b.Property<bool>("SoundOn");
 
                     b.Property<int>("UserId");
 
@@ -103,7 +105,7 @@ namespace GtdTimerDAL.Migrations
 
                     b.Property<string>("Action");
 
-                    b.Property<double>("ElapsedTime");
+                    b.Property<int>("ElapsedTime");
 
                     b.Property<DateTime>("StartTime");
 
@@ -157,6 +159,8 @@ namespace GtdTimerDAL.Migrations
 
                     b.Property<TimeSpan?>("Goal");
 
+                    b.Property<bool>("IsActive");
+
                     b.Property<bool>("IsRunning");
 
                     b.Property<DateTime>("LastStartTime");
@@ -172,23 +176,6 @@ namespace GtdTimerDAL.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Tasks");
-                });
-
-            modelBuilder.Entity("GtdTimerDAL.Entities.Token", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("TokenCreationTime");
-
-                    b.Property<string>("TokenValue");
-
-                    b.Property<int>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Tokens");
                 });
 
             modelBuilder.Entity("GtdTimerDAL.Entities.User", b =>
