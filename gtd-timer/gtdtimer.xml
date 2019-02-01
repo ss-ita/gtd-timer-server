@@ -345,6 +345,18 @@
             </summary>
             <returns>return text file</returns>
         </member>
+        <member name="M:GtdTimer.Controllers.TasksController.ExportAllRecordsAsCsvByUserId">
+            <summary>
+            Converts all user's records to csv format.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.TasksController.ExportAllRecordsAsXmlByUserId">
+            <summary>
+            Converts all user's records to xml format.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:GtdTimer.Controllers.TasksController.ExportTaskAsCsvById(System.Int32)">
             <summary>
             Converts  user's task by id to csv format.

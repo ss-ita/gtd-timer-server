@@ -277,6 +277,32 @@ namespace GtdTimer.Controllers
         }
 
         /// <summary>
+        /// Converts all user's records to csv format.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("[action]")]
+        public IActionResult ExportAllRecordsAsCsvByUserId()
+        {
+            var userId = userIdentityService.GetUserId();
+            var listOfRecords = taskService.GetAllRecordsByUserId(userId);
+
+            return new CsvResult(listOfRecords);
+        }
+
+        /// <summary>
+        /// Converts all user's records to xml format.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("[action]")]
+        public IActionResult ExportAllRecordsAsXmlByUserId()
+        {
+            var userId = userIdentityService.GetUserId();
+            var listOfRecords = taskService.GetAllRecordsByUserId(userId);
+
+            return new XmlResult(listOfRecords);
+        }
+
+        /// <summary>
         /// Converts  user's task by id to csv format.
         /// </summary>
         /// <param name="taskId">id of chosen task</param>

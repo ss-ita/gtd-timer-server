@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Xml.Serialization;
+
 using GtdCommon.Constant;
 
 namespace GtdCommon.ModelsDto
@@ -6,11 +8,13 @@ namespace GtdCommon.ModelsDto
     /// <summary>
     /// class for TaskRecord model
     /// </summary>
+    [Serializable, XmlRoot("TaskRecordDto")]
     public class TaskRecordDto
     {
         /// <summary>
         /// Gets or sets a value of Id property
         /// </summary>
+        [XmlIgnore]
         public int Id { get; set; }
 
         /// <summary>
