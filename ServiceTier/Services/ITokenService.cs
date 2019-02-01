@@ -25,5 +25,11 @@ namespace GtdServiceTier.Services
         /// <param name="userId">Id of user which token to return</param>
         /// <returns>token object</returns>
         Token GetTokenByUserId(int userId);
+
+        /// <summary>
+        /// Method for sending user verification email
+        /// </summary>
+        /// <param name="user">user</param>
+        void SendUserVerificationToken(User user);
     }
 }

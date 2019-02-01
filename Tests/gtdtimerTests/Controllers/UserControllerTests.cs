@@ -4,7 +4,6 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -22,6 +21,8 @@ namespace GtdTimerTests.Controllers
     [TestFixture]
     public class UserControllerTests
     {
+        private const string userId = "0";
+        private const string token = "User Token";
         private Mock<IUsersService> usersService;
         private Mock<IUserIdentityService> userIdentityService;
 
@@ -83,6 +84,17 @@ namespace GtdTimerTests.Controllers
             var actual = (OkResult)subject.Post(model);
 
             usersService.Verify(_ => _.Create(model), Times.Once);
+            Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
+        }
+
+        /// <summary>
+        /// Verify token test
+        /// </summary>
+        [Test]
+        public void VerifyToken()
+        {
+            var actual = (OkResult)subject.VerifyEmail(userId, token);
+
             Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
         }
 

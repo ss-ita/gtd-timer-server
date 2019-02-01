@@ -4,7 +4,6 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -84,7 +83,7 @@ namespace GtdTimer.Controllers
         /// <returns>result of token verification</returns>
         [AllowAnonymous]
         [HttpGet("Verify/{userId}/{emailToken}")]
-        public ActionResult VerifyEmailAsync(string userId, string emailToken)
+        public ActionResult VerifyEmail(string userId, string emailToken)
         {
             this.usersService.VerifyToken(userId, emailToken);
 

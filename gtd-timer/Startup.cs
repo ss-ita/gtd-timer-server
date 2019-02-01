@@ -22,7 +22,6 @@ using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
 
 using GtdCommon.IoC;
-using GtdCommon.Email;
 using GtdCommon.Email.SendGrid;
 using GtdCommon.Email.Templates;
 using GtdTimer.Middleware;
