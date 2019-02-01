@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using GtdCommon.IoC;
+using System;
 
 namespace GtdTimer.ActionResults
 {
@@ -40,9 +41,11 @@ namespace GtdTimer.ActionResults
         {
             if (this.ObjectToSerialize != null)
             {
+                string cors = Environment.GetEnvironmentVariable("AzureCors") ?? IoCContainer.Configuration["Origins"];
+
                 context.HttpContext.Response.Clear();
                 var xmlSerializer = new System.Xml.Serialization.XmlSerializer(this.ObjectToSerialize.GetType());
-                context.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", IoCContainer.Configuration["Origins"]);
+                context.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", cors);
                 using (var writer = new StreamWriter(context.HttpContext.Response.Body, Encoding.UTF8))
                 {
                     xmlSerializer.Serialize(writer, this.ObjectToSerialize);
