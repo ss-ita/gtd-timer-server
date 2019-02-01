@@ -1,11 +1,10 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="UsersService.cs" company="SoftServe">
 //     Company copyright tag.
 // </copyright>
 //-----------------------------------------------------------------------
 
 using System;
-using System.Web;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -15,8 +14,6 @@ using GtdCommon.ModelsDto;
 using GtdTimerDAL.Extensions;
 using GtdTimerDAL.Entities;
 using GtdTimerDAL.UnitOfWork;
-using GtdCommon.IoC;
-using GtdCommon.Email;
 
 namespace GtdServiceTier.Services
 {
