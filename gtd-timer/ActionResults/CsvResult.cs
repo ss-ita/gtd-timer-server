@@ -48,6 +48,7 @@ namespace GtdTimer.ActionResults
                 context.HttpContext.Response.Clear();               
                 context.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", cors);
                 JsConfig<TaskDto>.ExcludePropertyNames = new[] { "Id", "UserId" };
+                JsConfig<TaskRecordDto>.ExcludePropertyNames = new[] { "Id" };
                 using (var writer = new StreamWriter(context.HttpContext.Response.Body, Encoding.UTF8))
                 {
                     CsvSerializer.SerializeToWriter(ObjectToSerialize, writer);                   

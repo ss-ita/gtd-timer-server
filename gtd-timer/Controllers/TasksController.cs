@@ -14,6 +14,7 @@ using GtdTimer.Attributes;
 using GtdTimer.ActionResults;
 using GtdServiceTier.Services;
 using System;
+using System.Linq;
 
 namespace GtdTimer.Controllers
 {
@@ -300,6 +301,70 @@ namespace GtdTimer.Controllers
             var listOfRecords = taskService.GetAllRecordsByUserId(userId);
 
             return new XmlResult(listOfRecords);
+        }
+
+        /// <summary>
+        /// Converts all user's stopwatch records to csv format.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("[action]")]
+        public IActionResult ExportAllStopwatchesRecordsAsCsvByUserId()
+        {
+            var userId = userIdentityService.GetUserId();
+            var listOfRecords = taskService.GetAllRecordsByUserId(userId);
+            var listOfStopwatchesRecords = from record in listOfRecords
+                                           where record.WatchType == WatchType.Stopwatch
+                                           select record;
+
+            return new CsvResult(listOfStopwatchesRecords);
+        }
+
+        /// <summary>
+        /// Converts all user's stopwatch records to xml format.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("[action]")]
+        public IActionResult ExportAllStopwatchesRecordsAsXmlByUserId()
+        {
+            var userId = userIdentityService.GetUserId();
+            var listOfRecords = taskService.GetAllRecordsByUserId(userId);
+            var listOfStopwatchesRecords = from record in listOfRecords
+                                           where record.WatchType == WatchType.Stopwatch
+                                           select record;
+
+            return new XmlResult(listOfRecords);
+        }
+
+        /// <summary>
+        /// Converts all user's timer records to csv format.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("[action]")]
+        public IActionResult ExportAllTimersRecordsAsCsvByUserId()
+        {
+            var userId = userIdentityService.GetUserId();
+            var listOfRecords = taskService.GetAllRecordsByUserId(userId);
+            var listOfTimersRecords = from record in listOfRecords
+                                      where record.WatchType == WatchType.Timer
+                                      select record;
+
+            return new CsvResult(listOfTimersRecords);
+        }
+
+        /// <summary>
+        /// Converts all user's timer records to xml format.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("[action]")]
+        public IActionResult ExportAllTimersRecordsAsXmlByUserId()
+        {
+            var userId = userIdentityService.GetUserId();
+            var listOfRecords = taskService.GetAllRecordsByUserId(userId);
+            var listOfTimersRecords = from record in listOfRecords
+                                      where record.WatchType == WatchType.Timer
+                                      select record;
+
+            return new XmlResult(listOfTimersRecords);
         }
 
         /// <summary>

@@ -357,6 +357,30 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:GtdTimer.Controllers.TasksController.ExportAllStopwatchesRecordsAsCsvByUserId">
+            <summary>
+            Converts all user's stopwatch records to csv format.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.TasksController.ExportAllStopwatchesRecordsAsXmlByUserId">
+            <summary>
+            Converts all user's stopwatch records to xml format.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.TasksController.ExportAllTimersRecordsAsCsvByUserId">
+            <summary>
+            Converts all user's timer records to csv format.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.TasksController.ExportAllTimersRecordsAsXmlByUserId">
+            <summary>
+            Converts all user's timer records to xml format.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:GtdTimer.Controllers.TasksController.ExportTaskAsCsvById(System.Int32)">
             <summary>
             Converts  user's task by id to csv format.
