@@ -21,7 +21,7 @@ namespace GtdTimerDAL.Entities
         /// <summary>
         /// Gets or sets UserId column
         /// </summary>
-        public int UserId { get; set; }
+        public string UserEmail { get; set; }
 
         /// <summary>
         /// Gets or sets token value
@@ -32,5 +32,10 @@ namespace GtdTimerDAL.Entities
         /// Gets or sets a value indicating when token is creating
         /// </summary>
         public DateTime TokenCreationTime { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating when token will expire
+        /// </summary>
+        public DateTime TokenExpirationTime { get; set; }
     }
 }

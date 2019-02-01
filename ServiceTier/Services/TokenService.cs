@@ -35,9 +35,9 @@ namespace GtdServiceTier.Services
             UnitOfWork.Save();
         }
 
-        public Token GetTokenByUserId(int userId)
+        public Token GetTokenByUserEmail(string userEmail)
         {
-            var userToken = UnitOfWork.Tokens.GetAllEntitiesByFilter(token => token.UserId == userId)
+            var userToken = UnitOfWork.Tokens.GetAllEntitiesByFilter(token => token.UserEmail == userEmail)
                 .Select(token => token);
 
             return userToken.FirstOrDefault();
@@ -47,7 +47,7 @@ namespace GtdServiceTier.Services
         {
             var emailVerificationCode = UnitOfWork.UserManager.GenerateEmailConfirmationTokenAsync(user.Id).GetAwaiter().GetResult();
 
-            Token token = new Token() { UserId = user.Id, TokenValue = emailVerificationCode, TokenCreationTime = DateTime.Now };
+            Token token = new Token() { UserEmail = user.Email, TokenValue = emailVerificationCode, TokenCreationTime = DateTime.Now };
 
             CreateToken(token);
 

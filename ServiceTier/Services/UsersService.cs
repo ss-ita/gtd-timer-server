@@ -58,15 +58,15 @@ namespace GtdServiceTier.Services
             tokenService.SendUserVerificationToken(user);
         }
 
-        public void VerifyToken(string userId, string emailToken)
+        public void VerifyToken(string userEmail, string emailToken)
         {
-            var token = tokenService.GetTokenByUserId(Convert.ToInt32(userId));
+            var token = tokenService.GetTokenByUserEmail(userEmail);
             if (token == null)
             {
                 throw new InvalidTokenException("Token has expired");
             }
             
-            var user = UnitOfWork.UserManager.FindByIdAsync(Convert.ToInt32(userId)).GetAwaiter().GetResult();
+            var user = UnitOfWork.UserManager.FindByEmailAsync(userEmail).GetAwaiter().GetResult();
 
             var result = token.TokenValue == emailToken ? true : false;
 
