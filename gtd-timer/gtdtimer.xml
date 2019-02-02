@@ -258,6 +258,8 @@
             <summary>
             Returns all user's tasks within specified date range.
             </summary>
+            <param name="start">start date filter</param>
+            <param name="end">end date filter</param>
             <returns>result of getting all user's tasks within date range.</returns>
         </member>
         <member name="M:GtdTimer.Controllers.TasksController.CreateTask(GtdCommon.ModelsDto.TaskDto)">
@@ -349,37 +351,37 @@
             <summary>
             Converts all user's records to csv format.
             </summary>
-            <returns></returns>
+            <returns>result of exporting all records by user id</returns>
         </member>
         <member name="M:GtdTimer.Controllers.TasksController.ExportAllRecordsAsXmlByUserId">
             <summary>
             Converts all user's records to xml format.
             </summary>
-            <returns></returns>
+            <returns>result of exporting all records by user id</returns>
         </member>
         <member name="M:GtdTimer.Controllers.TasksController.ExportAllStopwatchesRecordsAsCsvByUserId">
             <summary>
             Converts all user's stopwatch records to csv format.
             </summary>
-            <returns></returns>
+            <returns>result of exporting all stopwatch records by user id</returns>
         </member>
         <member name="M:GtdTimer.Controllers.TasksController.ExportAllStopwatchesRecordsAsXmlByUserId">
             <summary>
             Converts all user's stopwatch records to xml format.
             </summary>
-            <returns></returns>
+            <returns>result of exporting all stopwatch records by user id</returns>
         </member>
         <member name="M:GtdTimer.Controllers.TasksController.ExportAllTimersRecordsAsCsvByUserId">
             <summary>
             Converts all user's timer records to csv format.
             </summary>
-            <returns></returns>
+            <returns>result of exporting all timer records by user id</returns>
         </member>
         <member name="M:GtdTimer.Controllers.TasksController.ExportAllTimersRecordsAsXmlByUserId">
             <summary>
             Converts all user's timer records to xml format.
             </summary>
-            <returns></returns>
+            <returns>result of exporting all timer records by user id</returns>
         </member>
         <member name="M:GtdTimer.Controllers.TasksController.ExportTaskAsCsvById(System.Int32)">
             <summary>
@@ -433,7 +435,7 @@
             <summary>
             Reset and run task 
             </summary>
-            <param name="recordId">Id of task to reset</param>
+            <param name="taskId">Id of task to reset</param>
             <returns>If task is runned it returns the new record</returns>
         </member>
         <member name="M:GtdTimer.Controllers.TasksController.GetAllTimersByUserId">
@@ -611,6 +613,11 @@
             Initializes a new instance of the <see cref="T:GtdTimer.Startup" /> class.
             </summary>
             <param name="env">hosting environment</param>
+        </member>
+        <member name="P:GtdTimer.Startup.Cors">
+            <summary>
+            Gets or sets cross origin property
+            </summary>
         </member>
         <member name="M:GtdTimer.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>

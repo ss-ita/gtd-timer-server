@@ -4,6 +4,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
@@ -16,21 +17,20 @@ using GtdServiceTier.Services;
 using GtdTimerDAL.UnitOfWork;
 using GtdTimer.ActionResults;
 using Microsoft.AspNetCore.Http;
-using System;
 
 namespace GtdTimerTests.Controllers
 {
     [TestFixture]
     public class TasksControllerTests : ControllerBase
     {
+        private readonly int userId = 315;
+        private readonly int taskId = 9;
+        private readonly DateTime start = DateTime.Now;
+        private readonly DateTime end = DateTime.Now;
         private Mock<ITaskService> taskService;
         private Mock<IUserIdentityService> userIdentityService;
         private Mock<IUnitOfWork> unitOfWork;
         private TasksController subject;
-        private int userId = 315;
-        private int taskId = 9;
-        private DateTime start = DateTime.Now;
-        private DateTime end = DateTime.Now;
 
         /// <summary>
         /// Method which is called immediately in each test run

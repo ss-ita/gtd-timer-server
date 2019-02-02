@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="SendGridEmailExtension.cs" company="SoftServe">
+// <copyright file="SendGridExtension.cs" company="SoftServe">
 //     Company copyright tag.
 // </copyright>
 //-----------------------------------------------------------------------

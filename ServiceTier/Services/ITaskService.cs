@@ -4,11 +4,11 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 
 using GtdCommon.ModelsDto;
-using System;
 
 namespace GtdServiceTier.Services
 {
@@ -113,10 +113,10 @@ namespace GtdServiceTier.Services
         /// <summary>
         /// Method for getting all records by task id
         /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="taskId"></param>
-        /// <returns></returns>
-        IEnumerable<TaskRecordDto> GetAllRecordsByTaskId(int userId,int taskId);
+        /// <param name="userId">id of chosen user</param>
+        /// <param name="taskId">id of chosen task</param>
+        /// <returns>all records with id of chosen task</returns>
+        IEnumerable<TaskRecordDto> GetAllRecordsByTaskId(int userId, int taskId);
 
         /// <summary>
         /// Method of deleting record by id

@@ -21,8 +21,8 @@ namespace GtdTimerTests.Controllers
     [TestFixture]
     public class UserControllerTests
     {
-        private const string userEmail = "User email";
-        private const string token = "User Token";
+        private const string UserEmail = "User email";
+        private const string Token = "User Token";
         private Mock<IUsersService> usersService;
         private Mock<IUserIdentityService> userIdentityService;
 
@@ -93,7 +93,7 @@ namespace GtdTimerTests.Controllers
         [Test]
         public void VerifyToken()
         {
-            var actual = (OkResult)subject.VerifyEmail(userEmail, token);
+            var actual = (OkResult)subject.VerifyEmail(UserEmail, Token);
 
             Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
         }

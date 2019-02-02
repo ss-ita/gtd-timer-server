@@ -18,17 +18,17 @@ namespace GtdCommon.IoC
     public static class IoCContainer
     {
         /// <summary>
-        /// The configuration manager for the application
+        /// Gets or sets the configuration manager for the application
         /// </summary>
         public static IConfiguration Configuration { get; set; }
 
         /// <summary>
-        /// The application builder for the application
+        /// Gets or sets the application builder for the application
         /// </summary>
-        public static IApplicationBuilder AppBuilder  { get; set;}
+        public static IApplicationBuilder AppBuilder { get; set; }
 
         /// <summary>
-        /// The transient instance of the <see cref="IEmailSender"/>
+        /// Gets or sets the transient instance of the <see cref="IEmailSender"/>
         /// </summary>
         public static IEmailSender EmailSender => AppBuilder.ApplicationServices.GetService<IEmailSender>();
 

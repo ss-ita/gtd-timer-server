@@ -26,7 +26,6 @@ namespace GtdServiceTier.Services
         /// <param name="unitOfWork">instance of unit of work</param>
         public TokenService(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
-
         }
 
         public void CreateToken(Token token)

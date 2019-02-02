@@ -43,7 +43,6 @@ namespace GtdTimerDAL.Extensions
         /// </summary>
         /// <param name="record">TaskRecordDto model</param>
         /// <returns>Returns Record model</returns>
-
         public static Record ToRecord(this TaskRecordDto record)
         {
             Record recordToReturn = new Record

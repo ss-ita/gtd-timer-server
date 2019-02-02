@@ -25,7 +25,8 @@ namespace GtdCommon.Email
         /// <returns>return result of sending email</returns>
         public static async Task<SendEmailResponse> SendUserVerificationEmailAsync(string displayName, string email, string verificationUrl)
         {
-            return await IoCContainer.EmailTemplateSender.SendGeneralEmailAsync(new SendEmailDetails
+            return await IoCContainer.EmailTemplateSender.SendGeneralEmailAsync(
+                new SendEmailDetails
             {
                 Content = IoCContainer.Configuration.GetValue<string>("GtdTimerEmailSettings:Content"),
                 IsHTML = true,
@@ -34,7 +35,8 @@ namespace GtdCommon.Email
                 ToEmail = email,
                 ToName = displayName,
                 Subject = IoCContainer.Configuration.GetValue<string>("GtdTimerEmailSettings:Subject")
-            }, verificationUrl);
+            }, 
+                verificationUrl);
         }
     }
 }

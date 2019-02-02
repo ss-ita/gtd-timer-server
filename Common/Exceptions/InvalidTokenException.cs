@@ -19,7 +19,6 @@ namespace GtdCommon.Exceptions
         /// </summary>
         private const string InvalidTokenExceptionMessage = "Invalid Token!";
 
-
         /// <summary>
         /// Initializes a new instance of the <see cref="InvalidTokenException" /> class.
         /// </summary>

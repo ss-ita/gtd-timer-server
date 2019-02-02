@@ -4,6 +4,8 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System;
+using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,8 +15,6 @@ using GtdCommon.ModelsDto;
 using GtdTimer.Attributes;
 using GtdTimer.ActionResults;
 using GtdServiceTier.Services;
-using System;
-using System.Linq;
 
 namespace GtdTimer.Controllers
 {
@@ -88,6 +88,8 @@ namespace GtdTimer.Controllers
         /// <summary>
         /// Returns all user's tasks within specified date range.
         /// </summary>
+        /// <param name="start">start date filter</param>
+        /// <param name="end">end date filter</param>
         /// <returns>result of getting all user's tasks within date range.</returns>
         [HttpGet("[action]")]
         public IActionResult GetAllTasksByDate(DateTime start, DateTime end)
@@ -189,7 +191,7 @@ namespace GtdTimer.Controllers
         /// <summary>
         /// Converts all user's tasks to xml format. 
         /// </summary>
-        /// <returns>returns a text file</returns>
+        /// <returns>result of exporting a tasks text file</returns>
         [HttpGet("[action]")]
         public IActionResult ExportAllTasksAsXmlByUserId()
         {
@@ -202,7 +204,7 @@ namespace GtdTimer.Controllers
         /// <summary>
         /// Converts all user's stopwatches to xml format. 
         /// </summary>
-        /// <returns>returns a text file</returns>
+        /// <returns>result of exporting a stopwatches text file</returns>
         [HttpGet("[action]")]
         public IActionResult ExportAllStopwatchesAsXmlByUserId()
         {
@@ -215,7 +217,7 @@ namespace GtdTimer.Controllers
         /// <summary>
         /// Converts all user's timers to xml format. 
         /// </summary>
-        /// <returns>returns a text file</returns>
+        /// <returns>result of exporting a timers text file</returns>
         [HttpGet("[action]")]
         public IActionResult ExportAllTimersAsXmlByUserId()
         {
@@ -229,7 +231,7 @@ namespace GtdTimer.Controllers
         /// Converts  user's task by id to xml format.
         /// </summary>
         /// <param name="taskId">id of chosen task</param>
-        /// <returns>returns text file</returns>
+        /// <returns>result of exporting a chosen task text file</returns>
         [HttpGet("[action]/{taskId}")]
         public IActionResult ExportTaskAsXmlById(int taskId)
         {
@@ -241,7 +243,7 @@ namespace GtdTimer.Controllers
         /// <summary>
         /// Converts all user's tasks to csv format.
         /// </summary>
-        /// <returns>return text file</returns>
+        /// <returns>result of exporting tasks by user id into text file</returns>
         [HttpGet("[action]")]
         public IActionResult ExportAllTasksAsCsvByUserId()
         {
@@ -254,7 +256,7 @@ namespace GtdTimer.Controllers
         /// <summary>
         /// Converts all user's stopwatches to csv format.
         /// </summary>
-        /// <returns>return text file</returns>
+        /// <returns>result of exporting stopwatches by user id into a text file</returns>
         [HttpGet("[action]")]
         public IActionResult ExportAllStopwatchesAsCsvByUserId()
         {
@@ -267,7 +269,7 @@ namespace GtdTimer.Controllers
         /// <summary>
         /// Converts all user's stopwatches to csv format.
         /// </summary>
-        /// <returns>return text file</returns>
+        /// <returns>result of exporting timers by user id into a text file</returns>
         [HttpGet("[action]")]
         public IActionResult ExportAllTimersAsCsvByUserId()
         {
@@ -280,7 +282,7 @@ namespace GtdTimer.Controllers
         /// <summary>
         /// Converts all user's records to csv format.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>result of exporting all records by user id</returns>
         [HttpGet("[action]")]
         public IActionResult ExportAllRecordsAsCsvByUserId()
         {
@@ -293,7 +295,7 @@ namespace GtdTimer.Controllers
         /// <summary>
         /// Converts all user's records to xml format.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>result of exporting all records by user id</returns>
         [HttpGet("[action]")]
         public IActionResult ExportAllRecordsAsXmlByUserId()
         {
@@ -306,7 +308,7 @@ namespace GtdTimer.Controllers
         /// <summary>
         /// Converts all user's stopwatch records to csv format.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>result of exporting all stopwatch records by user id</returns>
         [HttpGet("[action]")]
         public IActionResult ExportAllStopwatchesRecordsAsCsvByUserId()
         {
@@ -322,7 +324,7 @@ namespace GtdTimer.Controllers
         /// <summary>
         /// Converts all user's stopwatch records to xml format.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>result of exporting all stopwatch records by user id</returns>
         [HttpGet("[action]")]
         public IActionResult ExportAllStopwatchesRecordsAsXmlByUserId()
         {
@@ -338,7 +340,7 @@ namespace GtdTimer.Controllers
         /// <summary>
         /// Converts all user's timer records to csv format.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>result of exporting all timer records by user id</returns>
         [HttpGet("[action]")]
         public IActionResult ExportAllTimersRecordsAsCsvByUserId()
         {
@@ -354,7 +356,7 @@ namespace GtdTimer.Controllers
         /// <summary>
         /// Converts all user's timer records to xml format.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>result of exporting all timer records by user id</returns>
         [HttpGet("[action]")]
         public IActionResult ExportAllTimersRecordsAsXmlByUserId()
         {
@@ -371,7 +373,7 @@ namespace GtdTimer.Controllers
         /// Converts  user's task by id to csv format.
         /// </summary>
         /// <param name="taskId">id of chosen task</param>
-        /// <returns>returns text file</returns>
+        /// <returns>result of exporting task by task id into a text file</returns>
         [HttpGet("[action]/{taskId}")]
         public IActionResult ExportTaskAsCsvById(int taskId)
         {
@@ -439,7 +441,7 @@ namespace GtdTimer.Controllers
         /// Returns all records by Task id
         /// </summary>
         /// <param name="taskId">Task id</param>
-        /// <returns>Return result of getting records by task id</returns>
+        /// <returns>Returns result of getting records by task id</returns>
         [HttpGet("[action]/{taskId}")]
         public IActionResult GetAllRecordsByTaskId(int taskId)
         {
@@ -465,8 +467,8 @@ namespace GtdTimer.Controllers
         /// <summary>
         /// Reset and run task 
         /// </summary>
-        /// <param name="recordId">Id of task to reset</param>
-        /// <returns>If task is runned it returns the new record</returns>
+        /// <param name="taskId">Id of task to reset</param>
+        /// <returns>Result of reseting task from history </returns>
         [HttpGet("[action]/{taskId}")]
         public IActionResult ResetTaskFromHistory(int taskId)
         {

@@ -10,7 +10,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
-
 using GtdCommon.IoC;
 using Newtonsoft.Json;
 using SendGrid;
@@ -26,7 +25,7 @@ namespace GtdCommon.Email.SendGrid
         /// <summary>
         /// Send the email
         /// </summary>
-        /// <param name="details">The email message details/param>
+        /// <param name="details">The email message details</param>
         /// <returns>return result of sending email</returns>
         public async Task<SendEmailResponse> SendEmailAsync(SendEmailDetails details)
         {
@@ -34,7 +33,7 @@ namespace GtdCommon.Email.SendGrid
             var from = new EmailAddress(details.FromEmail, details.FromName);
             var to = new EmailAddress(details.ToEmail, details.ToName);
             var subject = details.Subject;
-            var Content = details.Content;
+            var content = details.Content;
             var msg = MailHelper.CreateSingleEmail(
                                                    from,
                                                    to,
@@ -42,11 +41,12 @@ namespace GtdCommon.Email.SendGrid
                                                    details.IsHTML ? null : details.Content,
                                                    details.IsHTML ? details.Content : null);
 
-
             var response = await client.SendEmailAsync(msg);
 
             if (response.StatusCode == System.Net.HttpStatusCode.Accepted)
+            {
                 return new SendEmailResponse();
+            }
 
             try
             {
@@ -58,10 +58,11 @@ namespace GtdCommon.Email.SendGrid
                 };
 
                 if (errorResponse.Errors == null || errorResponse.Errors.Count == 0)
+                {
                     errorResponse.Errors = new List<string>(new[] { "Unknown error from email sending service. Please contact Fasetto support." });
+                }
 
                 return errorResponse;
-
             }
             catch (Exception ex)
             {
