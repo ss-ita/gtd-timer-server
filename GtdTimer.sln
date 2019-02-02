@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GtdCommon", "Common\GtdComm
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GtdTimerDAL", "Timer.DAL\GtdTimerDAL.csproj", "{F929608B-BF64-4EE7-B451-A2E25B890A04}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GtdTimerTests", "Tests\GtdTimerTests\GtdTimerTests.csproj", "{858639FC-AA8A-464C-84E7-1C68A5845E7C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GtdTimerTests", "Tests\gtdtimerTests\GtdTimerTests.csproj", "{858639FC-AA8A-464C-84E7-1C68A5845E7C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GtdCommonTests", "Tests\CommonTests\GtdCommonTests.csproj", "{EF9A0DB9-0122-4C26-AAC4-CF2ABD6A6FF0}"
 EndProject
