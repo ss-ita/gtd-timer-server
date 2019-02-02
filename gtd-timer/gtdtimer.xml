@@ -308,44 +308,44 @@
             <summary>
             Converts all user's tasks to xml format. 
             </summary>
-            <returns>returns a text file</returns>
+            <returns>result of exporting a tasks text file</returns>
         </member>
         <member name="M:GtdTimer.Controllers.TasksController.ExportAllStopwatchesAsXmlByUserId">
             <summary>
             Converts all user's stopwatches to xml format. 
             </summary>
-            <returns>returns a text file</returns>
+            <returns>result of exporting a stopwatches text file</returns>
         </member>
         <member name="M:GtdTimer.Controllers.TasksController.ExportAllTimersAsXmlByUserId">
             <summary>
             Converts all user's timers to xml format. 
             </summary>
-            <returns>returns a text file</returns>
+            <returns>result of exporting a timers text file</returns>
         </member>
         <member name="M:GtdTimer.Controllers.TasksController.ExportTaskAsXmlById(System.Int32)">
             <summary>
             Converts  user's task by id to xml format.
             </summary>
             <param name="taskId">id of chosen task</param>
-            <returns>returns text file</returns>
+            <returns>result of exporting a chosen task text file</returns>
         </member>
         <member name="M:GtdTimer.Controllers.TasksController.ExportAllTasksAsCsvByUserId">
             <summary>
             Converts all user's tasks to csv format.
             </summary>
-            <returns>return text file</returns>
+            <returns>result of exporting tasks by user id into text file</returns>
         </member>
         <member name="M:GtdTimer.Controllers.TasksController.ExportAllStopwatchesAsCsvByUserId">
             <summary>
             Converts all user's stopwatches to csv format.
             </summary>
-            <returns>return text file</returns>
+            <returns>result of exporting stopwatches by user id into a text file</returns>
         </member>
         <member name="M:GtdTimer.Controllers.TasksController.ExportAllTimersAsCsvByUserId">
             <summary>
             Converts all user's stopwatches to csv format.
             </summary>
-            <returns>return text file</returns>
+            <returns>result of exporting timers by user id into a text file</returns>
         </member>
         <member name="M:GtdTimer.Controllers.TasksController.ExportAllRecordsAsCsvByUserId">
             <summary>
@@ -388,7 +388,7 @@
             Converts  user's task by id to csv format.
             </summary>
             <param name="taskId">id of chosen task</param>
-            <returns>returns text file</returns>
+            <returns>result of exporting task by task id into a text file</returns>
         </member>
         <member name="M:GtdTimer.Controllers.TasksController.ImportTasksAsCsv(Microsoft.AspNetCore.Http.IFormFile)">
             <summary>
@@ -422,7 +422,7 @@
             Returns all records by Task id
             </summary>
             <param name="taskId">Task id</param>
-            <returns>Return result of getting records by task id</returns>
+            <returns>Returns result of getting records by task id</returns>
         </member>
         <member name="M:GtdTimer.Controllers.TasksController.DeleteRecordById(System.Int32)">
             <summary>
@@ -436,7 +436,7 @@
             Reset and run task 
             </summary>
             <param name="taskId">Id of task to reset</param>
-            <returns>If task is runned it returns the new record</returns>
+            <returns>Result of reseting task from history </returns>
         </member>
         <member name="M:GtdTimer.Controllers.TasksController.GetAllTimersByUserId">
             <summary>
