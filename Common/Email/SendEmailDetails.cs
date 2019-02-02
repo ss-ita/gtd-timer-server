@@ -12,37 +12,37 @@ namespace GtdCommon.Email
     public class SendEmailDetails
     {
         /// <summary>
-        /// The name of the sender
+        /// Gets or sets the name of the sender
         /// </summary>
-
         public string FromName { get; set; }
-        /// <summary>
-        /// The email of the sender
-        /// </summary>
 
+        /// <summary>
+        /// Gets or sets the email of the sender
+        /// </summary>
         public string FromEmail { get; set; }
-        /// <summary>
-        /// The name of the receiver
-        /// </summary>
 
+        /// <summary>
+        /// Gets or sets the name of the receiver
+        /// </summary>
         public string ToName { get; set; }
-        /// <summary>
-        /// The email of the receiver
-        /// </summary>
 
+        /// <summary>
+        /// Gets or sets the email of the receiver
+        /// </summary>
         public string ToEmail { get; set; }
-        /// <summary>
-        /// The email subject
-        /// </summary>
 
-        public string Subject { get; set; }
         /// <summary>
-        /// The email body content
+        /// Gets or sets the email subject
+        /// </summary>
+        public string Subject { get; set; }
+
+        /// <summary>
+        /// Gets or sets the email body content
         /// </summary>
         public string Content { get; set; }
 
         /// <summary>
-        /// Indicates if the contents is a HTML email
+        /// Gets or sets a value indicating whether the contents is a HTML email
         /// </summary>
         public bool IsHTML { get; set; }
     }

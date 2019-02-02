@@ -18,8 +18,7 @@ namespace GtdTimerDAL.Entities
         /// Gets or sets Primary key for Record
         /// </summary>
         public int Id { get; set; }
-
-        
+   
         /// <summary>
         /// Gets or sets Time when timer was started
         /// </summary>
@@ -31,7 +30,7 @@ namespace GtdTimerDAL.Entities
         public DateTime StopTime { get; set; }
 
         /// <summary>
-        /// What's happened with timer
+        /// Gets or sets what's happened with timer
         /// </summary>
         public string Action { get; set; }
 

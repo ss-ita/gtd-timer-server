@@ -15,18 +15,17 @@ using GtdServiceTier.Services;
 using GtdTimerDAL.Entities;
 using GtdTimerDAL.Repositories;
 using GtdTimerDAL.UnitOfWork;
-using System.Threading.Tasks;
 
 namespace GtdServiceTierTests
 {
     [TestFixture]
     public class UsersServiceTests
     {
-        private const int userId = 0;
-        private const string userToken = "User Token";
+        private const string UserEmail = "User email";
+        private const string UserToken = "User Token";
+        private readonly IApplicationUserManager<User, int> userManager;
         private Mock<IUnitOfWork> unitOfWork;
         private Mock<ITokenService> tokenService;
-        private readonly IApplicationUserManager<User, int> userManager;
         private UsersService subject;
 
         /// <summary>
@@ -37,7 +36,7 @@ namespace GtdServiceTierTests
         {
             unitOfWork = new Mock<IUnitOfWork>();
             tokenService = new Mock<ITokenService>();
-            subject = new UsersService(unitOfWork.Object , tokenService.Object);
+            subject = new UsersService(unitOfWork.Object, tokenService.Object);
         }
 
         /// <summary>
@@ -85,21 +84,21 @@ namespace GtdServiceTierTests
         /// <summary>
         /// Verify token test
         /// </summary>
-        //[Test]
-        //public void VerifyToken()
-        //{
-        //    Token token = new Token();
-        //    User user = new User();
+        [Test]
+        public void VerifyToken()
+        {
+            Token token = new Token();
+            User user = new User();
 
-        //    tokenService.Setup(_ => _.GetTokenByUserId(userId)).Returns(token);
-        //    unitOfWork.Setup(_ => _.UserManager.FindByIdAsync(userId)).ReturnsAsync(user);
-        //    unitOfWork.Setup(_ => _.UserManager.UpdateAsync(user));
+            tokenService.Setup(_ => _.GetTokenByUserEmail(UserEmail)).Returns(token);
+            unitOfWork.Setup(_ => _.UserManager.FindByEmailAsync(UserEmail)).ReturnsAsync(user);
+            unitOfWork.Setup(_ => _.UserManager.UpdateAsync(user));
 
-        //    unitOfWork.Verify(_ => _.Save(), Times.Never);
-        //    var exception = Assert.Throws<InvalidTokenException>(() => subject.VerifyToken(userId.ToString(), userToken));
+            unitOfWork.Verify(_ => _.Save(), Times.Never);
+            var exception = Assert.Throws<InvalidTokenException>(() => subject.VerifyToken(UserEmail, UserToken));
 
-        //    Assert.That(exception.Message, Is.EqualTo("Token has expired"));
-        //}
+            Assert.That(exception.Message, Is.EqualTo("Token has expired"));
+        }
 
         /// <summary>
         /// User Already Exists Exception test
@@ -128,7 +127,7 @@ namespace GtdServiceTierTests
             int userId = 1;
             string password = "password";
             UpdatePasswordDto model = new UpdatePasswordDto { PasswordOld = password };
-            User user = new User { PasswordHash = password , EmailConfirmed = true };
+            User user = new User { PasswordHash = password, EmailConfirmed = true };
 
             unitOfWork.Setup(_ => _.UserManager).Returns(userManager);
             unitOfWork.Setup(_ => _.UserManager.FindByIdAsync(userId)).ReturnsAsync(user);
@@ -147,7 +146,7 @@ namespace GtdServiceTierTests
         {
             int userId = 1;
             UpdatePasswordDto model = new UpdatePasswordDto();
-            User user = new User { PasswordHash = "password" , EmailConfirmed = true};
+            User user = new User { PasswordHash = "password", EmailConfirmed = true };
 
             unitOfWork.Setup(_ => _.UserManager).Returns(userManager);
             unitOfWork.Setup(_ => _.UserManager.FindByIdAsync(userId)).ReturnsAsync(user);
@@ -165,7 +164,7 @@ namespace GtdServiceTierTests
         public void Delete()
         {
             int userId = 1;
-            User user = new User() { EmailConfirmed = true};
+            User user = new User() { EmailConfirmed = true };
 
             unitOfWork.Setup(_ => _.UserManager).Returns(userManager);
             unitOfWork.Setup(_ => _.UserManager.FindByIdAsync(userId)).ReturnsAsync(user);
@@ -266,7 +265,6 @@ namespace GtdServiceTierTests
 
             unitOfWork.Setup(_ => _.UserManager).Returns(userManager);
             unitOfWork.Setup(_ => _.UserManager.GetRolesAsync(id)).ReturnsAsync(roles);
-
 
             var actual = subject.GetRolesOfUser(id);
 

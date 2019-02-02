@@ -17,11 +17,11 @@ using GtdTimerDAL.UnitOfWork;
 namespace GtdServiceTierTests
 {
     [TestFixture]
-    class TokenServiceTests
+    public class TokenServiceTests
     {
-        private const int userId = 0;
-        private const int tokenId = 4;
-        private readonly List<Token> tokens = new List<Token>() { new Token() { Id = tokenId } };
+        private const string UserEmail = "User email";
+        private const int TokenId = 4;
+        private readonly List<Token> tokens = new List<Token>() { new Token() { Id = TokenId } };
         private TokenService subject;
         private Mock<IUnitOfWork> unitOfWork;
 
@@ -51,19 +51,18 @@ namespace GtdServiceTierTests
         }
 
         /// <summary>
-        /// Get token by user id test
+        /// Get token by user email test
         /// </summary>
-        //[Test]
-        //public void GetTokenByUserId()
-        //{
-        //    Token token = new Token() { Id = tokenId };
-        //    var tokenRepository = new Mock<IRepository<Token>>();
+        [Test]
+        public void GetTokenByUserEmail()
+        {
+            Token token = new Token() { Id = TokenId };
+            var tokenRepository = new Mock<IRepository<Token>>();
 
-        //    unitOfWork.Setup(_ => _.Tokens).Returns(tokenRepository.Object);
-        //    unitOfWork.Setup(_ => _.Tokens.GetAllEntitiesByFilter(It.IsAny<Func<Token, bool>>())).Returns(tokens);
+            unitOfWork.Setup(_ => _.Tokens).Returns(tokenRepository.Object);
+            unitOfWork.Setup(_ => _.Tokens.GetAllEntitiesByFilter(It.IsAny<Func<Token, bool>>())).Returns(tokens);
 
-        //    Assert.AreEqual(subject.GetTokenByUserEmail(userEmail).Id, token.Id);
-        //}
-
+            Assert.AreEqual(subject.GetTokenByUserEmail(UserEmail).Id, token.Id);
+        }
     }
 }

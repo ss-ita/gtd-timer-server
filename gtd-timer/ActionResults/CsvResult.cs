@@ -4,6 +4,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System;
 using System.IO;
 using System.Text;
 using Microsoft.AspNetCore.Http;
@@ -40,11 +41,14 @@ namespace GtdTimer.ActionResults
         /// <param name="context">The controller context for the current request.</param>       
         public override void ExecuteResult(ActionContext context)
         {
+            string cors = Environment.GetEnvironmentVariable("AzureCors") ?? IoCContainer.Configuration["Origins"];
+
             if (this.ObjectToSerialize != null)
             {
                 context.HttpContext.Response.Clear();               
-                context.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", IoCContainer.Configuration["Origins"]);
+                context.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", cors);
                 JsConfig<TaskDto>.ExcludePropertyNames = new[] { "Id", "UserId" };
+                JsConfig<TaskRecordDto>.ExcludePropertyNames = new[] { "Id" };
                 using (var writer = new StreamWriter(context.HttpContext.Response.Body, Encoding.UTF8))
                 {
                     CsvSerializer.SerializeToWriter(ObjectToSerialize, writer);                   

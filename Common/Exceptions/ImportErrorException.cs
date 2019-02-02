@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="TaskNotFoundException.cs" company="SoftServe">
+// <copyright file="ImportErrorException.cs" company="SoftServe">
 //     Company copyright tag.
 // </copyright>
 //-----------------------------------------------------------------------

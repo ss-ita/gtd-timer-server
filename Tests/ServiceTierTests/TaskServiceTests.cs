@@ -6,7 +6,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
 using Moq;
 using NUnit.Framework;
 
@@ -17,20 +19,13 @@ using GtdTimerDAL.Entities;
 using GtdTimerDAL.Repositories;
 using GtdTimerDAL.UnitOfWork;
 using GtdTimerDAL.Extensions;
-using Microsoft.AspNetCore.Http;
-using System.IO;
 
 namespace GtdServiceTierTests
 {
     public class TaskServiceTests
     {
-        private readonly int userId = 1;
-        private Tasks task = new Tasks { Id = 1, Name = "Test", UserId = 1 };
-        private List<Tasks> tasks = new List<Tasks>();
-        private Mock<IUnitOfWork> unitOfWork;
-        private TaskService subject;
-        string contentCsv = "testData";
-        string contentXml = @"<?xml version = ""1.0"" encoding=""utf-8""?>
+        private readonly string contentCsv = "testData";
+        private readonly string contentXml = @"<?xml version = ""1.0"" encoding=""utf-8""?>
                               <ArrayOfTaskDto xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
                                 <TaskDto>
                                     <Name>Test</Name>
@@ -42,10 +37,16 @@ namespace GtdServiceTierTests
                                     <IsRunning>true</IsRunning>
                                 </TaskDto>
                               </ArrayOfTaskDto>";
-        string fileNameCsv = "test.csv";
-        string fileNameXml = "test.xml";
-        private DateTime start = DateTime.Now;
-        private DateTime end = DateTime.Now;
+
+        private readonly string fileNameCsv = "test.csv";
+        private readonly string fileNameXml = "test.xml";
+        private readonly DateTime start = DateTime.Now;
+        private readonly DateTime end = DateTime.Now;
+        private readonly int userId = 1;
+        private Tasks task = new Tasks { Id = 1, Name = "Test", UserId = 1 };
+        private List<Tasks> tasks = new List<Tasks>();
+        private Mock<IUnitOfWork> unitOfWork;
+        private TaskService subject;
 
         /// <summary>
         /// Method which is called immediately in each test run

@@ -22,14 +22,14 @@ namespace GtdServiceTier.Services
         /// <summary>
         /// Method for getting token by user id
         /// </summary>
-        /// <param name="userId">Id of user which token to return</param>
+        /// <param name="userEmail">Email of user which token to return</param>
         /// <returns>token object</returns>
         Token GetTokenByUserEmail(string userEmail);
 
         /// <summary>
         /// Method for sending user verification email
         /// </summary>
-        /// <param name="user">user</param>
+        /// <param name="user">user instance</param>
         void SendUserVerificationToken(User user);
     }
 }

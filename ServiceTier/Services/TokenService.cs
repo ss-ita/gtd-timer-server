@@ -26,7 +26,6 @@ namespace GtdServiceTier.Services
         /// <param name="unitOfWork">instance of unit of work</param>
         public TokenService(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
-
         }
 
         public void CreateToken(Token token)
@@ -53,7 +52,7 @@ namespace GtdServiceTier.Services
 
             var host = Environment.GetEnvironmentVariable("AzureCors") ?? IoCContainer.Configuration["Origins"];
 
-            var confirmationUrl = $"{host}/confirm-email/{user.Id}/{HttpUtility.UrlEncode(emailVerificationCode)}";
+            var confirmationUrl = $"{host}/confirm-email/{user.Email}/{HttpUtility.UrlEncode(emailVerificationCode)}";
 
             GtdTimerEmailSender.SendUserVerificationEmailAsync(user.UserName, user.Email, confirmationUrl).GetAwaiter().GetResult();
         }

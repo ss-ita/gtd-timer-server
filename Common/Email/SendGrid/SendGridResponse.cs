@@ -14,7 +14,7 @@ namespace GtdCommon.Email.SendGrid
     public class SendGridResponse
     {
         /// <summary>
-        /// Any errors from a response
+        /// Gets or sets any errors from a response
         /// </summary>
         public List<SendGridResponseError> Errors { get; set; }
     }
