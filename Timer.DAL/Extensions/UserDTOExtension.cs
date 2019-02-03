@@ -1,48 +1,49 @@
-﻿using Common.ModelsDTO;
-using Timer.DAL.Timer.DAL.Entities;
+﻿//-----------------------------------------------------------------------
+// <copyright file="UserDtoExtension.cs" company="SoftServe">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
 
-namespace Timer.DAL.Extensions
+using GtdCommon.ModelsDto;
+using GtdTimerDAL.Entities;
+
+namespace GtdTimerDAL.Extensions
 {
-    public static class UserDTOExtension
+    /// <summary>
+    /// UserDtoExtension class for converting to user and vice versa
+    /// </summary>
+    public static class UserDtoExtension
     {
-        public static User ToUser(this UserDTO userDTO)
+        /// <summary>
+        /// Convert to user method
+        /// </summary>
+        /// <param name="userDto"> userDto model </param>
+        /// <returns>returns user</returns>
+        public static User ToUser(this UserDto userDto)
         {
-            User user = new User
+            return new User
             {
-                FirstName = userDTO.FirstName,
-                LastName = userDTO.LastName,
-                Email = userDTO.Email,
-                UserName = userDTO.Email
+                FirstName = userDto.FirstName,
+                LastName = userDto.LastName,
+                Email = userDto.Email,
+                UserName = userDto.Email
             };
-
-            return user;
         }
 
-        public static UserDTO ToUserDTO(this User user)
-        {
-            UserDTO userDTO = new UserDTO
-            {
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Email = user.Email,
-                Password = user.PasswordHash,
-                PasswordConfirm = user.PasswordHash
-            };
-
-            return userDTO;
-        }
-
+        /// <summary>
+        /// Convert to user method
+        /// </summary>
+        /// <param name="socialAuthUser"> socialUser model </param>
+        /// <returns>returns user</returns>
         public static User ToUser(this BaseAuthUserData socialAuthUser)
         {
-            User user = new User
+            return new User
             {
                 FirstName = socialAuthUser.FirstName,
                 LastName = socialAuthUser.LastName,
                 Email = socialAuthUser.Email,
                 UserName = socialAuthUser.Email
             };
-
-            return user;
         }
     }
 }

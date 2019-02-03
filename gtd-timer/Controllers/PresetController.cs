@@ -1,27 +1,58 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿//-----------------------------------------------------------------------
+// <copyright file="PresetController.cs" company="SoftServe">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
 
-using ServiceTier.Services;
-using Common.ModelsDTO;
 using Microsoft.AspNetCore.Authorization;
-using Common.Exceptions;
+using Microsoft.AspNetCore.Mvc;
 
-namespace gtdtimer.Controllers
+using GtdCommon.Exceptions;
+using GtdCommon.ModelsDto;
+using GtdServiceTier.Services;
+
+namespace GtdTimer.Controllers
 {
+    /// <summary>
+    /// class for preset controller
+    /// </summary>
     [Authorize]
     [Route("api/[controller]")]
     public class PresetController : ControllerBase
     {
+        /// <summary>
+        /// instance of user identity service
+        /// </summary>
         private readonly IUserIdentityService userIdentityService;
-        private readonly IPresetService presetService;
-        private readonly ITimerService timerService;
 
-        public PresetController(IUserIdentityService userIdentityService, IPresetService presetService, ITimerService timerService)
+        /// <summary>
+        /// instance of preset service
+        /// </summary>
+        private readonly IPresetService presetService;
+
+        /// <summary>
+        /// instance of task service
+        /// </summary>
+        private readonly ITaskService taskService;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PresetController" /> class.
+        /// </summary>
+        /// <param name="userIdentityService">instance of user identity service</param>
+        /// <param name="presetService">instance of preset service</param>
+        /// <param name="taskService">instance of task service</param>
+        public PresetController(IUserIdentityService userIdentityService, IPresetService presetService, ITaskService taskService)
         {
             this.userIdentityService = userIdentityService;
             this.presetService = presetService;
-            this.timerService = timerService;
+            this.taskService = taskService;
         }
 
+        /// <summary>
+        /// Method for obtaining a preset by id
+        /// </summary>
+        /// <param name="presetid"> id of preset</param>
+        /// <returns> result of getting preset with chosen id </returns>
         [HttpGet("GetPreset/{presetid}")]
         public IActionResult GetPreset(int presetid)
         {
@@ -30,6 +61,10 @@ namespace gtdtimer.Controllers
             return Ok(preset);
         }
 
+        /// <summary>
+        /// Method for getting all custom presets of chosen user
+        /// </summary>
+        /// <returns> result of getting a list of all custom presets of chosen user </returns>
         [HttpGet("[action]")]
         public IActionResult GetAllCustomPresets()
         {
@@ -39,41 +74,68 @@ namespace gtdtimer.Controllers
             return Ok(query);
         }
 
+        /// <summary>
+        /// Method for getting all standard presets
+        /// </summary>
+        /// <returns> result of getting a list of all standard presets</returns>
         [AllowAnonymous]
         [HttpGet("[action]")]
         public IActionResult GetAllStandardPresets()
         {
-            var query = presetService.GetAllStandardPresets();
+            var listOfPresets = presetService.GetAllStandardPresets();
 
-            return Ok(query);
+            return Ok(listOfPresets);
         }
 
+        /// <summary>
+        /// Method for creating a preset
+        /// </summary>
+        /// <param name="presetDto"> preset model</param>
+        /// <returns> result of creating a preset</returns>
         [HttpPost("[action]")]
-        public IActionResult CreatePreset([FromBody]PresetDTO presetDTO)
+        public IActionResult CreatePreset([FromBody]PresetDto presetDto)
         {
-            presetDTO.UserId = userIdentityService.GetUserId();
-            presetService.CreatePreset(presetDTO);
+            presetDto.UserId = userIdentityService.GetUserId();
+            if (presetDto.Tasks != null)
+            {
+                foreach (var task in presetDto.Tasks)
+                {
+                    task.UserId = userIdentityService.GetUserId();
+                }
+            }
 
-            return Ok();
+            presetService.CreatePreset(presetDto);
+
+            return Ok(presetDto);
         }
 
+        /// <summary>
+        /// Method for updating a preset
+        /// </summary>
+        /// <param name="presetDto"> preset model</param>
+        /// <returns> result of updating a preset</returns>
         [HttpPut("[action]")]
-        public IActionResult UpdatePreset([FromBody]PresetDTO presetDTO)
+        public IActionResult UpdatePreset([FromBody]PresetDto presetDto)
         {
-            presetDTO.UserId = userIdentityService.GetUserId();
-            presetService.UpdatePreset(presetDTO);
+            presetDto.UserId = userIdentityService.GetUserId();
+            if (presetDto.Tasks != null)
+            {
+                foreach (var task in presetDto.Tasks)
+                {
+                    task.UserId = userIdentityService.GetUserId();
+                }
+            }
 
-            return Ok();
+            presetService.UpdatePreset(presetDto);
+
+            return Ok(presetDto);
         }
 
-        [HttpPut("[action]")]
-        public IActionResult UpdateTimer([FromBody]TimerDTO timerDTO)
-        {
-            timerService.UpdateTimer(timerDTO);
-
-            return Ok();
-        }
-
+        /// <summary>
+        /// Method for deleting a preset
+        /// </summary>
+        /// <param name="presetid"> id of preset</param>
+        /// <returns> result of deleting a preset</returns>
         [HttpDelete("DeletePreset/{presetid}")]
         public IActionResult DeletePreset(int presetid)
         {
@@ -81,15 +143,8 @@ namespace gtdtimer.Controllers
             {
                 throw new AccessDeniedException();
             }
+
             presetService.DeletePresetById(presetid);
-
-            return Ok();
-        }
-
-        [HttpDelete("DeleteTimer/{timerid}")]
-        public IActionResult DeleteTimer(int timerid)
-        {
-            timerService.DeleteTimer(timerid);
 
             return Ok();
         }

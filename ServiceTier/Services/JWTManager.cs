@@ -1,35 +1,50 @@
-﻿using Common.Constant;
-using Common.IoC;
-using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
+﻿//-----------------------------------------------------------------------
+// <copyright file="JWTManager.cs" company="SoftServe">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Timer.DAL.Timer.DAL.Entities;
+using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 
-namespace ServiceTier.Services
+using GtdCommon.Constant;
+using GtdCommon.IoC;
+using GtdTimerDAL.Entities;
+
+namespace GtdServiceTier.Services
 {
-    public class JWTManager
+    /// <summary>
+    /// class for assigning token
+    /// </summary>
+    public class JWTManager : IJWTManager
     {
-        public virtual string GenerateToken(User user)
+        public virtual string GenerateToken(User user, IList<string> userRoles)
         {
-            var claims = new[]
-                        {
+            var claims = new List<Claim>
+            {
                 new Claim(Constants.ClaimUserId, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
+            foreach (var userRole in userRoles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, userRole));
+            }
+
             var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(IoCContainer.Configuration["JWTSecretKey"]));
 
             var token = new JwtSecurityToken(
-                expires: DateTime.UtcNow.AddHours(Constants.TokenExpirationInHours),
+                expires: DateTime.UtcNow.AddDays(Constants.TokenExpirationInDays),
                 claims: claims,
                 signingCredentials: new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256),
                 issuer: "Tokens:Issuer",
-                audience: "Tokens:Audience"
-                );
+                audience: "Tokens:Audience");
 
             var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 

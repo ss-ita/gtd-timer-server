@@ -1,66 +1,83 @@
-﻿using Common.Exceptions;
-using Common.ModelsDTO;
-using Moq;
-using NUnit.Framework;
-using ServiceTier.Services;
+﻿//-----------------------------------------------------------------------
+// <copyright file="PresetsServiceTests.cs" company="SoftServe">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Timer.DAL.Extensions;
-using Timer.DAL.Timer.DAL.Entities;
-using Timer.DAL.Timer.DAL.Repositories;
-using Timer.DAL.Timer.DAL.UnitOfWork;
+using Moq;
+using NUnit.Framework;
 
-namespace ServiceTierTests
+using GtdCommon.Exceptions;
+using GtdCommon.ModelsDto;
+using GtdServiceTier.Services;
+using GtdTimerDAL.Extensions;
+using GtdTimerDAL.Entities;
+using GtdTimerDAL.Repositories;
+using GtdTimerDAL.UnitOfWork;
+
+namespace GtdServiceTierTests
 {
-    class PresetsServiceTests
+    public class PresetsServiceTests
     {
-        Preset preset = new Preset { Name = "preset", UserId = 1, Id = 1 };
-        int presetid = 1;
-        int userid = 1;
-        List<Preset> presets = new List<Preset>();
-        List<Timer.DAL.Timer.DAL.Entities.Timer> timers = new List<Timer.DAL.Timer.DAL.Entities.Timer>();
+        private readonly int presetid = 1;
+        private readonly int userid = 1;
+        private readonly List<PresetTasks> presetTasks = new List<PresetTasks>();
+        private readonly List<Tasks> tasks = new List<Tasks>();
+        private Preset preset = new Preset { Name = "preset", UserId = 1, Id = 1 };
+        private List<Preset> presets = new List<Preset>();
         private Mock<IUnitOfWork> unitOfWork;
-        private Mock<ITimerService> timerService;
-        
+        private Mock<ITaskService> taskService;
         private PresetService subject;
 
+        /// <summary>
+        /// Method which is called immediately in each test run
+        /// </summary>
         [SetUp]
         public void Setup()
         {
             unitOfWork = new Mock<IUnitOfWork>();
-            timerService = new Mock<ITimerService>();
-            subject = new PresetService(unitOfWork.Object,timerService.Object);
+            taskService = new Mock<ITaskService>();
+            subject = new PresetService(unitOfWork.Object, taskService.Object);
             presets.Add(preset);
         }
 
+        /// <summary>
+        /// Create preset test
+        /// </summary>
         [Test]
         public void CreatePreset()
         {
-            List<TimerDTO> timers = new List<TimerDTO>();
+            List<TaskDto> tasks = new List<TaskDto>();
             var presetRepository = new Mock<IRepository<Preset>>();
 
             unitOfWork.Setup(_ => _.Presets).Returns(presetRepository.Object);
 
-            subject.CreatePreset(preset.ToPresetDTO(timers));
+            subject.CreatePreset(preset.ToPresetDto(tasks));
 
             unitOfWork.Verify(_ => _.Save(), Times.Once);
         }
 
+        /// <summary>
+        /// Update Preset test
+        /// </summary>
         [Test]
         public void UpdatePreset()
         {
-            List<TimerDTO> timers = new List<TimerDTO>();
+            List<TaskDto> tasks = new List<TaskDto>();
             var presetRepository = new Mock<IRepository<Preset>>();
 
             unitOfWork.Setup(_ => _.Presets).Returns(presetRepository.Object);
 
-            subject.UpdatePreset(preset.ToPresetDTO(timers));
+            subject.UpdatePreset(preset.ToPresetDto(tasks));
 
             unitOfWork.Verify(_ => _.Save(), Times.Once);
         }
 
+        /// <summary>
+        /// Delete preset throws exception test
+        /// </summary>
         [Test]
         public void ThrowsExceptionPresetDelete()
         {
@@ -73,6 +90,9 @@ namespace ServiceTierTests
             Assert.That(ex.Message, Is.EqualTo("Preset does not Exist!"));
         }
 
+        /// <summary>
+        /// Get preset by id throws exception test
+        /// </summary>
         [Test]
         public void ThrowsExceptionGetPresetById()
         {
@@ -85,6 +105,9 @@ namespace ServiceTierTests
             Assert.That(ex.Message, Is.EqualTo("Preset does not Exist!"));
         }
 
+        /// <summary>
+        /// Delete Preset test
+        /// </summary>
         [Test]
         public void PresetDelete()
         {
@@ -98,6 +121,9 @@ namespace ServiceTierTests
             unitOfWork.Verify(_ => _.Save(), Times.Once);
         }
 
+        /// <summary>
+        /// Get Preset By Id test
+        /// </summary>
         [Test]
         public void GetPresetById()
         {
@@ -105,10 +131,14 @@ namespace ServiceTierTests
 
             unitOfWork.Setup(_ => _.Presets).Returns(presetRepository.Object);
             unitOfWork.Setup(_ => _.Presets.GetByID(presetid)).Returns(preset);
+            unitOfWork.Setup(_ => _.PresetTasks.GetAllEntitiesByFilter(It.IsAny<Func<PresetTasks, bool>>())).Returns(presetTasks);
 
             Assert.AreEqual(subject.GetPresetById(presetid).PresetName, preset.Name);
         }
 
+        /// <summary>
+        /// Get All Standard Presets test
+        /// </summary>
         [Test]
         public void GetAllStandartPresets()
         {
@@ -116,12 +146,17 @@ namespace ServiceTierTests
 
             unitOfWork.Setup(_ => _.Presets).Returns(presetRepository.Object);
             unitOfWork.Setup(_ => _.Presets.GetAllEntitiesByFilter(It.IsAny<Func<Preset, bool>>())).Returns(presets);
-            unitOfWork.Setup(_ => _.Timers.GetAllEntities()).Returns(timers);
+            unitOfWork.Setup(_ => _.Tasks.GetAllEntities()).Returns(tasks);
+            unitOfWork.Setup(_ => _.PresetTasks.GetAllEntitiesByFilter(It.IsAny<Func<PresetTasks, bool>>())).Returns(presetTasks);
+
             preset.UserId = null;
-            
+
             Assert.AreEqual(subject.GetAllStandardPresets()[0].PresetName, preset.Name);
         }
 
+        /// <summary>
+        /// Get All Custom Presets test
+        /// </summary>
         [Test]
         public void GetAllCustomPresets()
         {
@@ -129,7 +164,8 @@ namespace ServiceTierTests
 
             unitOfWork.Setup(_ => _.Presets).Returns(presetRepository.Object);
             unitOfWork.Setup(_ => _.Presets.GetAllEntitiesByFilter(It.IsAny<Func<Preset, bool>>())).Returns(presets);
-            unitOfWork.Setup(_ => _.Timers.GetAllEntities()).Returns(timers);
+            unitOfWork.Setup(_ => _.Tasks.GetAllEntities()).Returns(tasks);
+            unitOfWork.Setup(_ => _.PresetTasks.GetAllEntitiesByFilter(It.IsAny<Func<PresetTasks, bool>>())).Returns(presetTasks);
 
             Assert.AreEqual(subject.GetAllCustomPresetsByUserId(userid)[0].PresetName, preset.Name);
         }

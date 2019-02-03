@@ -1,33 +1,50 @@
-﻿using Timer.DAL.Timer.DAL.Entities;
+﻿//-----------------------------------------------------------------------
+// <copyright file="TaskDtoExtension.cs" company="SoftServe">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
 
-using Common.ModelsDTO;
 using System;
 
-namespace Timer.DAL.Extensions
-{
-    public static class TaskDTOExtension
-    {
-        public static Tasks ToTask(this TaskDTO taskDTO)
-        {
-            Tasks task = new Tasks
-            {
-                Id = taskDTO.Id,
-                Name = taskDTO.Name,
-                Description = taskDTO.Description,
-                ElapsedTime = TimeSpan.FromMilliseconds(taskDTO.ElapsedTime),
-                Goal = taskDTO.Goal,
-                LastStartTime = taskDTO.LastStartTime,
-                IsActive = taskDTO.IsActive,
-                IsRunning = taskDTO.IsRunning,
-                UserId = taskDTO.UserId
-            };
+using GtdCommon.ModelsDto;
+using GtdTimerDAL.Entities;
 
-            return task;
+namespace GtdTimerDAL.Extensions
+{
+    /// <summary>
+    /// TaskDtoExtension class for converting to task and vice versa
+    /// </summary>
+    public static class TaskDtoExtension
+    {
+        /// <summary>
+        /// Convert to task method
+        /// </summary>
+        /// <param name="taskDto"> taskDto model </param>
+        /// <returns>returns task</returns>
+        public static Tasks ToTask(this TaskDto taskDto)
+        {
+            return new Tasks
+            {
+                Id = taskDto.Id,
+                Name = taskDto.Name,
+                Description = taskDto.Description,
+                ElapsedTime = TimeSpan.FromMilliseconds(taskDto.ElapsedTime),
+                Goal = taskDto.Goal,
+                LastStartTime = taskDto.LastStartTime,
+                IsRunning = taskDto.IsRunning,
+                UserId = taskDto.UserId,
+                WatchType = taskDto.WatchType
+            };
         }
 
-        public static TaskDTO ToTaskDTO(this Tasks task)
+        /// <summary>
+        /// Convert to taskDto method
+        /// </summary>
+        /// <param name="task"> task model </param>
+        /// <returns>returns taskDto</returns>
+        public static TaskDto ToTaskDto(this Tasks task)
         {
-            TaskDTO taskDTO = new TaskDTO
+            return new TaskDto
             {
                 Id = task.Id,
                 Name = task.Name,
@@ -35,12 +52,10 @@ namespace Timer.DAL.Extensions
                 ElapsedTime = (int)task.ElapsedTime.TotalMilliseconds,
                 Goal = task.Goal,
                 LastStartTime = task.LastStartTime,
-                IsActive = task.IsActive,
                 IsRunning = task.IsRunning,
-                UserId = task.UserId
+                UserId = task.UserId,
+                WatchType = task.WatchType
             };
-
-            return taskDTO;
         }
     }
 }
