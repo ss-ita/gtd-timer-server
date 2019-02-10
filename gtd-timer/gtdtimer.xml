@@ -228,7 +228,7 @@
             instance of user identity service
             </summary>
         </member>
-        <member name="M:GtdTimer.Controllers.TasksController.#ctor(GtdServiceTier.Services.ITaskService,GtdServiceTier.Services.IUserIdentityService)">
+        <member name="M:GtdTimer.Controllers.TasksController.#ctor(GtdServiceTier.Services.ITaskService,GtdServiceTier.Services.IUserIdentityService,Microsoft.AspNetCore.SignalR.IHubContext{GtdTimer.Hubs.TaskHub})">
             <summary>
             Initializes a new instance of the <see cref="T:GtdTimer.Controllers.TasksController" /> class.
             </summary>
@@ -540,6 +540,32 @@
             Get roles of user
             </summary>
             <returns>roles of chosen user</returns>
+        </member>
+        <member name="T:GtdTimer.Hubs.ITaskClient">
+            <summary>
+            interface for task hub
+            </summary>
+        </member>
+        <member name="T:GtdTimer.Hubs.TaskHub">
+            <summary>
+            class for task hub
+            </summary>
+        </member>
+        <member name="F:GtdTimer.Hubs.TaskHub.taskService">
+            <summary>
+            Instance of task service
+            </summary>
+        </member>
+        <member name="F:GtdTimer.Hubs.TaskHub.userIdentityService">
+            <summary>
+            Instance of user identity service
+            </summary>
+        </member>
+        <member name="M:GtdTimer.Hubs.TaskHub.#ctor(GtdServiceTier.Services.ITaskService,GtdServiceTier.Services.IUserIdentityService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:GtdTimer.Hubs.TaskHub" /> class.
+            </summary>
+            <param name="taskService">instance of task service</param>
         </member>
         <member name="T:GtdTimer.Middleware.ErrorHandlingMiddleware">
             <summary>
