@@ -251,8 +251,7 @@ namespace GtdServiceTier.Services
             var taskToUpdate = UnitOfWork.Tasks.GetByID(taskId);
             if (taskToUpdate.IsRunning)
             {
-                var time= DateTime.UtcNow;
-                var timeNow =time.AddHours(2);
+                var timeNow = DateTime.UtcNow;
                 var ellapsedTime = (timeNow - taskToUpdate.LastStartTime).TotalMilliseconds;
                 Record recordToCreate = new Record
                 {
