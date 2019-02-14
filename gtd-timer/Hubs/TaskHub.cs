@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using System;
 using System.Threading.Tasks;
 
 using GtdCommon.ModelsDto;
@@ -37,41 +38,53 @@ namespace GtdTimer.Hubs
         {
             model.UserId = GetUserId();
             taskService.CreateTask(model);
-            await Clients.All.CreateTask(model);
+            await Clients.User(Context.UserIdentifier).CreateTask(model);
         }
 
         public async Task StartTask(TaskDto model)
         {
             model.UserId = GetUserId();
             taskService.StartTask(model);
-            await Clients.Others.StartTask(model);
+            await Clients.GroupExcept(Context.UserIdentifier, Context.ConnectionId).StartTask(model);
         }
 
         public async Task PauseTask(TaskDto model)
         {
             model.UserId = GetUserId();
             taskService.PauseTask(model);
-            await Clients.Others.PauseTask(model);
+            await Clients.GroupExcept(Context.UserIdentifier, Context.ConnectionId).PauseTask(model);
         }
 
         public async Task ResetTask(TaskDto model)
         {
             model.UserId = GetUserId();
             taskService.ResetTask(model);
-            await Clients.Others.ResetTask(model);
+            await Clients.GroupExcept(Context.UserIdentifier, Context.ConnectionId).ResetTask(model);
         }
 
         public async Task DeleteTask(int taskId)
         {
             taskService.DeleteTaskById(taskId);
-            await Clients.Others.DeleteTask(taskId);
+            await Clients.GroupExcept(Context.UserIdentifier, Context.ConnectionId).DeleteTask(taskId);
         }
 
         public async Task UpdateTask(TaskDto model)
         {
             model.UserId = GetUserId();
             taskService.UpdateTask(model);
-            await Clients.Others.UpdateTask(model);
+            await Clients.GroupExcept(Context.UserIdentifier, Context.ConnectionId).UpdateTask(model);
+        }
+
+        public override async Task OnConnectedAsync()
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, Context.UserIdentifier);
+            await base.OnConnectedAsync();
+        }
+
+        public override async Task OnDisconnectedAsync(Exception exception)
+        {
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, Context.UserIdentifier);
+            await base.OnDisconnectedAsync(exception);
         }
 
         private int GetUserId()
