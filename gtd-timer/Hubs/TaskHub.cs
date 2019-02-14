@@ -37,7 +37,7 @@ namespace GtdTimer.Hubs
         {
             model.UserId = GetUserId();
             taskService.CreateTask(model);
-            await Clients.Others.CreateTask(model);
+            await Clients.All.CreateTask(model);
         }
 
         public async Task StartTask(TaskDto model)
