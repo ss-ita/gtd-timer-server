@@ -98,7 +98,9 @@ namespace GtdServiceTierTests
             int taskId = 2;
             Tasks task = new Tasks();
             var taskRepository = new Mock<IRepository<Tasks>>();
+            var recordRepository = new Mock<IRepository<Record>>();
 
+            unitOfWork.Setup(_ => _.Records).Returns(recordRepository.Object);
             unitOfWork.Setup(_ => _.Tasks).Returns(taskRepository.Object);
             unitOfWork.Setup(_ => _.Tasks.GetByID(taskId)).Returns(task);
 
