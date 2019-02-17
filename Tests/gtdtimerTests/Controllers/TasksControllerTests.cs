@@ -183,6 +183,36 @@ namespace GtdTimerTests.Controllers
         }
 
         /// <summary>
+        /// Get All Stopwatches By User Id Count test
+        /// </summary>
+        [Test]
+        public void GetAllStopwatchesByUserIdCount()
+        {
+            int count = 0;
+            userIdentityService.Setup(_ => _.GetUserId()).Returns(userId);
+            taskService.Setup(_ => _.GetAllStopwatchesByUserIdCount(userId)).Returns(count);
+            var actual = (OkObjectResult)subject.GetAllStopwatchesByUserIdCount();
+
+            Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
+            Assert.AreEqual(count, actual.Value);
+        }
+
+        /// <summary>
+        /// Get All Timers By User Id Count test
+        /// </summary>
+        [Test]
+        public void GetAllTimersByUserIdCount()
+        {
+            int count = 0;
+            userIdentityService.Setup(_ => _.GetUserId()).Returns(userId);
+            taskService.Setup(_ => _.GetAllTimersByUserIdCount(userId)).Returns(count);
+            var actual = (OkObjectResult)subject.GetAllTimersByUserIdCount();
+
+            Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
+            Assert.AreEqual(count, actual.Value);
+        }
+
+        /// <summary>
         /// Get All Timers By User Id test
         /// </summary>
         [Test]
@@ -190,7 +220,7 @@ namespace GtdTimerTests.Controllers
         {
             List<TaskDto> tasks = new List<TaskDto>();
             userIdentityService.Setup(_ => _.GetUserId()).Returns(userId);
-            taskService.Setup(_ => _.GetAllTimersByUserId(userId)).Returns(tasks);
+            taskService.Setup(_ => _.GetAllTimersByUserId(userId, It.IsAny<int>(), It.IsAny<int>())).Returns(tasks);
             var actual = (OkObjectResult)subject.GetAllTimersByUserId();
 
             Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
@@ -205,8 +235,8 @@ namespace GtdTimerTests.Controllers
         {
             List<TaskDto> tasks = new List<TaskDto>();
             userIdentityService.Setup(_ => _.GetUserId()).Returns(userId);
-            taskService.Setup(_ => _.GetAllStopwatchesByUserId(userId)).Returns(tasks);
-            var actual = (OkObjectResult)subject.GetAllStopwathesByUserId();
+            taskService.Setup(_ => _.GetAllStopwatchesByUserId(userId, It.IsAny<int>(), It.IsAny<int>())).Returns(tasks);
+            var actual = (OkObjectResult)subject.GetAllStopwatchesByUserId();
 
             Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
             Assert.AreSame(actual.Value, tasks);
@@ -235,7 +265,7 @@ namespace GtdTimerTests.Controllers
         {
             List<TaskDto> tasks = new List<TaskDto>();
             userIdentityService.Setup(_ => _.GetUserId()).Returns(userId);
-            taskService.Setup(_ => _.GetAllStopwatchesByUserId(userId)).Returns(tasks);
+            taskService.Setup(_ => _.GetAllStopwatchesByUserId(userId, It.IsAny<int>(), It.IsAny<int>())).Returns(tasks);
             var actual = subject.ExportAllStopwatchesAsXmlByUserId();
 
             Assert.IsInstanceOf(typeof(XmlResult), actual);
@@ -250,7 +280,7 @@ namespace GtdTimerTests.Controllers
         {
             List<TaskDto> tasks = new List<TaskDto>();
             userIdentityService.Setup(_ => _.GetUserId()).Returns(userId);
-            taskService.Setup(_ => _.GetAllTimersByUserId(userId)).Returns(tasks);
+            taskService.Setup(_ => _.GetAllTimersByUserId(userId, It.IsAny<int>(), It.IsAny<int>())).Returns(tasks);
             var actual = subject.ExportAllTimersAsXmlByUserId();
 
             Assert.IsInstanceOf(typeof(XmlResult), actual);
@@ -280,7 +310,7 @@ namespace GtdTimerTests.Controllers
         {
             List<TaskDto> tasks = new List<TaskDto>();
             userIdentityService.Setup(_ => _.GetUserId()).Returns(userId);
-            taskService.Setup(_ => _.GetAllStopwatchesByUserId(userId)).Returns(tasks);
+            taskService.Setup(_ => _.GetAllStopwatchesByUserId(userId, It.IsAny<int>(), It.IsAny<int>())).Returns(tasks);
             var actual = subject.ExportAllStopwatchesAsCsvByUserId();
 
             Assert.IsInstanceOf(typeof(CsvResult), actual);
@@ -295,7 +325,7 @@ namespace GtdTimerTests.Controllers
         {
             List<TaskDto> tasks = new List<TaskDto>();
             userIdentityService.Setup(_ => _.GetUserId()).Returns(userId);
-            taskService.Setup(_ => _.GetAllTimersByUserId(userId)).Returns(tasks);
+            taskService.Setup(_ => _.GetAllTimersByUserId(userId, It.IsAny<int>(), It.IsAny<int>())).Returns(tasks);
             var actual = subject.ExportAllTimersAsCsvByUserId();
 
             Assert.IsInstanceOf(typeof(CsvResult), actual);

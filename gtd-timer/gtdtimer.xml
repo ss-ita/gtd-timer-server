@@ -438,17 +438,33 @@
             <param name="taskId">Id of task to reset</param>
             <returns>Result of reseting task from history </returns>
         </member>
-        <member name="M:GtdTimer.Controllers.TasksController.GetAllTimersByUserId">
+        <member name="M:GtdTimer.Controllers.TasksController.GetAllTimersByUserId(System.Int32,System.Int32)">
             <summary>
-            Returns all user's timers.
+            Returns all user's timers by page.
             </summary>
-            <returns>result of getting all user's timers.</returns>
+            <param name="start">Index of first element on current page.</param>
+            <param name="length">Length of current page.</param>
+            <returns>Result of getting all user's timers by page.</returns>
         </member>
-        <member name="M:GtdTimer.Controllers.TasksController.GetAllStopwathesByUserId">
+        <member name="M:GtdTimer.Controllers.TasksController.GetAllStopwatchesByUserId(System.Int32,System.Int32)">
             <summary>
-            Returns all user's stopwatches.
+            Returns all user's stopwatches by page.
             </summary>
-            <returns>result of getting all user's stopwatches.</returns>
+            <param name="start">Index of first element on current page.</param>
+            <param name="length">Length of current page.</param>
+            <returns>Result of getting all user's stopwatches by page.</returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.TasksController.GetAllStopwatchesByUserIdCount">
+            <summary>
+            Returns total number of user's stopwatches.
+            </summary>
+            <returns>Result of getting all user's stopwatches count.</returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.TasksController.GetAllTimersByUserIdCount">
+            <summary>
+            Returns total number of user's timers.
+            </summary>
+            <returns>Result of getting all user's timers count.</returns>
         </member>
         <member name="T:GtdTimer.Controllers.UserController">
             <summary>

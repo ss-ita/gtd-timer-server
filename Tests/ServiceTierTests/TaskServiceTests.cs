@@ -260,6 +260,34 @@ namespace GtdServiceTierTests
         }
 
         /// <summary>
+        /// Get All Timers By User Id Count test.
+        /// </summary>
+        [Test]
+        public void GetAllTimersByUserIdCount()
+        {
+            var taskRepository = new Mock<IRepository<Tasks>>();
+
+            unitOfWork.Setup(_ => _.Tasks).Returns(taskRepository.Object);
+            unitOfWork.Setup(_ => _.Tasks.GetAllEntitiesByFilter(It.IsAny<Func<Tasks, bool>>())).Returns(tasks);
+
+            Assert.AreEqual(subject.GetAllTimersByUserIdCount(userId), tasks.Count);
+        }
+
+        /// <summary>
+        /// Get All Stopwatches By User Id Count test.
+        /// </summary>
+        [Test]
+        public void GetAllStopwatchesByUserIdCount()
+        {
+            var taskRepository = new Mock<IRepository<Tasks>>();
+
+            unitOfWork.Setup(_ => _.Tasks).Returns(taskRepository.Object);
+            unitOfWork.Setup(_ => _.Tasks.GetAllEntitiesByFilter(It.IsAny<Func<Tasks, bool>>())).Returns(tasks);
+
+            Assert.AreEqual(subject.GetAllStopwatchesByUserIdCount(userId), tasks.Count);
+        }
+
+        /// <summary>
         /// Get All Timers By User Id test
         /// </summary>
         [Test]

@@ -17,7 +17,6 @@ using GtdTimerDAL.Entities;
 using GtdTimerDAL.UnitOfWork;
 using ServiceStack.Text;
 using GtdCommon.Constant;
-using System;
 
 namespace GtdServiceTier.Services
 {
@@ -338,22 +337,42 @@ namespace GtdServiceTier.Services
                 .Select(tasks => UnitOfWork.Tasks.GetByID(tasks.Id).ToTaskDto()).ToList();
         }
 
-        public IEnumerable<TaskDto> GetAllTimersByUserId(int userId)
+        public IEnumerable<TaskDto> GetAllTimersByUserId(int userId, int start = 0, int length = int.MaxValue)
         {
             var listOfTasksDto = UnitOfWork.Tasks.GetAllEntitiesByFilter((task) => (task.UserId == userId && task.WatchType == WatchType.Timer))
                 .Select(task => task.ToTaskDto())
+                .Skip(start)
+                .Take(length)
                 .ToList();
 
             return listOfTasksDto;
         }
 
-        public IEnumerable<TaskDto> GetAllStopwatchesByUserId(int userId)
+        public IEnumerable<TaskDto> GetAllStopwatchesByUserId(int userId, int start = 0, int length = int.MaxValue)
         {
             var listOfTasksDto = UnitOfWork.Tasks.GetAllEntitiesByFilter((task) => (task.UserId == userId && task.WatchType == WatchType.Stopwatch))
                 .Select(task => task.ToTaskDto())
+                .Skip(start)
+                .Take(length)
                 .ToList();
 
             return listOfTasksDto;
+        }
+
+        public int GetAllStopwatchesByUserIdCount(int userId)
+        {
+            var stopwatchesCount = UnitOfWork.Tasks.GetAllEntitiesByFilter((task) => (task.UserId == userId && task.WatchType == WatchType.Stopwatch))
+                .Count();
+
+            return stopwatchesCount;
+        }
+
+        public int GetAllTimersByUserIdCount(int userId)
+        {
+            var timersCount = UnitOfWork.Tasks.GetAllEntitiesByFilter((task) => (task.UserId == userId && task.WatchType == WatchType.Timer))
+                .Count();
+
+            return timersCount;
         }
 
         public void madeRecordsFKNull(int taskId)

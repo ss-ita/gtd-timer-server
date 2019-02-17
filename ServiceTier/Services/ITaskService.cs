@@ -139,18 +139,36 @@ namespace GtdServiceTier.Services
         List<TaskDto> GetAllTasksByPresetId(int presetid);
 
         /// <summary>
-        /// Method for getting all timers of chosen user
+        /// Method for getting all timers of chosen user.
         /// </summary>
-        /// <param name="userId">id of chosen user</param>
-        /// <returns>all timers of chosen user</returns>
-        IEnumerable<TaskDto> GetAllTimersByUserId(int userId);
+        /// <param name="userId">Id of current user</param>
+        /// <param name="start">Index of first element on the current page.</param>
+        /// <param name="length">Length of the current page.</param>
+        /// <returns>User's timers on a specific page.</returns>
+        IEnumerable<TaskDto> GetAllTimersByUserId(int userId, int start = 0, int length = int.MaxValue);
 
         /// <summary>
-        /// Method for getting all stopwatches of chosen user
+        ///  Method for getting all stopwatches of chosen user.
         /// </summary>
-        /// <param name="userId">id of chosen user</param>
-        /// <returns>all stopwatches of chosen user</returns>
-        IEnumerable<TaskDto> GetAllStopwatchesByUserId(int userId);
+        /// <param name="userId">Id of current user.</param>
+        /// <param name="start">Index of first element on the current page.</param>
+        /// <param name="length">Length of the current page.</param>
+        /// <returns></returns>
+        IEnumerable<TaskDto> GetAllStopwatchesByUserId(int userId, int start = 0, int length = int.MaxValue);
+
+        /// <summary>
+        /// Method for getting the total number of user's stopwacthes.
+        /// </summary>
+        /// <param name="userId">Id of current user.</param>
+        /// <returns>Count of user's stopwatches.</returns>
+        int GetAllStopwatchesByUserIdCount(int userId);
+
+        /// <summary>
+        /// Method for getting the total number of user's timers.
+        /// </summary>
+        /// <param name="userId">Id of current user.</param>
+        /// <returns>Count of user's timers.</returns>
+        int GetAllTimersByUserIdCount(int userId);
 
         /// <summary>
         /// Method for getting all tasks in specified period of time.
