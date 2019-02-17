@@ -228,7 +228,7 @@
             instance of user identity service
             </summary>
         </member>
-        <member name="M:GtdTimer.Controllers.TasksController.#ctor(GtdServiceTier.Services.ITaskService,GtdServiceTier.Services.IUserIdentityService,Microsoft.AspNetCore.SignalR.IHubContext{GtdTimer.Hubs.TaskHub})">
+        <member name="M:GtdTimer.Controllers.TasksController.#ctor(GtdServiceTier.Services.ITaskService,GtdServiceTier.Services.IUserIdentityService)">
             <summary>
             Initializes a new instance of the <see cref="T:GtdTimer.Controllers.TasksController" /> class.
             </summary>
@@ -545,6 +545,48 @@
             <summary>
             interface for task hub
             </summary>
+        </member>
+        <member name="M:GtdTimer.Hubs.ITaskClient.CreateTask(GtdCommon.ModelsDto.TaskDto)">
+            <summary>
+            This event occurs when create a task.
+            </summary>
+            <param name="model">task model</param>
+            <returns></returns>
+        </member>
+        <member name="M:GtdTimer.Hubs.ITaskClient.StartTask(GtdCommon.ModelsDto.TaskDto)">
+            <summary>
+            This event occurs when start a task.
+            </summary>
+            <param name="model">task model</param>
+            <returns></returns>
+        </member>
+        <member name="M:GtdTimer.Hubs.ITaskClient.PauseTask(GtdCommon.ModelsDto.TaskDto)">
+            <summary>
+            This event occurs when pause a task.
+            </summary>
+            <param name="model">task model</param>
+            <returns></returns>
+        </member>
+        <member name="M:GtdTimer.Hubs.ITaskClient.ResetTask(GtdCommon.ModelsDto.TaskDto)">
+            <summary>
+            This event occurs when reset a task.
+            </summary>
+            <param name="model">task model</param>
+            <returns></returns>
+        </member>
+        <member name="M:GtdTimer.Hubs.ITaskClient.DeleteTask(System.Int32)">
+            <summary>
+            This event occurs when delete a task.
+            </summary>
+            <param name="taskId">task id</param>
+            <returns></returns>
+        </member>
+        <member name="M:GtdTimer.Hubs.ITaskClient.UpdateTask(GtdCommon.ModelsDto.TaskDto)">
+            <summary>
+            This event occurs when update a task.
+            </summary>
+            <param name="model">task model</param>
+            <returns></returns>
         </member>
         <member name="T:GtdTimer.Hubs.TaskHub">
             <summary>

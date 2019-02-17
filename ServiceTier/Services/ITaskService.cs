@@ -108,7 +108,7 @@ namespace GtdServiceTier.Services
         /// Method for creating record
         /// </summary>
         /// <param name="taskRecord">TaskRecord model to create</param>
-        void CreateRecord(TaskRecordDto taskRecord);
+        void CreateRecord(TaskRecordDto taskRecord, int userId);
 
         /// <summary>
         /// Method for getting all records by task id

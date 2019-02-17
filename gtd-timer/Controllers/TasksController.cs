@@ -432,7 +432,7 @@ namespace GtdTimer.Controllers
         public IActionResult CreateRecord([FromBody]TaskRecordDto taskRecord)
         {
             var userId = userIdentityService.GetUserId();
-            taskService.CreateRecord(taskRecord);
+            taskService.CreateRecord(taskRecord, userId);
 
             return Ok();
         }
@@ -469,10 +469,10 @@ namespace GtdTimer.Controllers
         /// </summary>
         /// <param name="taskId">Id of task to reset</param>
         /// <returns>Result of reseting task from history </returns>
-        [HttpGet("[action]/{taskId}")]
-        public IActionResult ResetTaskFromHistory(int taskId)
+        [HttpGet("[action]/{recordId}")]
+        public IActionResult ResetTaskFromHistory(int recordId)
         {
-            var recordToReturn = taskService.ResetTaskFromHistory(taskId);
+            var recordToReturn = taskService.ResetTaskFromHistory(recordId);
 
             return Ok(recordToReturn);
         }

@@ -90,6 +90,7 @@ namespace GtdTimerDAL.Entities
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            builder.Entity<Record>().HasOne(r => r.Task).WithMany().OnDelete(DeleteBehavior.ClientSetNull);
             builder.Entity<UserRole>(userRole =>
             {
                 userRole.HasKey(ur => new { ur.UserId, ur.RoleId });
