@@ -4,7 +4,6 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System.Data.SqlClient;
 using Microsoft.AspNetCore.Mvc;
 
 using GtdCommon.ModelsDto;
@@ -43,6 +42,19 @@ namespace GtdTimer.Controllers
         public IActionResult Login([FromBody] LoginDto model)
         {
             var token = logInService.CreateToken(model);
+
+            return Ok(token);
+        }
+
+        /// <summary>
+        /// Method for logging in with email
+        /// </summary>
+        /// <param name="email">user email</param>
+        /// <returns>result of logging in</returns>
+        [HttpGet("{email}")]
+        public IActionResult LoginWithEmail(string email)
+        {
+            var token = logInService.CreateTokenWithEmail(email);
 
             return Ok(token);
         }

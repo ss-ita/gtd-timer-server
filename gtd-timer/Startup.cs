@@ -80,14 +80,14 @@ namespace GtdTimer
                 options.AddPolicy(
                     "AllowSpecificOrigin",
                     builder => builder.WithOrigins(Cors).AllowAnyHeader().AllowAnyMethod().AllowCredentials());
-        });
+            });
             services.AddDbContext<TimerContext>(opts => opts.UseSqlServer(IoCContainer.Configuration["AzureConnection"]));
             services.AddIdentity<User, Role>().AddEntityFrameworkStores<TimerContext>().AddDefaultTokenProviders();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ILogInService, LogInService>();
             services.AddScoped<IPresetService, PresetService>();
             services.AddScoped<IUsersService, UsersService>();
-            services.AddScoped<ITaskService, TaskService>();
+            services.AddScoped<ITaskService,  TaskService>();
             services.AddScoped<IAlarmService, AlarmService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IUserIdentityService, UserIdentityService>();
