@@ -4,13 +4,15 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System.ComponentModel.DataAnnotations;
+
 namespace GtdTimerDAL.Entities
 {
     /// <summary>
     /// Alarm table
     /// </summary>
     public class Alarm
-    {        
+    {
         /// <summary>
         /// Gets or sets Id column
         /// </summary>
@@ -35,6 +37,12 @@ namespace GtdTimerDAL.Entities
         /// Gets or sets Message column
         /// </summary>
         public string Message { get; set; }
+
+        /// <summary>
+        /// Gets or sets Timestamp column
+        /// </summary>
+        [Timestamp]
+        public byte[] Timestamp { get; set; }
 
         /// <summary>
         /// Gets or sets UserId column

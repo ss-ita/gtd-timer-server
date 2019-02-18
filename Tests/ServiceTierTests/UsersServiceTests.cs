@@ -26,6 +26,7 @@ namespace GtdServiceTierTests
         private readonly IApplicationUserManager<User, int> userManager;
         private Mock<IUnitOfWork> unitOfWork;
         private Mock<ITokenService> tokenService;
+        private Mock<IPresetService> presetService;
         private UsersService subject;
 
         /// <summary>
@@ -36,7 +37,8 @@ namespace GtdServiceTierTests
         {
             unitOfWork = new Mock<IUnitOfWork>();
             tokenService = new Mock<ITokenService>();
-            subject = new UsersService(unitOfWork.Object, tokenService.Object);
+            presetService = new Mock<IPresetService>();
+            subject = new UsersService(unitOfWork.Object, tokenService.Object, presetService.Object);
         }
 
         /// <summary>

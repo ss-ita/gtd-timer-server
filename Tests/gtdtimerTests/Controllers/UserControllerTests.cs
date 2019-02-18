@@ -25,6 +25,7 @@ namespace GtdTimerTests.Controllers
         private const string Token = "User Token";
         private Mock<IUsersService> usersService;
         private Mock<IUserIdentityService> userIdentityService;
+        private Mock<IPresetService> presetService;
 
         private UserController subject;
 
@@ -36,7 +37,8 @@ namespace GtdTimerTests.Controllers
         {
             usersService = new Mock<IUsersService>();
             userIdentityService = new Mock<IUserIdentityService>();
-            subject = new UserController(userIdentityService.Object, usersService.Object);
+            presetService = new Mock<IPresetService>();
+            subject = new UserController(userIdentityService.Object, usersService.Object, presetService.Object);
         }
 
         /// <summary>

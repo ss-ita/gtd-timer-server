@@ -28,13 +28,19 @@ namespace GtdServiceTier.Services
         private readonly ITokenService tokenService;
 
         /// <summary>
+        /// Instance of preset service
+        /// </summary>
+        private readonly IPresetService presetService;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="UsersService" /> class.
         /// </summary>
         /// <param name="unitOfWork">instance of unit of work</param>
         /// <param name="tokenService">instance of token service</param>
-        public UsersService(IUnitOfWork unitOfWork , ITokenService tokenService) : base(unitOfWork)
+        public UsersService(IUnitOfWork unitOfWork , ITokenService tokenService, IPresetService presetService) : base(unitOfWork)
         {
             this.tokenService = tokenService;
+            this.presetService = presetService;
         }
 
         public User Get(int id)
@@ -207,6 +213,7 @@ namespace GtdServiceTier.Services
                 throw new UserNotFoundException();
             }
 
+            presetService.DeleteAllPresetsByUserId(user.Id);
             UnitOfWork.UserManager.DeleteAsync(user).GetAwaiter().GetResult();
 
             UnitOfWork.Save();

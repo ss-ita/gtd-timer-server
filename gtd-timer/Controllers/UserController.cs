@@ -33,14 +33,20 @@ namespace GtdTimer.Controllers
         private readonly IUsersService usersService;
 
         /// <summary>
+        /// instance of preset service
+        /// </summary>
+        private readonly IPresetService presetService;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="UserController" /> class.
         /// </summary>
         /// <param name="userIdentityService">instance of user identity service</param>
         /// <param name="usersService">instance of user service</param>
-        public UserController(IUserIdentityService userIdentityService, IUsersService usersService)
+        public UserController(IUserIdentityService userIdentityService, IUsersService usersService, IPresetService presetService)
         {
             this.userIdentityService = userIdentityService;
             this.usersService = usersService;
+            this.presetService = presetService;
         }
 
         /// <summary>
@@ -126,10 +132,11 @@ namespace GtdTimer.Controllers
         [HttpDelete]
         public ActionResult Delete()
         {
-            var userId = this.userIdentityService.GetUserId();
-            this.usersService.Delete(userId);
+            var userId = userIdentityService.GetUserId();
+            presetService.DeleteAllPresetsByUserId(userId);
+            usersService.Delete(userId);
 
-            return this.Ok();
+            return Ok();
         }
 
         /// <summary>

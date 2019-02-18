@@ -6,6 +6,7 @@
 
 using System;
 using GtdCommon.Constant;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GtdTimerDAL.Entities
 {
@@ -19,6 +20,9 @@ namespace GtdTimerDAL.Entities
         /// </summary>
         public int Id { get; set; }
    
+        public string Name { get; set; }
+
+        public string Description { get; set; }
         /// <summary>
         /// Gets or sets Time when timer was started
         /// </summary>
@@ -47,11 +51,15 @@ namespace GtdTimerDAL.Entities
         /// <summary>
         /// Gets or sets Foreign key that reference to Task
         /// </summary>
-        public int TaskId { get; set; }
+        public int? TaskId { get; set; }
 
+        public int UserId { get; set; }
         /// <summary>
         /// Gets or sets Task that are referenced by this record
         /// </summary>
         public Tasks Task { get; set; }
+
+        [ForeignKey("UserId")]
+        public User User { get; set; }
     }
 }

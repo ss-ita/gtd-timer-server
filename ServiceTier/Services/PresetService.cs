@@ -133,5 +133,15 @@ namespace GtdServiceTier.Services
 
             return listOfPresetsDto;
         }
+
+        public void DeleteAllPresetsByUserId(int userid)
+        {
+            var presets = GetAllCustomPresetsByUserId(userid);
+            foreach (var preset in presets)
+            {
+                UnitOfWork.Presets.Delete(preset.Id);
+                UnitOfWork.Save();
+            }
+        }
     }
 }
