@@ -169,5 +169,24 @@ namespace GtdServiceTierTests
 
             Assert.AreEqual(subject.GetAllCustomPresetsByUserId(userid)[0].PresetName, preset.Name);
         }
+
+        /// <summary>
+        /// Delete All user presets test
+        /// </summary>
+        [Test]
+        public void DeleteAllUserPresets()
+        {
+            var presetRepository = new Mock<IRepository<Preset>>();
+
+            unitOfWork.Setup(_ => _.Presets).Returns(presetRepository.Object);
+            unitOfWork.Setup(_ => _.Presets.GetByID(presetid)).Returns(preset);
+            unitOfWork.Setup(_ => _.Presets.GetAllEntitiesByFilter(It.IsAny<Func<Preset, bool>>())).Returns(presets);
+            unitOfWork.Setup(_ => _.Tasks.GetAllEntities()).Returns(tasks);
+            unitOfWork.Setup(_ => _.PresetTasks.GetAllEntitiesByFilter(It.IsAny<Func<PresetTasks, bool>>())).Returns(presetTasks);
+
+            subject.DeleteAllPresetsByUserId(userid);
+
+            unitOfWork.Verify(_ => _.Save(), Times.AtLeastOnce);
+        }
     }
 }

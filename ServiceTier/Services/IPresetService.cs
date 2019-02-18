@@ -34,6 +34,12 @@ namespace GtdServiceTier.Services
         void DeletePresetById(int presetid);
 
         /// <summary>
+        /// Method for deleting a preset
+        /// </summary>
+        /// <param name="userid"> id of user</param>
+        void DeleteAllPresetsByUserId(int userid);
+
+        /// <summary>
         /// Method for obtaining a preset by id
         /// </summary>
         /// <param name="presetid"> id of preset</param>
