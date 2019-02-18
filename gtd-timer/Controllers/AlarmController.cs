@@ -16,7 +16,7 @@ namespace GtdTimer.Controllers
     /// <summary>
     /// class for alarm controller
     /// </summary>
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     public class AlarmController : ControllerBase
     {
@@ -48,7 +48,7 @@ namespace GtdTimer.Controllers
         [HttpGet("[action]")]
         public IActionResult GetAllAlarmsByUserId()
         {
-            var userId = 218;// this.userIdentityService.GetUserId();
+            var userId = this.userIdentityService.GetUserId();
             var alarms = this.alarmService.GetAllAlarmsByUserId(userId);
 
             return Ok(alarms);
@@ -58,15 +58,14 @@ namespace GtdTimer.Controllers
         /// Creates a alarm.
         /// </summary>
         /// <param name="model">alarm model</param>
-        /// <returns>result id of creating alarm</returns>
+        /// <returns>result model of creating alarm</returns>
         [ValidateModel]
         [HttpPost("[action]")]
         public IActionResult CreateAlarm([FromBody]AlarmDto model)
         {
-            model.UserId = 218;// this.userIdentityService.GetUserId();
+            model.UserId = this.userIdentityService.GetUserId();
             alarmService.CreateAlarm(model);
 
-           // return Ok(model.Id);
             return Ok(model);
         }
 
@@ -74,15 +73,14 @@ namespace GtdTimer.Controllers
         /// Updates the alarm.
         /// </summary>
         /// <param name="model">alarm model</param>
-        /// <returns>result of updating the alarm.</returns>
+        /// <returns>result of updating the alarm</returns>
         [ValidateModel]
         [HttpPut("[action]")]
         public IActionResult UpdateAlarm([FromBody]AlarmDto model)
         {
-            model.UserId = 218;// this.userIdentityService.GetUserId();
+            model.UserId = this.userIdentityService.GetUserId();
             this.alarmService.UpdateAlarm(model);
 
-            //return Ok();
             return Ok(model);
         }
 

@@ -31,11 +31,9 @@ namespace GtdTimerDAL.Extensions
                 IsOn = alarmDto.IsOn,
                 SoundOn = alarmDto.SoundOn,
                 Message = alarmDto.Message,
-                //Timestamp = alarmDto.Timestamp.Split(',').Select(n => Convert.ToByte(n)).ToArray(),
                 UserId = alarmDto.UserId
             };
         }
-
 
         /// <summary>
         /// Convert to alarmDto method
@@ -79,11 +77,21 @@ namespace GtdTimerDAL.Extensions
         /// <param name="alarmDto"> alarmDto model </param>
         public static void ToAlarmDto(this Alarm alarm, AlarmDto alarmDto)
         {
+            alarmDto.Id = alarm.Id;
             alarmDto.CronExpression = alarm.CronExpression;
             alarmDto.IsOn = alarm.IsOn;
             alarmDto.SoundOn = alarm.SoundOn;
             alarmDto.Message = alarm.Message;
-            alarmDto.Timestamp = string.Join(",", alarm.Timestamp);
+            if (alarm.Timestamp != null)
+            {
+                alarmDto.Timestamp = string.Join(",", alarm.Timestamp);
+            }
+            else
+            {
+                alarmDto.Timestamp = "";
+            }
+            alarmDto.IsUpdated = false;
+            //alarmDto.Timestamp = string.Join(",", alarm.Timestamp);
             alarmDto.UserId = alarm.UserId;
         }
     }
