@@ -92,14 +92,14 @@
             Creates a alarm.
             </summary>
             <param name="model">alarm model</param>
-            <returns>result id of creating alarm</returns>
+            <returns>result model of creating alarm</returns>
         </member>
         <member name="M:GtdTimer.Controllers.AlarmController.UpdateAlarm(GtdCommon.ModelsDto.AlarmDto)">
             <summary>
             Updates the alarm.
             </summary>
             <param name="model">alarm model</param>
-            <returns>result of updating the alarm.</returns>
+            <returns>result of updating the alarm</returns>
         </member>
         <member name="M:GtdTimer.Controllers.AlarmController.DeleteAlarm(System.Int32)">
             <summary>

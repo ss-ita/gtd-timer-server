@@ -4,14 +4,16 @@ using GtdTimerDAL.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GtdTimerDAL.Migrations
 {
     [DbContext(typeof(TimerContext))]
-    partial class TimerContextModelSnapshot : ModelSnapshot
+    [Migration("20190213190936_AddTimestampFieldToAlarm")]
+    partial class AddTimestampFieldToAlarm
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -107,27 +109,19 @@ namespace GtdTimerDAL.Migrations
 
                     b.Property<string>("Action");
 
-                    b.Property<string>("Description");
-
                     b.Property<double>("ElapsedTime");
-
-                    b.Property<string>("Name");
 
                     b.Property<DateTime>("StartTime");
 
                     b.Property<DateTime>("StopTime");
 
-                    b.Property<int?>("TaskId");
-
-                    b.Property<int>("UserId");
+                    b.Property<int>("TaskId");
 
                     b.Property<int>("WatchType");
 
                     b.HasKey("Id");
 
                     b.HasIndex("TaskId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Records");
                 });
@@ -267,9 +261,17 @@ namespace GtdTimerDAL.Migrations
 
                     b.Property<int>("RoleId");
 
+                    b.Property<int?>("RoleId1");
+
+                    b.Property<int?>("UserId1");
+
                     b.HasKey("UserId", "RoleId");
 
                     b.HasIndex("RoleId");
+
+                    b.HasIndex("RoleId1");
+
+                    b.HasIndex("UserId1");
 
                     b.ToTable("AspNetUserRoles");
                 });
@@ -384,11 +386,7 @@ namespace GtdTimerDAL.Migrations
                 {
                     b.HasOne("GtdTimerDAL.Entities.Tasks", "Task")
                         .WithMany()
-                        .HasForeignKey("TaskId");
-
-                    b.HasOne("GtdTimerDAL.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("TaskId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -402,15 +400,23 @@ namespace GtdTimerDAL.Migrations
 
             modelBuilder.Entity("GtdTimerDAL.Entities.UserRole", b =>
                 {
+                    b.HasOne("GtdTimerDAL.Entities.Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("GtdTimerDAL.Entities.Role", "Role")
                         .WithMany("UserRoles")
-                        .HasForeignKey("RoleId")
+                        .HasForeignKey("RoleId1");
+
+                    b.HasOne("GtdTimerDAL.Entities.User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("GtdTimerDAL.Entities.User", "User")
                         .WithMany("UserRoles")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("UserId1");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>

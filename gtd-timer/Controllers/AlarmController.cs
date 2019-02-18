@@ -58,7 +58,7 @@ namespace GtdTimer.Controllers
         /// Creates a alarm.
         /// </summary>
         /// <param name="model">alarm model</param>
-        /// <returns>result id of creating alarm</returns>
+        /// <returns>result model of creating alarm</returns>
         [ValidateModel]
         [HttpPost("[action]")]
         public IActionResult CreateAlarm([FromBody]AlarmDto model)
@@ -66,14 +66,14 @@ namespace GtdTimer.Controllers
             model.UserId = this.userIdentityService.GetUserId();
             alarmService.CreateAlarm(model);
 
-            return Ok(model.Id);
+            return Ok(model);
         }
 
         /// <summary>
         /// Updates the alarm.
         /// </summary>
         /// <param name="model">alarm model</param>
-        /// <returns>result of updating the alarm.</returns>
+        /// <returns>result of updating the alarm</returns>
         [ValidateModel]
         [HttpPut("[action]")]
         public IActionResult UpdateAlarm([FromBody]AlarmDto model)
@@ -81,7 +81,7 @@ namespace GtdTimer.Controllers
             model.UserId = this.userIdentityService.GetUserId();
             this.alarmService.UpdateAlarm(model);
 
-            return Ok();
+            return Ok(model);
         }
 
         /// <summary>
