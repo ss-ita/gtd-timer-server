@@ -36,14 +36,6 @@ namespace GtdServiceTier.Services
             UnitOfWork.Alarms.Create(alarm);
             UnitOfWork.Save();
             alarm.ToAlarmDto(alarmDto);
-          /*  alarmDto.Id = alarm.Id;
-            if (alarm.Timestamp != null) {
-                alarmDto.Timestamp = string.Join(",", alarm.Timestamp);
-            } else
-            {
-                alarmDto.Timestamp = "";
-            }
-            alarmDto.IsUpdated = false;*/
         }
 
         public void DeleteAlarmById(int alarmId)
