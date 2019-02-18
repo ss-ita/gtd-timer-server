@@ -59,7 +59,7 @@ namespace GtdTimerDAL.Extensions
         /// Convert to alarmDto method
         /// </summary>
         /// <param name="alarmDto"> alarmDto model </param>
-        /// /// <param name="alarm"> alarm model </param>
+        /// <param name="alarm"> alarm model </param>
         public static void ToAlarm(this AlarmDto alarmDto, Alarm alarm)
         {
             alarm.CronExpression = alarmDto.CronExpression;
@@ -73,7 +73,7 @@ namespace GtdTimerDAL.Extensions
         /// <summary>
         /// Convert to alarmDto method
         /// </summary>
-        /// /// <param name="alarm"> alarm model </param>
+        /// <param name="alarm"> alarm model </param>
         /// <param name="alarmDto"> alarmDto model </param>
         public static void ToAlarmDto(this Alarm alarm, AlarmDto alarmDto)
         {
@@ -91,7 +91,6 @@ namespace GtdTimerDAL.Extensions
                 alarmDto.Timestamp = "";
             }
             alarmDto.IsUpdated = false;
-            //alarmDto.Timestamp = string.Join(",", alarm.Timestamp);
             alarmDto.UserId = alarm.UserId;
         }
     }
