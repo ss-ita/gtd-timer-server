@@ -20,11 +20,6 @@
 
 
   <ItemGroup>
-    <Content Remove="azurekeyvault.json" />
-  </ItemGroup>
-
-
-  <ItemGroup>
     <None Remove="EmailTemplate.html" />
   </ItemGroup>
 
@@ -38,11 +33,6 @@
 
     <Folder Include="wwwroot\" />
 
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <None Include="azurekeyvault.json" />
   </ItemGroup>
 
 

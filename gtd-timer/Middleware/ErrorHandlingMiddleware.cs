@@ -96,6 +96,7 @@ namespace GtdTimer.Middleware
                     exceptionCode = HttpStatusCode.NotFound;
                     break;
                 case UserAlreadyExistsException _:
+                case AlarmUpdateException _:
                     exceptionCode = HttpStatusCode.Conflict;
                     break;
                 case InvalidTokenException _:

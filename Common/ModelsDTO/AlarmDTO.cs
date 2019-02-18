@@ -4,6 +4,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 using System;
+using System.Collections.Generic;
 using System.Xml.Serialization;
 
 namespace GtdCommon.ModelsDto
@@ -38,6 +39,16 @@ namespace GtdCommon.ModelsDto
         /// Gets or sets a value of Message property
         /// </summary>
         public string Message { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value of Timestamp property
+        /// </summary>
+        public string Timestamp { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether property IsUpdated
+        /// </summary>
+        public bool IsUpdated { get; set; }
 
         /// <summary>
         /// Gets or sets a value of user id foreign key property

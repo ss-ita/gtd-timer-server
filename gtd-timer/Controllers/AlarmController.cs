@@ -16,7 +16,7 @@ namespace GtdTimer.Controllers
     /// <summary>
     /// class for alarm controller
     /// </summary>
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     public class AlarmController : ControllerBase
     {
@@ -48,7 +48,7 @@ namespace GtdTimer.Controllers
         [HttpGet("[action]")]
         public IActionResult GetAllAlarmsByUserId()
         {
-            var userId = this.userIdentityService.GetUserId();
+            var userId = 218;// this.userIdentityService.GetUserId();
             var alarms = this.alarmService.GetAllAlarmsByUserId(userId);
 
             return Ok(alarms);
@@ -63,10 +63,11 @@ namespace GtdTimer.Controllers
         [HttpPost("[action]")]
         public IActionResult CreateAlarm([FromBody]AlarmDto model)
         {
-            model.UserId = this.userIdentityService.GetUserId();
+            model.UserId = 218;// this.userIdentityService.GetUserId();
             alarmService.CreateAlarm(model);
 
-            return Ok(model.Id);
+           // return Ok(model.Id);
+            return Ok(model);
         }
 
         /// <summary>
@@ -78,10 +79,11 @@ namespace GtdTimer.Controllers
         [HttpPut("[action]")]
         public IActionResult UpdateAlarm([FromBody]AlarmDto model)
         {
-            model.UserId = this.userIdentityService.GetUserId();
+            model.UserId = 218;// this.userIdentityService.GetUserId();
             this.alarmService.UpdateAlarm(model);
 
-            return Ok();
+            //return Ok();
+            return Ok(model);
         }
 
         /// <summary>
