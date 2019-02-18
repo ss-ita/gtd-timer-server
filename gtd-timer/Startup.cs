@@ -29,6 +29,7 @@ using GtdServiceTier.Services;
 using GtdTimerDAL.Entities;
 using GtdTimerDAL.Repositories;
 using GtdTimerDAL.UnitOfWork;
+using GtdTimer.Hubs;
 
 namespace GtdTimer
 {
@@ -78,7 +79,7 @@ namespace GtdTimer
             {
                 options.AddPolicy(
                     "AllowSpecificOrigin",
-                    builder => builder.WithOrigins(Cors).AllowAnyHeader().AllowAnyMethod());
+                    builder => builder.WithOrigins(Cors).AllowAnyHeader().AllowAnyMethod().AllowCredentials());
             });
             services.AddDbContext<TimerContext>(opts => opts.UseSqlServer(IoCContainer.Configuration["AzureConnection"]));
             services.AddIdentity<User, Role>().AddEntityFrameworkStores<TimerContext>().AddDefaultTokenProviders();
@@ -102,6 +103,7 @@ namespace GtdTimer
             services.AddScoped<IRepository<User>, Repository<User>>();
             services.AddScoped<IApplicationUserManager<User, int>, ApplicationUserManager>();
             services.AddScoped<IUserStore<User, int>, UserStore>();
+            services.AddSignalR();
 
             services.AddAuthentication(opts =>
             {
@@ -173,6 +175,10 @@ namespace GtdTimer
             app.UseHttpsRedirection();
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
             loggerFactory.AddLog4Net(env.ContentRootPath + configuration.GetValue<string>("Log4NetConfigFile:Name"));
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<TaskHub>("/Hubs/Task");
+            });
             app.UseMvc();
         }
     }

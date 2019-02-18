@@ -27,16 +27,15 @@ namespace GtdCommon.Email
         {
             return await IoCContainer.EmailTemplateSender.SendGeneralEmailAsync(
                 new SendEmailDetails
-            {
+                {
                 Content = IoCContainer.Configuration.GetValue<string>("GtdTimerEmailSettings:Content"),
                 IsHTML = true,
                 FromEmail = IoCContainer.Configuration.GetValue<string>("GtdTimerEmailSettings:SendEmailFromEmail"),
-                FromName = IoCContainer.Configuration.GetValue<string>("GtdTimerEmailSettings:SendEmailFromEmail"),
+                FromName = IoCContainer.Configuration.GetValue<string>("GtdTimerEmailSettings:SendEmailFromName"),
                 ToEmail = email,
                 ToName = displayName,
                 Subject = IoCContainer.Configuration.GetValue<string>("GtdTimerEmailSettings:Subject")
-            }, 
-                verificationUrl);
+                }, verificationUrl);
         }
     }
 }

@@ -21,6 +21,13 @@ namespace GtdServiceTier.Services
         string CreateToken(LoginDto model);
 
         /// <summary>
+        /// Method for creating a token for authentication by email
+        /// </summary>
+        /// <param name="email"> user email </param>
+        /// <returns> new token </returns>
+        string CreateTokenWithEmail(string email);
+
+        /// <summary>
         /// Method for creating a token for authentication with google
         /// </summary>
         /// <param name="accessToken"> login model </param>

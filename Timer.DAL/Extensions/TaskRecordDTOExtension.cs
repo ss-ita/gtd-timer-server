@@ -20,19 +20,20 @@ namespace GtdTimerDAL.Extensions
         /// <param name="record">Record variable</param>
         /// <param name="task">Task variable</param>
         /// <returns>Returns TaskRecordDto model</returns>
-        public static TaskRecordDto ToTaskRecord(this Record record, Tasks task)
+        public static TaskRecordDto ToTaskRecord(this Record record)
         {
             TaskRecordDto recordToReturn = new TaskRecordDto
             {
                 Id = record.Id,
-                Name = task.Name,
-                Description = task.Description,
+                Name = record.Name,
+                Description = record.Description,
                 Action = record.Action,
                 StartTime = record.StartTime,
                 StopTime = record.StopTime,
-                TaskId = task.Id,
+                TaskId = record.TaskId,
                 ElapsedTime = record.ElapsedTime,
-                WatchType = record.WatchType
+                WatchType = record.WatchType,
+                UserId = record.UserId
             };
 
             return recordToReturn;
@@ -48,13 +49,15 @@ namespace GtdTimerDAL.Extensions
             Record recordToReturn = new Record
             {
                 Id = record.Id,
-               
+                Name = record.Name,
+                Description = record.Description,
                 Action = record.Action,
                 StartTime = record.StartTime,
                 StopTime = record.StopTime,
                 TaskId = record.TaskId,
                 ElapsedTime = record.ElapsedTime,
                 WatchType = record.WatchType,
+                UserId = record.UserId
             };
            
             return recordToReturn;

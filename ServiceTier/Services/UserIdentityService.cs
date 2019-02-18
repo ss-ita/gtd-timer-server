@@ -6,18 +6,19 @@
 
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
+using System.Security.Principal;
 
 using GtdCommon.Constant;
 
 namespace GtdServiceTier.Services
 {
     /// <summary>
-    /// class which implements i user identity service interface
+    /// Class which implements user identity service interface
     /// </summary>
     public class UserIdentityService : IUserIdentityService
     {
         /// <summary>
-        /// instance of http context accessor
+        /// Instance of http context accessor
         /// </summary>
         private readonly IHttpContextAccessor httpContextAccessor;
 
@@ -32,9 +33,16 @@ namespace GtdServiceTier.Services
 
         public int GetUserId()
         {
-            var identity = (ClaimsIdentity)this.httpContextAccessor.HttpContext.User.Identity;
+            var userId = GetUserId(httpContextAccessor.HttpContext.User.Identity);
 
-            return int.Parse(identity.FindFirst(Constants.ClaimUserId).Value);
+            return userId;
+        }
+
+        public int GetUserId(IIdentity identity)
+        {
+            var claimsIdentity = (ClaimsIdentity)identity;
+
+            return int.Parse(claimsIdentity.FindFirst(Constants.ClaimUserId).Value);
         }
     }
 }

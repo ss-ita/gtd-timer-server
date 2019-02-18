@@ -438,17 +438,33 @@
             <param name="taskId">Id of task to reset</param>
             <returns>Result of reseting task from history </returns>
         </member>
-        <member name="M:GtdTimer.Controllers.TasksController.GetAllTimersByUserId">
+        <member name="M:GtdTimer.Controllers.TasksController.GetAllTimersByUserId(System.Int32,System.Int32)">
             <summary>
-            Returns all user's timers.
+            Returns all user's timers by page.
             </summary>
-            <returns>result of getting all user's timers.</returns>
+            <param name="start">Index of first element on current page.</param>
+            <param name="length">Length of current page.</param>
+            <returns>Result of getting all user's timers by page.</returns>
         </member>
-        <member name="M:GtdTimer.Controllers.TasksController.GetAllStopwathesByUserId">
+        <member name="M:GtdTimer.Controllers.TasksController.GetAllStopwatchesByUserId(System.Int32,System.Int32)">
             <summary>
-            Returns all user's stopwatches.
+            Returns all user's stopwatches by page.
             </summary>
-            <returns>result of getting all user's stopwatches.</returns>
+            <param name="start">Index of first element on current page.</param>
+            <param name="length">Length of current page.</param>
+            <returns>Result of getting all user's stopwatches by page.</returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.TasksController.GetAllStopwatchesByUserIdCount">
+            <summary>
+            Returns total number of user's stopwatches.
+            </summary>
+            <returns>Result of getting all user's stopwatches count.</returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.TasksController.GetAllTimersByUserIdCount">
+            <summary>
+            Returns total number of user's timers.
+            </summary>
+            <returns>Result of getting all user's timers count.</returns>
         </member>
         <member name="T:GtdTimer.Controllers.UserController">
             <summary>
@@ -540,6 +556,74 @@
             Get roles of user
             </summary>
             <returns>roles of chosen user</returns>
+        </member>
+        <member name="T:GtdTimer.Hubs.ITaskClient">
+            <summary>
+            interface for task hub
+            </summary>
+        </member>
+        <member name="M:GtdTimer.Hubs.ITaskClient.CreateTask(GtdCommon.ModelsDto.TaskDto)">
+            <summary>
+            This event occurs when create a task.
+            </summary>
+            <param name="model">task model</param>
+            <returns></returns>
+        </member>
+        <member name="M:GtdTimer.Hubs.ITaskClient.StartTask(GtdCommon.ModelsDto.TaskDto)">
+            <summary>
+            This event occurs when start a task.
+            </summary>
+            <param name="model">task model</param>
+            <returns></returns>
+        </member>
+        <member name="M:GtdTimer.Hubs.ITaskClient.PauseTask(GtdCommon.ModelsDto.TaskDto)">
+            <summary>
+            This event occurs when pause a task.
+            </summary>
+            <param name="model">task model</param>
+            <returns></returns>
+        </member>
+        <member name="M:GtdTimer.Hubs.ITaskClient.ResetTask(GtdCommon.ModelsDto.TaskDto)">
+            <summary>
+            This event occurs when reset a task.
+            </summary>
+            <param name="model">task model</param>
+            <returns></returns>
+        </member>
+        <member name="M:GtdTimer.Hubs.ITaskClient.DeleteTask(System.Int32)">
+            <summary>
+            This event occurs when delete a task.
+            </summary>
+            <param name="taskId">task id</param>
+            <returns></returns>
+        </member>
+        <member name="M:GtdTimer.Hubs.ITaskClient.UpdateTask(GtdCommon.ModelsDto.TaskDto)">
+            <summary>
+            This event occurs when update a task.
+            </summary>
+            <param name="model">task model</param>
+            <returns></returns>
+        </member>
+        <member name="T:GtdTimer.Hubs.TaskHub">
+            <summary>
+            class for task hub
+            </summary>
+        </member>
+        <member name="F:GtdTimer.Hubs.TaskHub.taskService">
+            <summary>
+            Instance of task service
+            </summary>
+        </member>
+        <member name="F:GtdTimer.Hubs.TaskHub.userIdentityService">
+            <summary>
+            Instance of user identity service
+            </summary>
+        </member>
+        <member name="M:GtdTimer.Hubs.TaskHub.#ctor(GtdServiceTier.Services.ITaskService,GtdServiceTier.Services.IUserIdentityService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:GtdTimer.Hubs.TaskHub" /> class.
+            </summary>
+            <param name="taskService">instance of task service</param>
         </member>
         <member name="T:GtdTimer.Middleware.ErrorHandlingMiddleware">
             <summary>
