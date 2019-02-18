@@ -488,7 +488,12 @@
             instance of user service
             </summary>
         </member>
-        <member name="M:GtdTimer.Controllers.UserController.#ctor(GtdServiceTier.Services.IUserIdentityService,GtdServiceTier.Services.IUsersService)">
+        <member name="F:GtdTimer.Controllers.UserController.presetService">
+            <summary>
+            instance of preset service
+            </summary>
+        </member>
+        <member name="M:GtdTimer.Controllers.UserController.#ctor(GtdServiceTier.Services.IUserIdentityService,GtdServiceTier.Services.IUsersService,GtdServiceTier.Services.IPresetService)">
             <summary>
             Initializes a new instance of the <see cref="T:GtdTimer.Controllers.UserController" /> class.
             </summary>
