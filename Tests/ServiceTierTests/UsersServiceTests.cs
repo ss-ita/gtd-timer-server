@@ -91,13 +91,14 @@ namespace GtdServiceTierTests
             User user = new User();
 
             tokenService.Setup(_ => _.GetTokenByUserEmail(UserEmail)).Returns(token);
+            tokenService.Setup(_ => _.DeleteTokenByUserEmail(UserEmail));
             unitOfWork.Setup(_ => _.UserManager.FindByEmailAsync(UserEmail)).ReturnsAsync(user);
             unitOfWork.Setup(_ => _.UserManager.UpdateAsync(user));
 
             unitOfWork.Verify(_ => _.Save(), Times.Never);
-            var exception = Assert.Throws<InvalidTokenException>(() => subject.VerifyToken(UserEmail, UserToken));
+            var exception = Assert.Throws<InvalidTokenException>(() => subject.VerifyEmailToken(UserEmail, UserToken));
 
-            Assert.That(exception.Message, Is.EqualTo("Token has expired"));
+            Assert.That(exception.Message, Is.EqualTo("Token has expired , resend verification email?"));
         }
 
         /// <summary>

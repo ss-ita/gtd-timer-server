@@ -131,6 +131,13 @@
             <param name="model">log in model</param>
             <returns>result of logging in</returns>
         </member>
+        <member name="M:GtdTimer.Controllers.LogInController.LoginWithEmail(System.String)">
+            <summary>
+            Method for logging in with email
+            </summary>
+            <param name="email">user email</param>
+            <returns>result of logging in</returns>
+        </member>
         <member name="M:GtdTimer.Controllers.LogInController.GoogleLogin(GtdCommon.ModelsDto.SocialAuthDto)">
             <summary>
             Method for logging in with google
@@ -492,6 +499,13 @@
             <param name="userEmail">user email</param>
             <param name="emailToken">user confirmation token</param>
             <returns>result of token verification</returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.UserController.ResendVerificationEmail(System.String)">
+            <summary>
+            Resend verification email to user
+            </summary>
+            <param name="userEmail">user email</param>
+            <returns>result of resending verification email</returns>
         </member>
         <member name="M:GtdTimer.Controllers.UserController.Put(GtdCommon.ModelsDto.UpdatePasswordDto)">
             <summary>
