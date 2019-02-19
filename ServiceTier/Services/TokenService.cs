@@ -7,8 +7,9 @@
 using System;
 using System.Linq;
 using System.Web;
-
+using GtdCommon.Constant;
 using GtdCommon.Email;
+using GtdCommon.Exceptions;
 using GtdCommon.IoC;
 using GtdTimerDAL.Entities;
 using GtdTimerDAL.UnitOfWork;
@@ -34,6 +35,20 @@ namespace GtdServiceTier.Services
             UnitOfWork.Save();
         }
 
+        public void DeleteTokenByUserEmail(string email)
+        {
+            var tokenToDelete = GetTokenByUserEmail(email);
+            if (tokenToDelete != null)
+            {
+                UnitOfWork.Tokens.Delete(tokenToDelete);
+                UnitOfWork.Save();
+            }
+            else
+            {
+                throw new InvalidTokenException("Token has expired!");
+            }
+        }
+
         public Token GetTokenByUserEmail(string userEmail)
         {
             var userToken = UnitOfWork.Tokens.GetAllEntitiesByFilter(token => token.UserEmail == userEmail)
@@ -46,7 +61,8 @@ namespace GtdServiceTier.Services
         {
             var emailVerificationCode = UnitOfWork.UserManager.GenerateEmailConfirmationTokenAsync(user.Id).GetAwaiter().GetResult();
 
-            Token token = new Token() { UserEmail = user.Email, TokenValue = emailVerificationCode, TokenCreationTime = DateTime.Now };
+            Token token = new Token() { UserEmail = user.Email, TokenValue = emailVerificationCode,
+                TokenCreationTime = DateTime.Now, TokenExpirationTime = DateTime.Now.AddDays(Constants.EmailTokenExpiration)};
 
             CreateToken(token);
 

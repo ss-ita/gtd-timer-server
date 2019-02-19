@@ -20,6 +20,12 @@ namespace GtdServiceTier.Services
         void CreateToken(Token token);
 
         /// <summary>
+        /// Method for deleting a token by user email
+        /// </summary>
+        /// <param name="userEmail">user email</param>
+        void DeleteTokenByUserEmail(string userEmail);
+
+        /// <summary>
         /// Method for getting token by user id
         /// </summary>
         /// <param name="userEmail">Email of user which token to return</param>

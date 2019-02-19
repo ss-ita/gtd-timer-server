@@ -34,7 +34,13 @@ namespace GtdServiceTier.Services
         /// </summary>
         /// <param name="userId">user id</param>
         /// <param name="emailToken">user confirmation token</param>
-        void VerifyToken(string userId, string emailToken);
+        void VerifyEmailToken(string userId, string emailToken);
+
+        /// <summary>
+        /// Resend verification email to user
+        /// </summary>
+        /// <param name="userEmail">user email</param>
+        void ResendVerificationEmail(string userEmail);
 
         /// <summary>
         /// Method for updating user password

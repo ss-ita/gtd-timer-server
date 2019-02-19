@@ -91,7 +91,21 @@ namespace GtdTimer.Controllers
         [HttpGet("Verify/{userEmail}/{emailToken}")]
         public ActionResult VerifyEmail(string userEmail, string emailToken)
         {
-            this.usersService.VerifyToken(userEmail, emailToken);
+            this.usersService.VerifyEmailToken(userEmail, emailToken);
+
+            return this.Ok();
+        }
+
+        /// <summary>
+        /// Resend verification email to user
+        /// </summary>
+        /// <param name="userEmail">user email</param>
+        /// <returns>result of resending verification email</returns>
+        [AllowAnonymous]
+        [HttpGet("ResendVerificationEmail/{userEmail}")]
+        public ActionResult ResendVerificationEmail(string userEmail)
+        {
+            this.usersService.ResendVerificationEmail(userEmail);
 
             return this.Ok();
         }

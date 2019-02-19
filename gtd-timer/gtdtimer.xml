@@ -521,6 +521,13 @@
             <param name="emailToken">user confirmation token</param>
             <returns>result of token verification</returns>
         </member>
+        <member name="M:GtdTimer.Controllers.UserController.ResendVerificationEmail(System.String)">
+            <summary>
+            Resend verification email to user
+            </summary>
+            <param name="userEmail">user email</param>
+            <returns>result of resending verification email</returns>
+        </member>
         <member name="M:GtdTimer.Controllers.UserController.Put(GtdCommon.ModelsDto.UpdatePasswordDto)">
             <summary>
             Update current user password.
