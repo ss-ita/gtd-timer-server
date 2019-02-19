@@ -15,6 +15,12 @@ namespace GtdCommon.Constant
         Timer
     }
 
+    public enum TokenType
+    {
+        EmailVerification,
+        PasswordRecovery
+    }
+
     /// <summary>
     /// Class for storing contstants
     /// </summary>

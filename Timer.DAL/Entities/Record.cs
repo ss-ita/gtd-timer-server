@@ -54,10 +54,6 @@ namespace GtdTimerDAL.Entities
         public int? TaskId { get; set; }
 
         public int UserId { get; set; }
-        /// <summary>
-        /// Gets or sets Task that are referenced by this record
-        /// </summary>
-        public Tasks Task { get; set; }
 
         [ForeignKey("UserId")]
         public User User { get; set; }

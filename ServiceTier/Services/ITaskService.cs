@@ -129,7 +129,7 @@ namespace GtdServiceTier.Services
         /// </summary>
         /// <param name="taskId">Id of task to reset</param>
         /// <returns>Returns taskRecordDto if task was stopped</returns>
-        TaskRecordDto ResetTaskFromHistory(int taskId);
+        List<TaskRecordDto> ResetTaskFromHistory(int taskId);
 
         /// <summary>
         /// Method for getting all timers by preset id

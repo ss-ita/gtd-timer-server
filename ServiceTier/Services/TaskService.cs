@@ -62,8 +62,7 @@ namespace GtdServiceTier.Services
         {
             var toDelete = UnitOfWork.Tasks.GetByID(taskId);
             if (toDelete != null)
-            {
-                madeRecordsFKNull(toDelete.Id);
+            { 
                 UnitOfWork.Tasks.Delete(toDelete);
                 UnitOfWork.Save();
             }
@@ -245,7 +244,7 @@ namespace GtdServiceTier.Services
             }
         }
 
-        public TaskRecordDto ResetTaskFromHistory(int recordId)
+        public List<TaskRecordDto> ResetTaskFromHistory(int recordId)
         {
             var recordToFind = UnitOfWork.Records.GetByID(recordId);
             var taskToUpdate = UnitOfWork.Tasks.GetByID(recordToFind.TaskId);
@@ -260,7 +259,6 @@ namespace GtdServiceTier.Services
                         Action = "Reset",
                         Name = taskToUpdate.Name,
                         Description = taskToUpdate.Description,
-                        Task = taskToUpdate,
                         TaskId = taskToUpdate.Id,
                         StartTime = taskToUpdate.LastStartTime,
                         StopTime = timeNow,
@@ -273,7 +271,9 @@ namespace GtdServiceTier.Services
                     taskToUpdate.LastStartTime = timeNow;
                     UnitOfWork.Tasks.Update(taskToUpdate);
                     UnitOfWork.Save();
-                    return recordToCreate.ToTaskRecord();
+                    var listToReturn = new List<TaskRecordDto>();
+                    listToReturn.Add(recordToCreate.ToTaskRecord());
+                    return listToReturn;
                 }
                 else
                 {
@@ -303,10 +303,23 @@ namespace GtdServiceTier.Services
                     };
                     UnitOfWork.Tasks.Create(taskToCreate);
                     UnitOfWork.Save();
-                    record.TaskId = taskToCreate.Id;
-                    UnitOfWork.Records.Update(record);
+
+                    var listOfRecordsWithSameTaskId = UnitOfWork.Records.GetAllEntitiesByFilter(rec => rec.TaskId == record.TaskId).ToList();
+                    foreach (var item in listOfRecordsWithSameTaskId)
+                    {
+                        item.TaskId = taskToCreate.Id;
+                    }
+                    foreach (var item in listOfRecordsWithSameTaskId)
+                    {
+                        UnitOfWork.Records.Update(item);
+                    }
                     UnitOfWork.Save();
-                    return record.ToTaskRecord();
+                    var listToReturn = new List<TaskRecordDto>();
+                    foreach (var item in listOfRecordsWithSameTaskId)
+                    {
+                        listToReturn.Add(item.ToTaskRecord());
+                    }
+                    return listToReturn;
                 }
                 else
                 {
@@ -323,10 +336,23 @@ namespace GtdServiceTier.Services
                     };
                     UnitOfWork.Tasks.Create(taskToCreate);
                     UnitOfWork.Save();
-                    record.TaskId = taskToCreate.Id;
-                    UnitOfWork.Records.Update(record);
+
+                    var listOfRecordsWithSameTaskId = UnitOfWork.Records.GetAllEntitiesByFilter(rec => rec.TaskId == record.TaskId);
+                    foreach (var item in listOfRecordsWithSameTaskId)
+                    {
+                        item.TaskId = taskToCreate.Id;
+                    }
+                    foreach (var item in listOfRecordsWithSameTaskId)
+                    {
+                        UnitOfWork.Records.Update(item);
+                    }
                     UnitOfWork.Save();
-                    return record.ToTaskRecord();
+                    var listToReturn = new List<TaskRecordDto>();
+                    foreach (var item in listOfRecordsWithSameTaskId)
+                    {
+                        listToReturn.Add(item.ToTaskRecord());
+                    }
+                    return listToReturn;
                 }
             }
         }
