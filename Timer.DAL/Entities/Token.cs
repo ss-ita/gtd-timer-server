@@ -40,7 +40,7 @@ namespace GtdTimerDAL.Entities
         public DateTime TokenExpirationTime { get; set; }
 
         /// <summary>
-        /// Gets or sets watch type column
+        /// Gets or sets a token type
         /// </summary>
         public TokenType TokenType { get; set; }
     }

@@ -499,6 +499,7 @@
             </summary>
             <param name="userIdentityService">instance of user identity service</param>
             <param name="usersService">instance of user service</param>
+            <param name="presetService">instance of user service</param>
         </member>
         <member name="M:GtdTimer.Controllers.UserController.Get">
             <summary>
@@ -527,6 +528,29 @@
             </summary>
             <param name="userEmail">user email</param>
             <returns>result of resending verification email</returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.UserController.SendPasswordRecoveryEmail(System.String)">
+            <summary>
+            Send password recovery email to user
+            </summary>
+            <param name="userEmail">user email</param>
+            <returns>result of sending password recovery email</returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.UserController.VerifyPasswordRecoveryToken(System.String,System.String)">
+            <summary>
+            Verify password recovery token
+            </summary>
+            <param name="userEmail">user email</param>
+            <param name="recoveryToken">password recovery token</param>
+            <returns>result of verifying password recovery token</returns>
+        </member>
+        <member name="M:GtdTimer.Controllers.UserController.ResetPassword(System.String,System.String)">
+            <summary>
+            Reset user password and set new one
+            </summary>
+            <param name="userEmail">user email</param>
+            <param name="newPassword">new password</param>
+            <returns>result of resetting a password</returns>
         </member>
         <member name="M:GtdTimer.Controllers.UserController.Put(GtdCommon.ModelsDto.UpdatePasswordDto)">
             <summary>

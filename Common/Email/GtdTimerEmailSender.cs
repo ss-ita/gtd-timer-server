@@ -22,20 +22,33 @@ namespace GtdCommon.Email
         /// <param name="displayName">The users display name (typically first name)</param>
         /// <param name="email">The users email to be verified</param>
         /// <param name="verificationUrl">The URL the user needs to click to verify their email</param>
+        /// <param name="buttonText">Text on button</param>
+        /// <param name="titleMessage">Title text</param>
+        /// <param name="mainMessage">The main message of email</param>
         /// <returns>return result of sending email</returns>
-        public static async Task<SendEmailResponse> SendUserVerificationEmailAsync(string displayName, string email, string verificationUrl)
+        public static async Task<SendEmailResponse> SendUserVerificationEmailAsync(
+            string displayName,
+            string email,
+            string verificationUrl,
+            string buttonText,
+            string titleMessage,
+            string mainMessage)
         {
             return await IoCContainer.EmailTemplateSender.SendGeneralEmailAsync(
                 new SendEmailDetails
                 {
-                Content = IoCContainer.Configuration.GetValue<string>("GtdTimerEmailSettings:Content"),
-                IsHTML = true,
-                FromEmail = IoCContainer.Configuration.GetValue<string>("GtdTimerEmailSettings:SendEmailFromEmail"),
-                FromName = IoCContainer.Configuration.GetValue<string>("GtdTimerEmailSettings:SendEmailFromName"),
-                ToEmail = email,
-                ToName = displayName,
-                Subject = IoCContainer.Configuration.GetValue<string>("GtdTimerEmailSettings:Subject")
-                }, verificationUrl);
+                    Content = IoCContainer.Configuration.GetValue<string>("GtdTimerEmailSettings:Content"),
+                    IsHTML = true,
+                    FromEmail = IoCContainer.Configuration.GetValue<string>("GtdTimerEmailSettings:SendEmailFromEmail"),
+                    FromName = IoCContainer.Configuration.GetValue<string>("GtdTimerEmailSettings:SendEmailFromName"),
+                    ToEmail = email,
+                    ToName = displayName,
+                    Subject = IoCContainer.Configuration.GetValue<string>("GtdTimerEmailSettings:Subject")
+                }, 
+                verificationUrl,
+                buttonText,
+                titleMessage,
+                mainMessage);
         }
     }
 }

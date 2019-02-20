@@ -66,7 +66,7 @@ namespace GtdServiceTier.Services
 
         public void VerifyEmailToken(string userEmail, string emailToken)
         {
-            var token = tokenService.GetTokenByUserEmail(userEmail);
+            var token = tokenService.GetTokenByUserEmail(userEmail, TokenType.EmailVerification);
 
             if (token == null)
             {
@@ -85,7 +85,7 @@ namespace GtdServiceTier.Services
             if (result)
             {
                 user.EmailConfirmed = true;
-                tokenService.DeleteTokenByUserEmail(userEmail);
+                tokenService.DeleteTokenByUserEmail(userEmail, TokenType.EmailVerification);
                 UnitOfWork.UserManager.UpdateAsync(user).GetAwaiter().GetResult();
                 UnitOfWork.Save();
             }
@@ -101,8 +101,57 @@ namespace GtdServiceTier.Services
                 throw new UserNotFoundException();
             }
 
-            tokenService.DeleteTokenByUserEmail(userEmail);
+            tokenService.DeleteTokenByUserEmail(userEmail, TokenType.EmailVerification);
             tokenService.SendUserVerificationToken(user);
+        }
+
+        public void SendPasswordRecoveryEmail(string userEmail)
+        {
+            var user = UnitOfWork.UserManager.FindByEmailAsync(userEmail).GetAwaiter().GetResult();
+
+            if (user == null)
+            {
+                throw new UserNotFoundException();
+            }
+
+            var token = tokenService.GetTokenByUserEmail(userEmail, TokenType.PasswordRecovery);
+
+            if (token != null)
+            {
+                tokenService.DeleteTokenByUserEmail(userEmail, TokenType.PasswordRecovery);
+            }
+
+            tokenService.SendUserRecoveryToken(user);
+        }
+
+        public void VerifyPasswordRecoveryToken(string userEmail, string recoveryToken)
+        {
+            var token = tokenService.GetTokenByUserEmail(userEmail, TokenType.PasswordRecovery);
+
+            if (token == null || DateTime.Now > token.TokenExpirationTime)
+            {
+                throw new InvalidTokenException("Token has expired");
+            }
+
+            var user = UnitOfWork.UserManager.FindByEmailAsync(userEmail).GetAwaiter().GetResult();
+
+            var result = token.TokenValue == recoveryToken ? true : false;
+
+            if (result)
+            {
+                tokenService.DeleteTokenByUserEmail(userEmail, TokenType.PasswordRecovery);
+            }
+            else throw new InvalidTokenException("Token has expired");
+        }
+
+        public void ResetPassword(string userEmail, string newPassword)
+        {
+            var user = UnitOfWork.UserManager.FindByEmailAsync(userEmail).GetAwaiter().GetResult();
+
+            user.PasswordHash = UnitOfWork.UserManager.PasswordHasher.HashPassword(newPassword);
+
+            UnitOfWork.UserManager.UpdateAsync(user).GetAwaiter().GetResult();
+            UnitOfWork.Save();
         }
 
         public void UpdatePassword(int id, UpdatePasswordDto model)

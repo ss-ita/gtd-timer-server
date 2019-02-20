@@ -35,9 +35,9 @@ namespace GtdServiceTier.Services
             UnitOfWork.Save();
         }
 
-        public void DeleteTokenByUserEmail(string email)
+        public void DeleteTokenByUserEmail(string email, TokenType tokenType)
         {
-            var tokenToDelete = GetTokenByUserEmail(email);
+            var tokenToDelete = GetTokenByUserEmail(email, tokenType);
             if (tokenToDelete != null)
             {
                 UnitOfWork.Tokens.Delete(tokenToDelete);
@@ -49,9 +49,9 @@ namespace GtdServiceTier.Services
             }
         }
 
-        public Token GetTokenByUserEmail(string userEmail)
+        public Token GetTokenByUserEmail(string userEmail , TokenType tokenType)
         {
-            var userToken = UnitOfWork.Tokens.GetAllEntitiesByFilter(token => token.UserEmail == userEmail)
+            var userToken = UnitOfWork.Tokens.GetAllEntitiesByFilter(token => token.UserEmail == userEmail && token.TokenType == tokenType)
                 .Select(token => token);
 
             return userToken.FirstOrDefault();
@@ -61,16 +61,56 @@ namespace GtdServiceTier.Services
         {
             var emailVerificationCode = UnitOfWork.UserManager.GenerateEmailConfirmationTokenAsync(user.Id).GetAwaiter().GetResult();
 
-            Token token = new Token() { UserEmail = user.Email, TokenValue = emailVerificationCode,
-                TokenCreationTime = DateTime.Now, TokenExpirationTime = DateTime.Now.AddDays(Constants.EmailTokenExpiration)};
+            Token token = new Token()
+            {
+                UserEmail = user.Email,
+                TokenValue = emailVerificationCode,
+                TokenCreationTime = DateTime.Now,
+                TokenExpirationTime = DateTime.Now.AddDays(Constants.EmailTokenExpiration),
+                TokenType = TokenType.EmailVerification
+            };
 
             CreateToken(token);
 
             var host = Environment.GetEnvironmentVariable("AzureCors") ?? IoCContainer.Configuration["Origins"];
 
-            var confirmationUrl = $"{host}/confirm-email/{user.Email}/{HttpUtility.UrlEncode(emailVerificationCode)}";
+            var confirmationUrl = $"{host}/{Constants.ConfirmEmail}/{user.Email}/{HttpUtility.UrlEncode(emailVerificationCode)}";
 
-            GtdTimerEmailSender.SendUserVerificationEmailAsync(user.UserName, user.Email, confirmationUrl).GetAwaiter().GetResult();
+            SendUserVerificationEmail(user, confirmationUrl);
+        }
+
+        public void SendUserRecoveryToken(User user)
+        {
+            var passwordRecoveryCode = UnitOfWork.UserManager.GeneratePasswordResetTokenAsync(user.Id).GetAwaiter().GetResult();
+
+            Token token = new Token()
+            {
+                UserEmail = user.Email,
+                TokenValue = passwordRecoveryCode,
+                TokenCreationTime = DateTime.Now,
+                TokenExpirationTime = DateTime.Now.AddHours(Constants.PasswordRecoveryTokenExpiration),
+                TokenType = TokenType.PasswordRecovery
+            };
+
+            CreateToken(token);
+
+            var host = Environment.GetEnvironmentVariable("AzureCors") ?? IoCContainer.Configuration["Origins"];
+
+            var passwordRecoveryUrl = $"{host}/{Constants.PasswordRecovery}/{user.Email}/{HttpUtility.UrlEncode(passwordRecoveryCode)}";
+
+            SendPasswordRecoveryEmail(user, passwordRecoveryUrl);
+        }
+
+        public void SendUserVerificationEmail(User user, string confirmationUrl)
+        {
+            GtdTimerEmailSender.SendUserVerificationEmailAsync(user.UserName, user.Email, confirmationUrl,
+                Constants.VerifyEmailButton, Constants.VerifyEmailTitle, Constants.VerifyEmailMessage).GetAwaiter().GetResult();
+        }
+
+        public void SendPasswordRecoveryEmail(User user, string passwordRecoveryUrl)
+        {
+            GtdTimerEmailSender.SendUserVerificationEmailAsync(user.UserName, user.Email, passwordRecoveryUrl,
+                Constants.PasswordResetButton , Constants.PasswordResetTitle, Constants.PasswordResetMessage).GetAwaiter().GetResult();
         }
     }
 }

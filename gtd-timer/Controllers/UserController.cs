@@ -42,6 +42,7 @@ namespace GtdTimer.Controllers
         /// </summary>
         /// <param name="userIdentityService">instance of user identity service</param>
         /// <param name="usersService">instance of user service</param>
+        /// <param name="presetService">instance of user service</param>
         public UserController(IUserIdentityService userIdentityService, IUsersService usersService, IPresetService presetService)
         {
             this.userIdentityService = userIdentityService;
@@ -106,6 +107,50 @@ namespace GtdTimer.Controllers
         public ActionResult ResendVerificationEmail(string userEmail)
         {
             this.usersService.ResendVerificationEmail(userEmail);
+
+            return this.Ok();
+        }
+
+        /// <summary>
+        /// Send password recovery email to user
+        /// </summary>
+        /// <param name="userEmail">user email</param>
+        /// <returns>result of sending password recovery email</returns>
+        [AllowAnonymous]
+        [HttpGet("SendPasswordRecoveryEmail/{userEmail}")]
+        public ActionResult SendPasswordRecoveryEmail(string userEmail)
+        {
+            this.usersService.SendPasswordRecoveryEmail(userEmail);
+
+            return this.Ok();
+        }
+
+        /// <summary>
+        /// Verify password recovery token
+        /// </summary>
+        /// <param name="userEmail">user email</param>
+        /// <param name="recoveryToken">password recovery token</param>
+        /// <returns>result of verifying password recovery token</returns>
+        [AllowAnonymous]
+        [HttpGet("VerifyPasswordRecoveryToken/{userEmail}/{recoveryToken}")]
+        public ActionResult VerifyPasswordRecoveryToken(string userEmail, string recoveryToken)
+        {
+            this.usersService.VerifyPasswordRecoveryToken(userEmail, recoveryToken);
+
+            return this.Ok();
+        }
+
+        /// <summary>
+        /// Reset user password and set new one
+        /// </summary>
+        /// <param name="userEmail">user email</param>
+        /// <param name="newPassword">new password</param>
+        /// <returns>result of resetting a password</returns>
+        [AllowAnonymous]
+        [HttpGet("ResetPassword/{userEmail}/{newPassword}")]
+        public ActionResult ResetPassword(string userEmail, string newPassword)
+        {
+            this.usersService.ResetPassword(userEmail, newPassword);
 
             return this.Ok();
         }

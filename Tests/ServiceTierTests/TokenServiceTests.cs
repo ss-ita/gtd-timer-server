@@ -13,6 +13,7 @@ using GtdServiceTier.Services;
 using GtdTimerDAL.Entities;
 using GtdTimerDAL.Repositories;
 using GtdTimerDAL.UnitOfWork;
+using GtdCommon.Constant;
 
 namespace GtdServiceTierTests
 {
@@ -62,7 +63,7 @@ namespace GtdServiceTierTests
             unitOfWork.Setup(_ => _.Tokens).Returns(tokenRepository.Object);
             unitOfWork.Setup(_ => _.Tokens.GetAllEntitiesByFilter(It.IsAny<Func<Token, bool>>())).Returns(tokens);
 
-            Assert.AreEqual(subject.GetTokenByUserEmail(UserEmail).Id, token.Id);
+            Assert.AreEqual(subject.GetTokenByUserEmail(UserEmail, TokenType.EmailVerification).Id, token.Id);
         }
     }
 }

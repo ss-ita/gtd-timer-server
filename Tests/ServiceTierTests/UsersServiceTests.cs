@@ -15,6 +15,7 @@ using GtdServiceTier.Services;
 using GtdTimerDAL.Entities;
 using GtdTimerDAL.Repositories;
 using GtdTimerDAL.UnitOfWork;
+using GtdCommon.Constant;
 
 namespace GtdServiceTierTests
 {
@@ -92,8 +93,8 @@ namespace GtdServiceTierTests
             Token token = new Token();
             User user = new User();
 
-            tokenService.Setup(_ => _.GetTokenByUserEmail(UserEmail)).Returns(token);
-            tokenService.Setup(_ => _.DeleteTokenByUserEmail(UserEmail));
+            tokenService.Setup(_ => _.GetTokenByUserEmail(UserEmail, TokenType.EmailVerification)).Returns(token);
+            tokenService.Setup(_ => _.DeleteTokenByUserEmail(UserEmail, TokenType.EmailVerification));
             unitOfWork.Setup(_ => _.UserManager.FindByEmailAsync(UserEmail)).ReturnsAsync(user);
             unitOfWork.Setup(_ => _.UserManager.UpdateAsync(user));
 
