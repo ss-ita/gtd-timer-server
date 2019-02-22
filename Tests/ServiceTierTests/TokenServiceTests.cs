@@ -52,6 +52,22 @@ namespace GtdServiceTierTests
         }
 
         /// <summary>
+        /// Delete token test
+        /// </summary>
+        [Test]
+        public void DeleteTokenByUserEmail()
+        {
+            Token token = new Token();
+            var tokenRepository = new Mock<IRepository<Token>>();
+
+            unitOfWork.Setup(_ => _.Tokens).Returns(tokenRepository.Object);
+            unitOfWork.Setup(_ => _.Tokens.GetAllEntitiesByFilter(It.IsAny<Func<Token, bool>>())).Returns(tokens);
+            subject.DeleteTokenByUserEmail(UserEmail, TokenType.EmailVerification);
+
+            unitOfWork.Verify(_ => _.Save(), Times.Once);
+        }
+
+        /// <summary>
         /// Get token by user email test
         /// </summary>
         [Test]
