@@ -22,7 +22,7 @@ namespace GtdServiceTierTests
     public class AlarmServiceTests
     {
         private readonly int userId = 1;
-        private Alarm alarm = new Alarm { Id = 1, CronExpression = "0 15 14 * * ? *", UserId = 1, Timestamp = new byte[] { 0,0,0,0,12,14} };
+        private Alarm alarm = new Alarm { Id = 1, CronExpression = "0 15 14 * * ? *", UserId = 1, Timestamp = new byte[] { 0, 0, 0, 0, 12, 14 } };
         private List<Alarm> alarms = new List<Alarm>();
         private Mock<IUnitOfWork> unitOfWork;
         private AlarmService subject;
@@ -44,7 +44,7 @@ namespace GtdServiceTierTests
         [Test]
         public void CreateAlarm()
         {
-            AlarmDto alarm = new AlarmDto() { Timestamp = ""};
+            AlarmDto alarm = new AlarmDto() { Timestamp = string.Empty };
             var alarmRepository = new Mock<IRepository<Alarm>>();
             
             unitOfWork.Setup(_ => _.Alarms).Returns(alarmRepository.Object);

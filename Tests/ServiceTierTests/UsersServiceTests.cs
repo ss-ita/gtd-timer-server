@@ -168,7 +168,7 @@ namespace GtdServiceTierTests
         [Test]
         public void ResetPassword()
         {
-            User user = new User ();
+            User user = new User();
 
             unitOfWork.Setup(_ => _.UserManager.FindByEmailAsync(UserEmail)).ReturnsAsync(user);
             unitOfWork.Setup(_ => _.UserManager.PasswordHasher.HashPassword(NewPassword)).Returns(HashPassword);

@@ -18,7 +18,6 @@ namespace GtdTimerDAL.Extensions
         /// Convert to TaskRecord method
         /// </summary>
         /// <param name="record">Record variable</param>
-        /// <param name="task">Task variable</param>
         /// <returns>Returns TaskRecordDto model</returns>
         public static TaskRecordDto ToTaskRecord(this Record record)
         {

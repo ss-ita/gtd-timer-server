@@ -108,6 +108,7 @@ namespace GtdServiceTier.Services
         /// Method for creating record
         /// </summary>
         /// <param name="taskRecord">TaskRecord model to create</param>
+        /// <param name="userId">id of user for choosen record</param>
         void CreateRecord(TaskRecordDto taskRecord, int userId);
 
         /// <summary>
@@ -153,7 +154,7 @@ namespace GtdServiceTier.Services
         /// <param name="userId">Id of current user.</param>
         /// <param name="start">Index of first element on the current page.</param>
         /// <param name="length">Length of the current page.</param>
-        /// <returns></returns>
+        /// <returns>List of all stopwatches of choosen user</returns>
         IEnumerable<TaskDto> GetAllStopwatchesByUserId(int userId, int start = 0, int length = int.MaxValue);
 
         /// <summary>

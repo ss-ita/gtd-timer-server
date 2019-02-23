@@ -34,7 +34,7 @@ namespace GtdTimerDAL.Repositories
         IRepository<Role> Roles { get; set; }
 
         /// <summary>
-        /// Used to hash/verify passwords
+        /// Gets or sets mean to hash/verify passwords
         /// </summary>
         IPasswordHasher PasswordHasher { get; set; }
 

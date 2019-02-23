@@ -5,8 +5,8 @@
 //-----------------------------------------------------------------------
 
 using System;
-using GtdCommon.Constant;
 using System.ComponentModel.DataAnnotations.Schema;
+using GtdCommon.Constant;
 
 namespace GtdTimerDAL.Entities
 {
@@ -19,10 +19,17 @@ namespace GtdTimerDAL.Entities
         /// Gets or sets Primary key for Record
         /// </summary>
         public int Id { get; set; }
-   
+
+        /// <summary>
+        /// Gets or sets Name for Record
+        /// </summary>
         public string Name { get; set; }
 
+        /// <summary>
+        /// Gets or sets Description for Record
+        /// </summary>
         public string Description { get; set; }
+
         /// <summary>
         /// Gets or sets Time when timer was started
         /// </summary>
@@ -53,8 +60,14 @@ namespace GtdTimerDAL.Entities
         /// </summary>
         public int? TaskId { get; set; }
 
+        /// <summary>
+        /// Gets or sets Foreign key that reference to Users
+        /// </summary>
         public int UserId { get; set; }
 
+        /// <summary>
+        /// Gets or sets Foreign key that reference to Users
+        /// </summary>
         [ForeignKey("UserId")]
         public User User { get; set; }
     }
