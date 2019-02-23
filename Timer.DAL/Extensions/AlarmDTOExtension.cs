@@ -88,8 +88,9 @@ namespace GtdTimerDAL.Extensions
             }
             else
             {
-                alarmDto.Timestamp = "";
+                alarmDto.Timestamp = string.Empty;
             }
+
             alarmDto.IsUpdated = false;
             alarmDto.UserId = alarm.UserId;
         }

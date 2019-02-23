@@ -467,7 +467,7 @@ namespace GtdTimer.Controllers
         /// <summary>
         /// Reset and run task 
         /// </summary>
-        /// <param name="taskId">Id of task to reset</param>
+        /// <param name="recordId">Id of record</param>
         /// <returns>Result of reseting task from history </returns>
         [HttpGet("[action]/{recordId}")]
         public IActionResult ResetTaskFromHistory(int recordId)

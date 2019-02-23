@@ -22,7 +22,7 @@ namespace GtdServiceTier.Services
         /// <summary>
         /// Method for getting id of current user
         /// </summary>
-        /// <param name="identity">identity</param>
+        /// <param name="identity">identity framework</param>
         /// <returns>id of current user</returns>
         int GetUserId(IIdentity identity);
     }

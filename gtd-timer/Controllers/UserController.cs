@@ -42,7 +42,7 @@ namespace GtdTimer.Controllers
         /// </summary>
         /// <param name="userIdentityService">instance of user identity service</param>
         /// <param name="usersService">instance of user service</param>
-        /// <param name="presetService">instance of user service</param>
+        /// <param name="presetService">instance of preset service</param>
         public UserController(IUserIdentityService userIdentityService, IUsersService usersService, IPresetService presetService)
         {
             this.userIdentityService = userIdentityService;
@@ -57,14 +57,14 @@ namespace GtdTimer.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var userId = this.userIdentityService.GetUserId();
-            var user = this.usersService.Get(userId);
+            var userId = userIdentityService.GetUserId();
+            var user = usersService.Get(userId);
             if (user == null)
             {
                 throw new UserNotFoundException();
             }
 
-            return this.Ok(user);
+            return Ok(user);
         }
 
         /// <summary>
@@ -77,9 +77,9 @@ namespace GtdTimer.Controllers
         [HttpPost]
         public ActionResult Post([FromBody]UserDto model)
         {
-            this.usersService.Create(model);
+            usersService.Create(model);
 
-            return this.Ok();
+            return Ok();
         }
 
         /// <summary>
@@ -92,9 +92,9 @@ namespace GtdTimer.Controllers
         [HttpGet("Verify/{userEmail}/{emailToken}")]
         public ActionResult VerifyEmail(string userEmail, string emailToken)
         {
-            this.usersService.VerifyEmailToken(userEmail, emailToken);
+            usersService.VerifyEmailToken(userEmail, emailToken);
 
-            return this.Ok();
+            return Ok();
         }
 
         /// <summary>
@@ -106,9 +106,9 @@ namespace GtdTimer.Controllers
         [HttpGet("ResendVerificationEmail/{userEmail}")]
         public ActionResult ResendVerificationEmail(string userEmail)
         {
-            this.usersService.ResendVerificationEmail(userEmail);
+            usersService.ResendVerificationEmail(userEmail);
 
-            return this.Ok();
+            return Ok();
         }
 
         /// <summary>
@@ -120,9 +120,9 @@ namespace GtdTimer.Controllers
         [HttpGet("SendPasswordRecoveryEmail/{userEmail}")]
         public ActionResult SendPasswordRecoveryEmail(string userEmail)
         {
-            this.usersService.SendPasswordRecoveryEmail(userEmail);
+            usersService.SendPasswordRecoveryEmail(userEmail);
 
-            return this.Ok();
+            return Ok();
         }
 
         /// <summary>
@@ -135,9 +135,9 @@ namespace GtdTimer.Controllers
         [HttpGet("VerifyPasswordRecoveryToken/{userEmail}/{recoveryToken}")]
         public ActionResult VerifyPasswordRecoveryToken(string userEmail, string recoveryToken)
         {
-            this.usersService.VerifyPasswordRecoveryToken(userEmail, recoveryToken);
+            usersService.VerifyPasswordRecoveryToken(userEmail, recoveryToken);
 
-            return this.Ok();
+            return Ok();
         }
 
         /// <summary>
@@ -150,9 +150,9 @@ namespace GtdTimer.Controllers
         [HttpGet("ResetPassword/{userEmail}/{newPassword}")]
         public ActionResult ResetPassword(string userEmail, string newPassword)
         {
-            this.usersService.ResetPassword(userEmail, newPassword);
+            usersService.ResetPassword(userEmail, newPassword);
 
-            return this.Ok();
+            return Ok();
         }
 
         /// <summary>
@@ -164,10 +164,10 @@ namespace GtdTimer.Controllers
         [HttpPut]
         public ActionResult Put([FromBody]UpdatePasswordDto model)
         {
-            var userId = this.userIdentityService.GetUserId();
-            this.usersService.UpdatePassword(userId, model);
+            var userId = userIdentityService.GetUserId();
+            usersService.UpdatePassword(userId, model);
 
-            return this.Ok();
+            return Ok();
         }
 
         /// <summary>
@@ -195,7 +195,7 @@ namespace GtdTimer.Controllers
         {
             usersService.AddToRole(model);
 
-            return this.Ok();
+            return Ok();
         }
 
         /// <summary>
@@ -239,7 +239,7 @@ namespace GtdTimer.Controllers
             var userId = userIdentityService.GetUserId();
             var emailsList = usersService.GetUsersEmails(roleName, userId);
 
-            return this.Ok(emailsList);
+            return Ok(emailsList);
         }
 
         /// <summary>

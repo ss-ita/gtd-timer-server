@@ -112,7 +112,6 @@ namespace GtdServiceTier.Services
         public void ResetTask(TaskDto model)
         {
             model.ElapsedTime = 0;
-            model.Goal = null;
             model.LastStartTime = model.LastStartTime.Date;
             model.IsRunning = false;
 
@@ -271,8 +270,10 @@ namespace GtdServiceTier.Services
                     taskToUpdate.LastStartTime = timeNow;
                     UnitOfWork.Tasks.Update(taskToUpdate);
                     UnitOfWork.Save();
-                    var listToReturn = new List<TaskRecordDto>();
-                    listToReturn.Add(recordToCreate.ToTaskRecord());
+                    var listToReturn = new List<TaskRecordDto>
+                    {
+                        recordToCreate.ToTaskRecord()
+                    };
                     return listToReturn;
                 }
                 else
@@ -401,7 +402,7 @@ namespace GtdServiceTier.Services
             return timersCount;
         }
 
-        public void madeRecordsFKNull(int taskId)
+        public void MadeRecordsFKNull(int taskId)
         {
             var listOfRecords = UnitOfWork.Records.GetAllEntitiesByFilter((rec) => rec.TaskId == taskId);
             foreach (var item in listOfRecords)

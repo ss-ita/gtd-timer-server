@@ -442,7 +442,7 @@
             <summary>
             Reset and run task 
             </summary>
-            <param name="taskId">Id of task to reset</param>
+            <param name="recordId">Id of record</param>
             <returns>Result of reseting task from history </returns>
         </member>
         <member name="M:GtdTimer.Controllers.TasksController.GetAllTimersByUserId(System.Int32,System.Int32)">
@@ -499,7 +499,7 @@
             </summary>
             <param name="userIdentityService">instance of user identity service</param>
             <param name="usersService">instance of user service</param>
-            <param name="presetService">instance of user service</param>
+            <param name="presetService">instance of preset service</param>
         </member>
         <member name="M:GtdTimer.Controllers.UserController.Get">
             <summary>
@@ -610,42 +610,42 @@
             This event occurs when create a task.
             </summary>
             <param name="model">task model</param>
-            <returns></returns>
+            <returns>Result of creating new task</returns>
         </member>
         <member name="M:GtdTimer.Hubs.ITaskClient.StartTask(GtdCommon.ModelsDto.TaskDto)">
             <summary>
             This event occurs when start a task.
             </summary>
             <param name="model">task model</param>
-            <returns></returns>
+            <returns>Result of starting task</returns>
         </member>
         <member name="M:GtdTimer.Hubs.ITaskClient.PauseTask(GtdCommon.ModelsDto.TaskDto)">
             <summary>
             This event occurs when pause a task.
             </summary>
             <param name="model">task model</param>
-            <returns></returns>
+            <returns>Result of pausing task</returns>
         </member>
         <member name="M:GtdTimer.Hubs.ITaskClient.ResetTask(GtdCommon.ModelsDto.TaskDto)">
             <summary>
             This event occurs when reset a task.
             </summary>
             <param name="model">task model</param>
-            <returns></returns>
+            <returns>Result of reseting task</returns>
         </member>
         <member name="M:GtdTimer.Hubs.ITaskClient.DeleteTask(System.Int32)">
             <summary>
             This event occurs when delete a task.
             </summary>
             <param name="taskId">task id</param>
-            <returns></returns>
+            <returns>Result of deleting task</returns>
         </member>
         <member name="M:GtdTimer.Hubs.ITaskClient.UpdateTask(GtdCommon.ModelsDto.TaskDto)">
             <summary>
             This event occurs when update a task.
             </summary>
             <param name="model">task model</param>
-            <returns></returns>
+            <returns>Result of updating task</returns>
         </member>
         <member name="T:GtdTimer.Hubs.TaskHub">
             <summary>
@@ -667,6 +667,68 @@
             Initializes a new instance of the <see cref="T:GtdTimer.Hubs.TaskHub" /> class.
             </summary>
             <param name="taskService">instance of task service</param>
+            <param name="userIdentityService">instance of user identity service</param>
+        </member>
+        <member name="M:GtdTimer.Hubs.TaskHub.CreateTask(GtdCommon.ModelsDto.TaskDto)">
+            <summary>
+            This event occurs when create a task.
+            </summary>
+            <param name="model">task model</param>
+            <returns>Result of creating new task</returns>
+        </member>
+        <member name="M:GtdTimer.Hubs.TaskHub.StartTask(GtdCommon.ModelsDto.TaskDto)">
+            <summary>
+            This event occurs when start a task.
+            </summary>
+            <param name="model">task model</param>
+            <returns>Result of starting task</returns>
+        </member>
+        <member name="M:GtdTimer.Hubs.TaskHub.PauseTask(GtdCommon.ModelsDto.TaskDto)">
+            <summary>
+            This event occurs when pause a task.
+            </summary>
+            <param name="model">task model</param>
+            <returns>Result of pausing task</returns>
+        </member>
+        <member name="M:GtdTimer.Hubs.TaskHub.ResetTask(GtdCommon.ModelsDto.TaskDto)">
+            <summary>
+            This event occurs when reset a task.
+            </summary>
+            <param name="model">task model</param>
+            <returns>Result of reseting task</returns>
+        </member>
+        <member name="M:GtdTimer.Hubs.TaskHub.DeleteTask(System.Int32)">
+            <summary>
+            This event occurs when delete a task.
+            </summary>
+            <param name="taskId">task id</param>
+            <returns>Result of deleting task</returns>
+        </member>
+        <member name="M:GtdTimer.Hubs.TaskHub.UpdateTask(GtdCommon.ModelsDto.TaskDto)">
+            <summary>
+            This event occurs when update a task.
+            </summary>
+            <param name="model">task model</param>
+            <returns>Result of updating task</returns>
+        </member>
+        <member name="M:GtdTimer.Hubs.TaskHub.OnConnectedAsync">
+            <summary>
+            Method for connecting to hub
+            </summary>
+            <returns>result of connecting to hub</returns>
+        </member>
+        <member name="M:GtdTimer.Hubs.TaskHub.OnDisconnectedAsync(System.Exception)">
+            <summary>
+            Method for disconnecting from hub
+            </summary>
+            <param name="exception">exeption result of disconecting from hub</param>
+            <returns>result of disconnecting from hub</returns>
+        </member>
+        <member name="M:GtdTimer.Hubs.TaskHub.GetUserId">
+            <summary>
+            Method for getting user id
+            </summary>
+            <returns>user id</returns>
         </member>
         <member name="T:GtdTimer.Middleware.ErrorHandlingMiddleware">
             <summary>
