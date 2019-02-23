@@ -432,7 +432,7 @@ namespace GtdTimer.Controllers
         public IActionResult CreateRecord([FromBody]TaskRecordDto taskRecord)
         {
             var userId = userIdentityService.GetUserId();
-            taskService.CreateRecord(taskRecord);
+            taskService.CreateRecord(taskRecord, userId);
 
             return Ok();
         }
@@ -467,40 +467,70 @@ namespace GtdTimer.Controllers
         /// <summary>
         /// Reset and run task 
         /// </summary>
-        /// <param name="taskId">Id of task to reset</param>
+        /// <param name="recordId">Id of record</param>
         /// <returns>Result of reseting task from history </returns>
-        [HttpGet("[action]/{taskId}")]
-        public IActionResult ResetTaskFromHistory(int taskId)
+        [HttpGet("[action]/{recordId}")]
+        public IActionResult ResetTaskFromHistory(int recordId)
         {
-            var recordToReturn = taskService.ResetTaskFromHistory(taskId);
+            var recordToReturn = taskService.ResetTaskFromHistory(recordId);
 
             return Ok(recordToReturn);
         }
 
         /// <summary>
-        /// Returns all user's timers.
+        /// Returns all user's timers by page.
         /// </summary>
-        /// <returns>result of getting all user's timers.</returns>
+        /// <param name="start">Index of first element on current page.</param>
+        /// <param name="length">Length of current page.</param>
+        /// <returns>Result of getting all user's timers by page.</returns>
         [HttpGet("[action]")]
-        public IActionResult GetAllTimersByUserId()
+        public IActionResult GetAllTimersByUserId(int start = 0, int length = int.MaxValue)
         {
             var userId = userIdentityService.GetUserId();
-            var tasks = taskService.GetAllTimersByUserId(userId);
+            var tasks = taskService.GetAllTimersByUserId(userId, start, length);
 
             return Ok(tasks);
         }
 
         /// <summary>
-        /// Returns all user's stopwatches.
+        /// Returns all user's stopwatches by page.
         /// </summary>
-        /// <returns>result of getting all user's stopwatches.</returns>
+        /// <param name="start">Index of first element on current page.</param>
+        /// <param name="length">Length of current page.</param>
+        /// <returns>Result of getting all user's stopwatches by page.</returns>
         [HttpGet("[action]")]
-        public IActionResult GetAllStopwathesByUserId()
+        public IActionResult GetAllStopwatchesByUserId(int start = 0, int length = int.MaxValue)
         {
             var userId = userIdentityService.GetUserId();
-            var tasks = taskService.GetAllStopwatchesByUserId(userId);
+            var tasks = taskService.GetAllStopwatchesByUserId(userId, start, length);
 
             return Ok(tasks);
+        }
+
+        /// <summary>
+        /// Returns total number of user's stopwatches.
+        /// </summary>
+        /// <returns>Result of getting all user's stopwatches count.</returns>
+        [HttpGet("[action]")]
+        public IActionResult GetAllStopwatchesByUserIdCount()
+        {
+            var userId = userIdentityService.GetUserId();
+            var stopwatchesCount = taskService.GetAllStopwatchesByUserIdCount(userId);
+
+            return Ok(stopwatchesCount);
+        }
+
+        /// <summary>
+        /// Returns total number of user's timers.
+        /// </summary>
+        /// <returns>Result of getting all user's timers count.</returns>
+        [HttpGet("[action]")]
+        public IActionResult GetAllTimersByUserIdCount()
+        {
+            var userId = userIdentityService.GetUserId();
+            var timersCount = taskService.GetAllTimersByUserIdCount(userId);
+
+            return Ok(timersCount);
         }
     }
 }

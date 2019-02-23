@@ -61,6 +61,11 @@ namespace GtdCommon.ModelsDto
         /// <summary>
         /// Gets or sets a value of TaskId value
         /// </summary>
-        public int TaskId { get; set; }
+        public int? TaskId { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value of UserId value
+        /// </summary>
+        public int UserId { get; set; }
     }
 }

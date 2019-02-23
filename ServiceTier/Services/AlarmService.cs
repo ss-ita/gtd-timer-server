@@ -7,11 +7,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Text;
+using GtdCommon.Exceptions;
 using GtdCommon.ModelsDto;
 using GtdTimerDAL.Extensions;
 using GtdTimerDAL.UnitOfWork;
-
+using Microsoft.EntityFrameworkCore;
 using DefaultXmlSerializer = System.Xml.Serialization.XmlSerializer;
 
 namespace GtdServiceTier.Services
@@ -34,7 +35,7 @@ namespace GtdServiceTier.Services
             var alarm = alarmDto.ToAlarm();
             UnitOfWork.Alarms.Create(alarm);
             UnitOfWork.Save();
-            alarmDto.Id = alarm.Id;
+            alarm.ToAlarmDto(alarmDto);
         }
 
         public void DeleteAlarmById(int alarmId)
@@ -62,10 +63,22 @@ namespace GtdServiceTier.Services
 
         public void UpdateAlarm(AlarmDto alarmDto)
         {
-            var alarm = alarmDto.ToAlarm();
+            var alarm = UnitOfWork.Alarms.GetByID(alarmDto.Id);
 
-            UnitOfWork.Alarms.Update(alarm);
-            UnitOfWork.Save();
+            var alarmTimestamp = string.Join(",", alarm.Timestamp);
+            if (alarmTimestamp == alarmDto.Timestamp)
+            {
+                alarmDto.ToAlarm(alarm);
+                UnitOfWork.Alarms.Update(alarm);
+                UnitOfWork.Save();
+                alarmDto.Timestamp = string.Join(",", alarm.Timestamp);
+                alarmDto.IsUpdated = true;
+            }
+            else
+            {
+                alarm.ToAlarmDto(alarmDto);
+                alarmDto.IsUpdated = false;
+            }
         }
     }
 }

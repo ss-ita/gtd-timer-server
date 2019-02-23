@@ -17,7 +17,6 @@ using GtdTimerDAL.Entities;
 using GtdTimerDAL.UnitOfWork;
 using ServiceStack.Text;
 using GtdCommon.Constant;
-using System;
 
 namespace GtdServiceTier.Services
 {
@@ -63,7 +62,7 @@ namespace GtdServiceTier.Services
         {
             var toDelete = UnitOfWork.Tasks.GetByID(taskId);
             if (toDelete != null)
-            {
+            { 
                 UnitOfWork.Tasks.Delete(toDelete);
                 UnitOfWork.Save();
             }
@@ -113,7 +112,6 @@ namespace GtdServiceTier.Services
         public void ResetTask(TaskDto model)
         {
             model.ElapsedTime = 0;
-            model.Goal = null;
             model.LastStartTime = model.LastStartTime.Date;
             model.IsRunning = false;
 
@@ -193,30 +191,29 @@ namespace GtdServiceTier.Services
 
         public IEnumerable<TaskRecordDto> GetAllRecordsByUserId(int userId)
         {
-
-            var listOfTasks = this.UnitOfWork.Tasks.GetAllEntitiesByFilter(task => task.UserId == userId);
-            var listOfTaskRecords = (from tasks in listOfTasks
-                                     from taskRecord in UnitOfWork.Records.GetAllEntitiesByFilter(record => record.TaskId == tasks.Id)
+            var listOfTaskRecords = (from taskRecord in UnitOfWork.Records.GetAllEntitiesByFilter(record => record.UserId == userId)
                                      select new TaskRecordDto
                                      {
                                          Id = taskRecord.Id,
-                                         TaskId = tasks.Id,
-                                         Name = tasks.Name,
-                                         Description = tasks.Description,
+                                         TaskId = taskRecord.TaskId,
+                                         Name = taskRecord.Name,
+                                         Description = taskRecord.Description,
                                          Action = taskRecord.Action,
                                          StartTime = taskRecord.StartTime,
                                          StopTime = taskRecord.StopTime,
                                          ElapsedTime = taskRecord.ElapsedTime,
-                                         WatchType = taskRecord.WatchType
+                                         WatchType = taskRecord.WatchType,
+                                         UserId = taskRecord.UserId
 
                                      }).ToList();
 
             return listOfTaskRecords;
         }
 
-        public void CreateRecord(TaskRecordDto taskRecord)
+        public void CreateRecord(TaskRecordDto taskRecord, int userId)
         {
             Record record = taskRecord.ToRecord();
+            record.UserId = userId;
             UnitOfWork.Records.Create(record);
             UnitOfWork.Save();
         }
@@ -225,16 +222,16 @@ namespace GtdServiceTier.Services
         {
             var listOfRecords = (UnitOfWork.Records.GetAllEntitiesByFilter(record => record.TaskId == taskId)
                 .Where(record => record.TaskId == taskId)
-                .Select(record => record.ToTaskRecord(UnitOfWork.Tasks.GetByID(taskId))))
+                .Select(record => record.ToTaskRecord()))
                 .ToList();
 
             return listOfRecords;
 
         }
 
-        public void DeleteRecordById(int taskId)
+        public void DeleteRecordById(int recordId)
         {
-            var toDelete = UnitOfWork.Records.GetByID(taskId);
+            var toDelete = UnitOfWork.Records.GetByID(recordId);
             if (toDelete != null)
             {
                 UnitOfWork.Records.Delete(toDelete);
@@ -246,40 +243,118 @@ namespace GtdServiceTier.Services
             }
         }
 
-        public TaskRecordDto ResetTaskFromHistory(int taskId)
+        public List<TaskRecordDto> ResetTaskFromHistory(int recordId)
         {
-            var taskToUpdate = UnitOfWork.Tasks.GetByID(taskId);
-            if (taskToUpdate.IsRunning)
+            var recordToFind = UnitOfWork.Records.GetByID(recordId);
+            var taskToUpdate = UnitOfWork.Tasks.GetByID(recordToFind.TaskId);
+            if (taskToUpdate != null)
             {
-                var time= DateTime.Now;
-                var timeNow =time.AddHours(2);
-                var ellapsedTime = (timeNow - taskToUpdate.LastStartTime).TotalMilliseconds;
-                Record recordToCreate = new Record
+                if (taskToUpdate.IsRunning)
                 {
-                    Action = "Reset",
-                    Task = taskToUpdate,
-                    TaskId = taskId,
-                    StartTime = taskToUpdate.LastStartTime,
-                    StopTime = timeNow,
-                    WatchType = taskToUpdate.WatchType,
-                    ElapsedTime = ellapsedTime
-                };
-                UnitOfWork.Records.Create(recordToCreate);
-                taskToUpdate.ElapsedTime = TimeSpan.FromMilliseconds(0);
-                taskToUpdate.LastStartTime = timeNow;
-                UnitOfWork.Tasks.Update(taskToUpdate);
-                UnitOfWork.Save();
-                return recordToCreate.ToTaskRecord(taskToUpdate);
+                    var timeNow = DateTime.UtcNow;
+                    var ellapsedTime = (timeNow - taskToUpdate.LastStartTime).TotalMilliseconds;
+                    Record recordToCreate = new Record
+                    {
+                        Action = "Reset",
+                        Name = taskToUpdate.Name,
+                        Description = taskToUpdate.Description,
+                        TaskId = taskToUpdate.Id,
+                        StartTime = taskToUpdate.LastStartTime,
+                        StopTime = timeNow,
+                        WatchType = taskToUpdate.WatchType,
+                        ElapsedTime = ellapsedTime,
+                        UserId = taskToUpdate.UserId
+                    };
+                    UnitOfWork.Records.Create(recordToCreate);
+                    taskToUpdate.ElapsedTime = TimeSpan.FromMilliseconds(0);
+                    taskToUpdate.LastStartTime = timeNow;
+                    UnitOfWork.Tasks.Update(taskToUpdate);
+                    UnitOfWork.Save();
+                    var listToReturn = new List<TaskRecordDto>
+                    {
+                        recordToCreate.ToTaskRecord()
+                    };
+                    return listToReturn;
+                }
+                else
+                {
+                    var timeNow = DateTime.UtcNow;
+                    taskToUpdate.ElapsedTime = TimeSpan.FromMilliseconds(0);
+                    taskToUpdate.LastStartTime = timeNow;
+                    taskToUpdate.IsRunning = true;
+                    UnitOfWork.Tasks.Update(taskToUpdate);
+                    UnitOfWork.Save();
+                    return null;
+                }
             }
             else
             {
-                var timeNow = DateTime.Now;
-                taskToUpdate.ElapsedTime = TimeSpan.FromMilliseconds(0);
-                taskToUpdate.LastStartTime = timeNow;
-                taskToUpdate.IsRunning = true;
-                UnitOfWork.Tasks.Update(taskToUpdate);
-                UnitOfWork.Save();
-                return null;
+                Record record = UnitOfWork.Records.GetByID(recordId);
+                if (record.WatchType == WatchType.Stopwatch)
+                {
+                    var taskToCreate = new Tasks
+                    {
+                        Name = record.Name,
+                        Description = record.Description,
+                        LastStartTime = DateTime.UtcNow,
+                        ElapsedTime = TimeSpan.FromMilliseconds(0),
+                        IsRunning = true,
+                        WatchType = WatchType.Stopwatch,
+                        UserId = record.UserId
+                    };
+                    UnitOfWork.Tasks.Create(taskToCreate);
+                    UnitOfWork.Save();
+
+                    var listOfRecordsWithSameTaskId = UnitOfWork.Records.GetAllEntitiesByFilter(rec => rec.TaskId == record.TaskId).ToList();
+                    foreach (var item in listOfRecordsWithSameTaskId)
+                    {
+                        item.TaskId = taskToCreate.Id;
+                    }
+                    foreach (var item in listOfRecordsWithSameTaskId)
+                    {
+                        UnitOfWork.Records.Update(item);
+                    }
+                    UnitOfWork.Save();
+                    var listToReturn = new List<TaskRecordDto>();
+                    foreach (var item in listOfRecordsWithSameTaskId)
+                    {
+                        listToReturn.Add(item.ToTaskRecord());
+                    }
+                    return listToReturn;
+                }
+                else
+                {
+                    var taskToCreate = new Tasks
+                    {
+                        Name = record.Name,
+                        Description = record.Description,
+                        LastStartTime = new DateTime(1,1,1,0,0,0,0,DateTimeKind.Utc),
+                        ElapsedTime = TimeSpan.FromMilliseconds(0),
+                        Goal = new TimeSpan(0,0,0,0,0),
+                        IsRunning = false,
+                        WatchType = WatchType.Timer,
+                        UserId = record.UserId
+                    };
+                    UnitOfWork.Tasks.Create(taskToCreate);
+                    UnitOfWork.Save();
+
+                    var listOfRecordsWithSameTaskId = UnitOfWork.Records.GetAllEntitiesByFilter(rec => rec.TaskId == record.TaskId);
+                    foreach (var item in listOfRecordsWithSameTaskId)
+                    {
+                        item.TaskId = taskToCreate.Id;
+                    }
+                    foreach (var item in listOfRecordsWithSameTaskId)
+                    {
+                        UnitOfWork.Records.Update(item);
+                    }
+                    UnitOfWork.Save();
+                    var listToReturn = new List<TaskRecordDto>();
+                    foreach (var item in listOfRecordsWithSameTaskId)
+                    {
+                        listToReturn.Add(item.ToTaskRecord());
+                    }
+                    return listToReturn;
+                }
             }
         }
 
@@ -289,22 +364,55 @@ namespace GtdServiceTier.Services
                 .Select(tasks => UnitOfWork.Tasks.GetByID(tasks.Id).ToTaskDto()).ToList();
         }
 
-        public IEnumerable<TaskDto> GetAllTimersByUserId(int userId)
+        public IEnumerable<TaskDto> GetAllTimersByUserId(int userId, int start = 0, int length = int.MaxValue)
         {
             var listOfTasksDto = UnitOfWork.Tasks.GetAllEntitiesByFilter((task) => (task.UserId == userId && task.WatchType == WatchType.Timer))
                 .Select(task => task.ToTaskDto())
+                .Skip(start)
+                .Take(length)
                 .ToList();
 
             return listOfTasksDto;
         }
 
-        public IEnumerable<TaskDto> GetAllStopwatchesByUserId(int userId)
+        public IEnumerable<TaskDto> GetAllStopwatchesByUserId(int userId, int start = 0, int length = int.MaxValue)
         {
             var listOfTasksDto = UnitOfWork.Tasks.GetAllEntitiesByFilter((task) => (task.UserId == userId && task.WatchType == WatchType.Stopwatch))
                 .Select(task => task.ToTaskDto())
+                .Skip(start)
+                .Take(length)
                 .ToList();
 
             return listOfTasksDto;
+        }
+
+        public int GetAllStopwatchesByUserIdCount(int userId)
+        {
+            var stopwatchesCount = UnitOfWork.Tasks.GetAllEntitiesByFilter((task) => (task.UserId == userId && task.WatchType == WatchType.Stopwatch))
+                .Count();
+
+            return stopwatchesCount;
+        }
+
+        public int GetAllTimersByUserIdCount(int userId)
+        {
+            var timersCount = UnitOfWork.Tasks.GetAllEntitiesByFilter((task) => (task.UserId == userId && task.WatchType == WatchType.Timer))
+                .Count();
+
+            return timersCount;
+        }
+
+        public void MadeRecordsFKNull(int taskId)
+        {
+            var listOfRecords = UnitOfWork.Records.GetAllEntitiesByFilter((rec) => rec.TaskId == taskId);
+            foreach (var item in listOfRecords)
+            {
+                item.TaskId = null;
+            }
+            foreach (var item in listOfRecords)
+            {
+                UnitOfWork.Records.Update(item);
+            }
         }
     }
 }

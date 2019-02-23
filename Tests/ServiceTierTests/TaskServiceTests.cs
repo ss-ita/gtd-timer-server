@@ -98,7 +98,9 @@ namespace GtdServiceTierTests
             int taskId = 2;
             Tasks task = new Tasks();
             var taskRepository = new Mock<IRepository<Tasks>>();
+            var recordRepository = new Mock<IRepository<Record>>();
 
+            unitOfWork.Setup(_ => _.Records).Returns(recordRepository.Object);
             unitOfWork.Setup(_ => _.Tasks).Returns(taskRepository.Object);
             unitOfWork.Setup(_ => _.Tasks.GetByID(taskId)).Returns(task);
 
@@ -255,6 +257,34 @@ namespace GtdServiceTierTests
             unitOfWork.Setup(_ => _.Tasks.GetByID(task.Id)).Returns(task);
 
             Assert.AreEqual(subject.GetAllTasksByPresetId(presetid)[0].Name, taskDtos[0].Name);
+        }
+
+        /// <summary>
+        /// Get All Timers By User Id Count test.
+        /// </summary>
+        [Test]
+        public void GetAllTimersByUserIdCount()
+        {
+            var taskRepository = new Mock<IRepository<Tasks>>();
+
+            unitOfWork.Setup(_ => _.Tasks).Returns(taskRepository.Object);
+            unitOfWork.Setup(_ => _.Tasks.GetAllEntitiesByFilter(It.IsAny<Func<Tasks, bool>>())).Returns(tasks);
+
+            Assert.AreEqual(subject.GetAllTimersByUserIdCount(userId), tasks.Count);
+        }
+
+        /// <summary>
+        /// Get All Stopwatches By User Id Count test.
+        /// </summary>
+        [Test]
+        public void GetAllStopwatchesByUserIdCount()
+        {
+            var taskRepository = new Mock<IRepository<Tasks>>();
+
+            unitOfWork.Setup(_ => _.Tasks).Returns(taskRepository.Object);
+            unitOfWork.Setup(_ => _.Tasks.GetAllEntitiesByFilter(It.IsAny<Func<Tasks, bool>>())).Returns(tasks);
+
+            Assert.AreEqual(subject.GetAllStopwatchesByUserIdCount(userId), tasks.Count);
         }
 
         /// <summary>

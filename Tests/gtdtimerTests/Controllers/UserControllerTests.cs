@@ -23,8 +23,11 @@ namespace GtdTimerTests.Controllers
     {
         private const string UserEmail = "User email";
         private const string Token = "User Token";
+        private const string PasswordRecoveryToken = "PasswordRecoveryToken";
+        private const string NewPassword = "New password";
         private Mock<IUsersService> usersService;
         private Mock<IUserIdentityService> userIdentityService;
+        private Mock<IPresetService> presetService;
 
         private UserController subject;
 
@@ -36,7 +39,8 @@ namespace GtdTimerTests.Controllers
         {
             usersService = new Mock<IUsersService>();
             userIdentityService = new Mock<IUserIdentityService>();
-            subject = new UserController(userIdentityService.Object, usersService.Object);
+            presetService = new Mock<IPresetService>();
+            subject = new UserController(userIdentityService.Object, usersService.Object, presetService.Object);
         }
 
         /// <summary>
@@ -94,6 +98,50 @@ namespace GtdTimerTests.Controllers
         public void VerifyToken()
         {
             var actual = (OkResult)subject.VerifyEmail(UserEmail, Token);
+
+            Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
+        }
+
+        /// <summary>
+        /// Resend verification email test
+        /// </summary>
+        [Test]
+        public void ResendVerificationEmail()
+        {
+            var actual = (OkResult)subject.ResendVerificationEmail(UserEmail);
+
+            Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
+        }
+
+        /// <summary>
+        /// Send password recovery email test
+        /// </summary>
+        [Test]
+        public void SendPasswordRecoveryEmail()
+        {
+            var actual = (OkResult)subject.SendPasswordRecoveryEmail(UserEmail);
+
+            Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
+        }
+
+        /// <summary>
+        /// Verify password recovery token test
+        /// </summary>
+        [Test]
+        public void VerifyPasswordRecoveryToken()
+        {
+            var actual = (OkResult)subject.VerifyPasswordRecoveryToken(UserEmail, PasswordRecoveryToken);
+
+            Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
+        }
+
+        /// <summary>
+        /// Reset password test
+        /// </summary>
+        [Test]
+        public void ResetPassword()
+        {
+            var actual = (OkResult)subject.ResetPassword(UserEmail, NewPassword);
 
             Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
         }

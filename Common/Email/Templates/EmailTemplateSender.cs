@@ -23,8 +23,11 @@ namespace GtdCommon.Email.Templates
         /// </summary>
         /// <param name="details">email message details</param>
         /// <param name="buttonUrl">the button URL</param>
+        /// <param name="buttonText">Text on button</param>
+        /// <param name="titleMessage">Title text</param>
+        /// <param name="mainMessage">The main message of email</param>
         /// <returns>response of sending email</returns>
-        public async Task<SendEmailResponse> SendGeneralEmailAsync(SendEmailDetails details, string buttonUrl)
+        public async Task<SendEmailResponse> SendGeneralEmailAsync(SendEmailDetails details, string buttonUrl, string buttonText, string titleMessage, string mainMessage)
         {
             var templateText = default(string);
           
@@ -34,6 +37,10 @@ namespace GtdCommon.Email.Templates
             }
 
             templateText = templateText.Replace("--ButtonUrl--", buttonUrl);
+            templateText = templateText.Replace("--ButtonText--", buttonText);
+            templateText = templateText.Replace("--TitleMessage--", titleMessage);
+            templateText = templateText.Replace("--MainMessage--", mainMessage);
+
             details.Content = templateText;
 
             return await IoCContainer.EmailSender.SendEmailAsync(details);

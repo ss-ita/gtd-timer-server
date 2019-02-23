@@ -28,13 +28,19 @@ namespace GtdServiceTier.Services
         private readonly ITokenService tokenService;
 
         /// <summary>
+        /// Instance of preset service
+        /// </summary>
+        private readonly IPresetService presetService;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="UsersService" /> class.
         /// </summary>
         /// <param name="unitOfWork">instance of unit of work</param>
         /// <param name="tokenService">instance of token service</param>
-        public UsersService(IUnitOfWork unitOfWork , ITokenService tokenService) : base(unitOfWork)
+        public UsersService(IUnitOfWork unitOfWork , ITokenService tokenService, IPresetService presetService) : base(unitOfWork)
         {
             this.tokenService = tokenService;
+            this.presetService = presetService;
         }
 
         public User Get(int id)
@@ -58,14 +64,20 @@ namespace GtdServiceTier.Services
             tokenService.SendUserVerificationToken(user);
         }
 
-        public void VerifyToken(string userEmail, string emailToken)
+        public void VerifyEmailToken(string userEmail, string emailToken)
         {
-            var token = tokenService.GetTokenByUserEmail(userEmail);
+            var token = tokenService.GetTokenByUserEmail(userEmail, TokenType.EmailVerification);
+
             if (token == null)
             {
                 throw new InvalidTokenException("Token has expired");
             }
-            
+
+            if (DateTime.Now > token.TokenExpirationTime)
+            {
+                throw new InvalidTokenException("Token has expired , resend verification email?");
+            }
+
             var user = UnitOfWork.UserManager.FindByEmailAsync(userEmail).GetAwaiter().GetResult();
 
             var result = token.TokenValue == emailToken ? true : false;
@@ -73,12 +85,75 @@ namespace GtdServiceTier.Services
             if (result)
             {
                 user.EmailConfirmed = true;
+                tokenService.DeleteTokenByUserEmail(userEmail, TokenType.EmailVerification);
                 UnitOfWork.UserManager.UpdateAsync(user).GetAwaiter().GetResult();
                 UnitOfWork.Save();
             }
             else throw new InvalidTokenException("Token has expired");
         }
-  
+
+        public void ResendVerificationEmail(string userEmail)
+        {
+            var user = UnitOfWork.UserManager.FindByEmailAsync(userEmail).GetAwaiter().GetResult();
+
+            if (user == null)
+            {
+                throw new UserNotFoundException();
+            }
+
+            tokenService.DeleteTokenByUserEmail(userEmail, TokenType.EmailVerification);
+            tokenService.SendUserVerificationToken(user);
+        }
+
+        public void SendPasswordRecoveryEmail(string userEmail)
+        {
+            var user = UnitOfWork.UserManager.FindByEmailAsync(userEmail).GetAwaiter().GetResult();
+
+            if (user == null)
+            {
+                throw new UserNotFoundException();
+            }
+
+            var token = tokenService.GetTokenByUserEmail(userEmail, TokenType.PasswordRecovery);
+
+            if (token != null)
+            {
+                tokenService.DeleteTokenByUserEmail(userEmail, TokenType.PasswordRecovery);
+            }
+
+            tokenService.SendUserRecoveryToken(user);
+        }
+
+        public void VerifyPasswordRecoveryToken(string userEmail, string recoveryToken)
+        {
+            var token = tokenService.GetTokenByUserEmail(userEmail, TokenType.PasswordRecovery);
+
+            if (token == null || DateTime.Now > token.TokenExpirationTime)
+            {
+                throw new InvalidTokenException("Token has expired");
+            }
+
+            var user = UnitOfWork.UserManager.FindByEmailAsync(userEmail).GetAwaiter().GetResult();
+
+            var result = token.TokenValue == recoveryToken ? true : false;
+
+            if (result)
+            {
+                tokenService.DeleteTokenByUserEmail(userEmail, TokenType.PasswordRecovery);
+            }
+            else throw new InvalidTokenException("Token has expired");
+        }
+
+        public void ResetPassword(string userEmail, string newPassword)
+        {
+            var user = UnitOfWork.UserManager.FindByEmailAsync(userEmail).GetAwaiter().GetResult();
+
+            user.PasswordHash = UnitOfWork.UserManager.PasswordHasher.HashPassword(newPassword);
+
+            UnitOfWork.UserManager.UpdateAsync(user).GetAwaiter().GetResult();
+            UnitOfWork.Save();
+        }
+
         public void UpdatePassword(int id, UpdatePasswordDto model)
         {
             User user = Get(id);
@@ -187,6 +262,7 @@ namespace GtdServiceTier.Services
                 throw new UserNotFoundException();
             }
 
+            presetService.DeleteAllPresetsByUserId(user.Id);
             UnitOfWork.UserManager.DeleteAsync(user).GetAwaiter().GetResult();
 
             UnitOfWork.Save();

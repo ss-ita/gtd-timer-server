@@ -33,14 +33,21 @@ namespace GtdTimer.Controllers
         private readonly IUsersService usersService;
 
         /// <summary>
+        /// instance of preset service
+        /// </summary>
+        private readonly IPresetService presetService;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="UserController" /> class.
         /// </summary>
         /// <param name="userIdentityService">instance of user identity service</param>
         /// <param name="usersService">instance of user service</param>
-        public UserController(IUserIdentityService userIdentityService, IUsersService usersService)
+        /// <param name="presetService">instance of preset service</param>
+        public UserController(IUserIdentityService userIdentityService, IUsersService usersService, IPresetService presetService)
         {
             this.userIdentityService = userIdentityService;
             this.usersService = usersService;
+            this.presetService = presetService;
         }
 
         /// <summary>
@@ -50,14 +57,14 @@ namespace GtdTimer.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var userId = this.userIdentityService.GetUserId();
-            var user = this.usersService.Get(userId);
+            var userId = userIdentityService.GetUserId();
+            var user = usersService.Get(userId);
             if (user == null)
             {
                 throw new UserNotFoundException();
             }
 
-            return this.Ok(user);
+            return Ok(user);
         }
 
         /// <summary>
@@ -70,9 +77,9 @@ namespace GtdTimer.Controllers
         [HttpPost]
         public ActionResult Post([FromBody]UserDto model)
         {
-            this.usersService.Create(model);
+            usersService.Create(model);
 
-            return this.Ok();
+            return Ok();
         }
 
         /// <summary>
@@ -85,9 +92,67 @@ namespace GtdTimer.Controllers
         [HttpGet("Verify/{userEmail}/{emailToken}")]
         public ActionResult VerifyEmail(string userEmail, string emailToken)
         {
-            this.usersService.VerifyToken(userEmail, emailToken);
+            usersService.VerifyEmailToken(userEmail, emailToken);
 
-            return this.Ok();
+            return Ok();
+        }
+
+        /// <summary>
+        /// Resend verification email to user
+        /// </summary>
+        /// <param name="userEmail">user email</param>
+        /// <returns>result of resending verification email</returns>
+        [AllowAnonymous]
+        [HttpGet("ResendVerificationEmail/{userEmail}")]
+        public ActionResult ResendVerificationEmail(string userEmail)
+        {
+            usersService.ResendVerificationEmail(userEmail);
+
+            return Ok();
+        }
+
+        /// <summary>
+        /// Send password recovery email to user
+        /// </summary>
+        /// <param name="userEmail">user email</param>
+        /// <returns>result of sending password recovery email</returns>
+        [AllowAnonymous]
+        [HttpGet("SendPasswordRecoveryEmail/{userEmail}")]
+        public ActionResult SendPasswordRecoveryEmail(string userEmail)
+        {
+            usersService.SendPasswordRecoveryEmail(userEmail);
+
+            return Ok();
+        }
+
+        /// <summary>
+        /// Verify password recovery token
+        /// </summary>
+        /// <param name="userEmail">user email</param>
+        /// <param name="recoveryToken">password recovery token</param>
+        /// <returns>result of verifying password recovery token</returns>
+        [AllowAnonymous]
+        [HttpGet("VerifyPasswordRecoveryToken/{userEmail}/{recoveryToken}")]
+        public ActionResult VerifyPasswordRecoveryToken(string userEmail, string recoveryToken)
+        {
+            usersService.VerifyPasswordRecoveryToken(userEmail, recoveryToken);
+
+            return Ok();
+        }
+
+        /// <summary>
+        /// Reset user password and set new one
+        /// </summary>
+        /// <param name="userEmail">user email</param>
+        /// <param name="newPassword">new password</param>
+        /// <returns>result of resetting a password</returns>
+        [AllowAnonymous]
+        [HttpGet("ResetPassword/{userEmail}/{newPassword}")]
+        public ActionResult ResetPassword(string userEmail, string newPassword)
+        {
+            usersService.ResetPassword(userEmail, newPassword);
+
+            return Ok();
         }
 
         /// <summary>
@@ -99,10 +164,10 @@ namespace GtdTimer.Controllers
         [HttpPut]
         public ActionResult Put([FromBody]UpdatePasswordDto model)
         {
-            var userId = this.userIdentityService.GetUserId();
-            this.usersService.UpdatePassword(userId, model);
+            var userId = userIdentityService.GetUserId();
+            usersService.UpdatePassword(userId, model);
 
-            return this.Ok();
+            return Ok();
         }
 
         /// <summary>
@@ -112,10 +177,11 @@ namespace GtdTimer.Controllers
         [HttpDelete]
         public ActionResult Delete()
         {
-            var userId = this.userIdentityService.GetUserId();
-            this.usersService.Delete(userId);
+            var userId = userIdentityService.GetUserId();
+            presetService.DeleteAllPresetsByUserId(userId);
+            usersService.Delete(userId);
 
-            return this.Ok();
+            return Ok();
         }
 
         /// <summary>
@@ -129,7 +195,7 @@ namespace GtdTimer.Controllers
         {
             usersService.AddToRole(model);
 
-            return this.Ok();
+            return Ok();
         }
 
         /// <summary>
@@ -173,7 +239,7 @@ namespace GtdTimer.Controllers
             var userId = userIdentityService.GetUserId();
             var emailsList = usersService.GetUsersEmails(roleName, userId);
 
-            return this.Ok(emailsList);
+            return Ok(emailsList);
         }
 
         /// <summary>

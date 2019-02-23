@@ -19,7 +19,10 @@ namespace GtdCommon.Email.Templates
         /// </summary>
         /// <param name="details">the email message details</param>
         /// <param name="buttonUrl">The button URL</param>
+        /// <param name="buttonText">Text on button</param>
+        /// <param name="titleMessage">Title text</param>
+        /// <param name="mainMessage">The main message of email</param>
         /// <returns>return result of sending email</returns>
-        Task<SendEmailResponse> SendGeneralEmailAsync(SendEmailDetails details, string buttonUrl);
+        Task<SendEmailResponse> SendGeneralEmailAsync(SendEmailDetails details, string buttonUrl, string buttonText, string titleMessage, string mainMessage);
     }
 }

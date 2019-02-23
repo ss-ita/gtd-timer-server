@@ -4,6 +4,8 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System.Security.Principal;
+
 namespace GtdServiceTier.Services
 {
     /// <summary>
@@ -16,5 +18,12 @@ namespace GtdServiceTier.Services
         /// </summary>
         /// <returns>id of current user</returns>
         int GetUserId();
+
+        /// <summary>
+        /// Method for getting id of current user
+        /// </summary>
+        /// <param name="identity">identity framework</param>
+        /// <returns>id of current user</returns>
+        int GetUserId(IIdentity identity);
     }
 }

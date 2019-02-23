@@ -4,14 +4,16 @@ using GtdTimerDAL.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GtdTimerDAL.Migrations
 {
     [DbContext(typeof(TimerContext))]
-    partial class TimerContextModelSnapshot : ModelSnapshot
+    [Migration("20190216111337_UserRole")]
+    partial class UserRole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,10 +34,6 @@ namespace GtdTimerDAL.Migrations
                     b.Property<string>("Message");
 
                     b.Property<bool>("SoundOn");
-
-                    b.Property<byte[]>("Timestamp")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
 
                     b.Property<int>("UserId");
 
@@ -125,6 +123,8 @@ namespace GtdTimerDAL.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("TaskId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Records");
@@ -193,8 +193,6 @@ namespace GtdTimerDAL.Migrations
                     b.Property<DateTime>("TokenCreationTime");
 
                     b.Property<DateTime>("TokenExpirationTime");
-
-                    b.Property<int>("TokenType");
 
                     b.Property<string>("TokenValue");
 
@@ -382,6 +380,11 @@ namespace GtdTimerDAL.Migrations
 
             modelBuilder.Entity("GtdTimerDAL.Entities.Record", b =>
                 {
+                    b.HasOne("GtdTimerDAL.Entities.Tasks", "Task")
+                        .WithMany()
+                        .HasForeignKey("TaskId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("GtdTimerDAL.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")

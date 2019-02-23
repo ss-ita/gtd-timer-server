@@ -15,13 +15,14 @@ using GtdServiceTier.Services;
 using GtdTimerDAL.Entities;
 using GtdTimerDAL.Repositories;
 using GtdTimerDAL.UnitOfWork;
+using GtdTimerDAL.Extensions;
 
 namespace GtdServiceTierTests
 {
     public class AlarmServiceTests
     {
         private readonly int userId = 1;
-        private Alarm alarm = new Alarm { Id = 1, CronExpression = "0 15 14 * * ? *", UserId = 1 };
+        private Alarm alarm = new Alarm { Id = 1, CronExpression = "0 15 14 * * ? *", UserId = 1, Timestamp = new byte[] { 0, 0, 0, 0, 12, 14 } };
         private List<Alarm> alarms = new List<Alarm>();
         private Mock<IUnitOfWork> unitOfWork;
         private AlarmService subject;
@@ -43,10 +44,11 @@ namespace GtdServiceTierTests
         [Test]
         public void CreateAlarm()
         {
-            AlarmDto alarm = new AlarmDto();
+            AlarmDto alarm = new AlarmDto() { Timestamp = string.Empty };
             var alarmRepository = new Mock<IRepository<Alarm>>();
-
+            
             unitOfWork.Setup(_ => _.Alarms).Returns(alarmRepository.Object);
+          
             subject.CreateAlarm(alarm);
 
             unitOfWork.Verify(_ => _.Save(), Times.Once);
@@ -58,11 +60,13 @@ namespace GtdServiceTierTests
         [Test]
         public void UpdateAlarm()
         {
-            AlarmDto alarm = new AlarmDto();
+            AlarmDto alarmDto = new AlarmDto() { Id = 1, Timestamp = "0,0,0,0,12,14" };
             var alarmRepository = new Mock<IRepository<Alarm>>();
 
             unitOfWork.Setup(_ => _.Alarms).Returns(alarmRepository.Object);
-            subject.UpdateAlarm(alarm);
+            unitOfWork.Setup(_ => _.Alarms.GetByID(alarmDto.Id)).Returns(alarm);
+
+            subject.UpdateAlarm(alarmDto);
 
             unitOfWork.Verify(_ => _.Save(), Times.Once);
         }

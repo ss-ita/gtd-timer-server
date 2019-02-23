@@ -108,7 +108,8 @@ namespace GtdServiceTier.Services
         /// Method for creating record
         /// </summary>
         /// <param name="taskRecord">TaskRecord model to create</param>
-        void CreateRecord(TaskRecordDto taskRecord);
+        /// <param name="userId">id of user for choosen record</param>
+        void CreateRecord(TaskRecordDto taskRecord, int userId);
 
         /// <summary>
         /// Method for getting all records by task id
@@ -129,7 +130,7 @@ namespace GtdServiceTier.Services
         /// </summary>
         /// <param name="taskId">Id of task to reset</param>
         /// <returns>Returns taskRecordDto if task was stopped</returns>
-        TaskRecordDto ResetTaskFromHistory(int taskId);
+        List<TaskRecordDto> ResetTaskFromHistory(int taskId);
 
         /// <summary>
         /// Method for getting all timers by preset id
@@ -139,18 +140,36 @@ namespace GtdServiceTier.Services
         List<TaskDto> GetAllTasksByPresetId(int presetid);
 
         /// <summary>
-        /// Method for getting all timers of chosen user
+        /// Method for getting all timers of chosen user.
         /// </summary>
-        /// <param name="userId">id of chosen user</param>
-        /// <returns>all timers of chosen user</returns>
-        IEnumerable<TaskDto> GetAllTimersByUserId(int userId);
+        /// <param name="userId">Id of current user</param>
+        /// <param name="start">Index of first element on the current page.</param>
+        /// <param name="length">Length of the current page.</param>
+        /// <returns>User's timers on a specific page.</returns>
+        IEnumerable<TaskDto> GetAllTimersByUserId(int userId, int start = 0, int length = int.MaxValue);
 
         /// <summary>
-        /// Method for getting all stopwatches of chosen user
+        ///  Method for getting all stopwatches of chosen user.
         /// </summary>
-        /// <param name="userId">id of chosen user</param>
-        /// <returns>all stopwatches of chosen user</returns>
-        IEnumerable<TaskDto> GetAllStopwatchesByUserId(int userId);
+        /// <param name="userId">Id of current user.</param>
+        /// <param name="start">Index of first element on the current page.</param>
+        /// <param name="length">Length of the current page.</param>
+        /// <returns>List of all stopwatches of choosen user</returns>
+        IEnumerable<TaskDto> GetAllStopwatchesByUserId(int userId, int start = 0, int length = int.MaxValue);
+
+        /// <summary>
+        /// Method for getting the total number of user's stopwacthes.
+        /// </summary>
+        /// <param name="userId">Id of current user.</param>
+        /// <returns>Count of user's stopwatches.</returns>
+        int GetAllStopwatchesByUserIdCount(int userId);
+
+        /// <summary>
+        /// Method for getting the total number of user's timers.
+        /// </summary>
+        /// <param name="userId">Id of current user.</param>
+        /// <returns>Count of user's timers.</returns>
+        int GetAllTimersByUserIdCount(int userId);
 
         /// <summary>
         /// Method for getting all tasks in specified period of time.

@@ -5,6 +5,7 @@
 //-----------------------------------------------------------------------
 
 using System;
+using GtdCommon.Constant;
 
 namespace GtdTimerDAL.Entities
 {
@@ -37,5 +38,10 @@ namespace GtdTimerDAL.Entities
         /// Gets or sets a value indicating when token will expire
         /// </summary>
         public DateTime TokenExpirationTime { get; set; }
+
+        /// <summary>
+        /// Gets or sets a token type
+        /// </summary>
+        public TokenType TokenType { get; set; }
     }
 }

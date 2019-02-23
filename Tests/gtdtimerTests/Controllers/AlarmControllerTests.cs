@@ -76,10 +76,9 @@ namespace GtdTimerTests.Controllers
         {
             userIdentityService.Setup(_ => _.GetUserId()).Returns(userId);
             AlarmDto model = new AlarmDto();
-            var actual = (OkResult)subject.UpdateAlarm(model);
+            var actual = (OkObjectResult)subject.UpdateAlarm(model);
 
             Assert.AreEqual(actual.StatusCode, (int)HttpStatusCode.OK);
-            alarmService.Verify(_ => _.UpdateAlarm(model), Times.Once);
         }
 
         /// <summary>

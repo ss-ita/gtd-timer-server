@@ -11,7 +11,6 @@ using Newtonsoft.Json;
 using GtdCommon.Constant;
 using GtdCommon.Exceptions;
 using GtdCommon.ModelsDto;
-using GtdServiceTier.Services;
 using GtdTimerDAL.Extensions;
 using GtdTimerDAL.Entities;
 using GtdTimerDAL.UnitOfWork;
@@ -69,6 +68,21 @@ namespace GtdServiceTier.Services
             }
 
             if (!this.userManager.UserManager.CheckPasswordAsync(user, model.Password).Result)
+            {
+                throw new LoginFailedException();
+            }
+
+            var userRoles = this.userManager.UserManager.GetRolesAsync(user.Id).Result;
+            var token = this.jwtManager.GenerateToken(user, userRoles);
+
+            return token;
+        }
+
+        public string CreateTokenWithEmail(string email)
+        {
+            var user = this.userManager.UserManager.FindByEmailAsync(email).Result;
+
+            if (user == null)
             {
                 throw new LoginFailedException();
             }

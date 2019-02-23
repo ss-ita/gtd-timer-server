@@ -34,6 +34,11 @@ namespace GtdTimerDAL.Repositories
         IRepository<Role> Roles { get; set; }
 
         /// <summary>
+        /// Gets or sets mean to hash/verify passwords
+        /// </summary>
+        IPasswordHasher PasswordHasher { get; set; }
+
+        /// <summary>
         /// Method for creating a user
         /// </summary>
         /// <param name="user"> generic user </param>
@@ -138,12 +143,19 @@ namespace GtdTimerDAL.Repositories
         /// <param name="newPassword"> new password of account </param>
         /// <returns> result of checking password </returns>
         Task<IdentityResult> ChangePasswordAsync(TKey userId, string currentPassword, string newPassword);
-
+   
         /// <summary>
         /// Get the email confirmation token for the user
         /// </summary>
         /// <param name="userId">user id</param>
         /// <returns>confirmation token</returns>
         Task<string> GenerateEmailConfirmationTokenAsync(TKey userId);
+
+        /// <summary>
+        /// Generate a password reset token for the user using the UserTokenProvider
+        /// </summary>
+        /// <param name="userId">user id</param>
+        /// <returns>password recovery token</returns>
+        Task<string> GeneratePasswordResetTokenAsync(TKey userId);
     }
 }
